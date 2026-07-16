@@ -13,19 +13,40 @@
 import 'dotenv/config';
 import { z } from 'zod';
 
+// 토큰 만료 시간 형식 (예: 15m, 7d)
+// jsonwebtoken은 내부적으로 ms 라이브러리를 사용해 "7 days", 초 단위 숫자 등도 허용하지만,
+// 팀 내 표기를 통일하기 위해 의도적으로 좁게 제한합니다.
+const EXPIRES_IN_REGEX = /^\d+[smhd]$/;
+
 const envSchema = z.object({
-  PORT: z.coerce.number().default(4000), // 기본값 3000 -> 4000 (프론트 Next.js와 포트 충돌 방지)
+  PORT: z.coerce.number().default(4000), // process.env 값은 전부 문자열이라 coerce로 숫자 변환
   DATABASE_URL: z.string().min(1, 'DATABASE_URL은 필수입니다'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET은 필수입니다'),
-  JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
-  JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
+
+  // default는 환경변수가 '없을 때'만 적용되므로, 값이 있으면 형식 검증이 필요합니다.
+  // 형식이 틀리면(예: 15mm) 서버는 정상 기동하고 첫 로그인 시점에야 에러가 납니다.
+  JWT_ACCESS_EXPIRES_IN: z
+    .string()
+    .regex(
+      EXPIRES_IN_REGEX,
+      'JWT_ACCESS_EXPIRES_IN은 15m, 7d 같은 형식이어야 합니다'
+    )
+    .default('15m'),
+  JWT_REFRESH_EXPIRES_IN: z
+    .string()
+    .regex(
+      EXPIRES_IN_REGEX,
+      'JWT_REFRESH_EXPIRES_IN은 15m, 7d 같은 형식이어야 합니다'
+    )
+    .default('7d'),
+
   CLIENT_URL: z.url('CLIENT_URL은 올바른 URL이어야 합니다'), // cors origin 설정에 사용
 });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  // console.log -> console.error (에러 상황이므로 stderr로 출력)
+  // 에러 상황이므로 stdout이 아닌 stderr로 출력
   console.error('환경변수 검증 실패\n' + z.prettifyError(parsed.error));
   process.exit(1);
 }

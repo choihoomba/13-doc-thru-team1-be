@@ -1,5 +1,26 @@
 # dependencies
+# 설치된 패키지. package.json으로 재설치 가능하므로 커밋하지 않음
 node_modules/
 
 # environment
+# 개인 환경변수 파일 (.env.example은 커밋 대상)
 .env
+
+# logs
+# 로그 파일 (현재는 morgan이 콘솔 출력만 하지만, 파일 로깅 도입 시 대비)
+logs
+*.log
+npm-debug.log*
+
+# editor
+# 개인 에디터 설정은 제외하되, 권장 확장 목록(extensions.json)은 팀 공유용으로 커밋
+# 폴더 자체(.vscode/)를 무시하면 git이 내부를 보지 않아 예외(!) 규칙이 동작하지 않으므로 .vscode/* 사용
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# OS
+# Mac에서 폴더를 열기만 해도 자동 생성되는 파일
+.DS_Store
+# vim 스왑 파일 (.swp 등)
+*.sw?
