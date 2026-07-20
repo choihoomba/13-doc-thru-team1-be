@@ -1,0 +1,402 @@
+[
+  {
+    "id": 1,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-05-11T03:59:59Z",
+    "updatedAt": "2026-05-11T03:59:59Z",
+    "submissionId": 1,
+    "userId": 11
+  },
+  {
+    "id": 2,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-05-11T05:59:59Z",
+    "updatedAt": "2026-05-12T03:59:59Z",
+    "submissionId": 1,
+    "userId": 8
+  },
+  {
+    "id": 3,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-05-12T03:59:59Z",
+    "updatedAt": "2026-05-12T03:59:59Z",
+    "submissionId": 1,
+    "userId": 12
+  },
+  {
+    "id": 4,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-05-13T03:59:59Z",
+    "updatedAt": "2026-05-13T03:59:59Z",
+    "submissionId": 1,
+    "userId": 8
+  },
+  {
+    "id": 5,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-05-14T03:59:59Z",
+    "updatedAt": "2026-05-14T03:59:59Z",
+    "submissionId": 1,
+    "userId": 6
+  },
+  {
+    "id": 6,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-05-15T03:59:59Z",
+    "updatedAt": "2026-05-15T03:59:59Z",
+    "submissionId": 1,
+    "userId": 9
+  },
+  {
+    "id": 7,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-05-15T05:59:59Z",
+    "updatedAt": "2026-05-16T03:59:59Z",
+    "submissionId": 1,
+    "userId": 3
+  },
+  {
+    "id": 8,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-05-21T03:59:59Z",
+    "updatedAt": "2026-05-21T03:59:59Z",
+    "submissionId": 1,
+    "userId": 9
+  },
+  {
+    "id": 9,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-05-22T03:59:59Z",
+    "updatedAt": "2026-05-22T03:59:59Z",
+    "submissionId": 1,
+    "userId": 3
+  },
+  {
+    "id": 10,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-05-23T03:59:59Z",
+    "updatedAt": "2026-05-23T03:59:59Z",
+    "submissionId": 1,
+    "userId": 3
+  },
+  {
+    "id": 11,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-05-24T03:59:59Z",
+    "updatedAt": "2026-05-24T03:59:59Z",
+    "submissionId": 1,
+    "userId": 4
+  },
+  {
+    "id": 12,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-05-24T05:59:59Z",
+    "updatedAt": "2026-05-25T03:59:59Z",
+    "submissionId": 1,
+    "userId": 11
+  },
+  {
+    "id": 13,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-05-25T03:59:59Z",
+    "updatedAt": "2026-05-25T03:59:59Z",
+    "submissionId": 1,
+    "userId": 10
+  },
+  {
+    "id": 14,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-06-01T03:59:59Z",
+    "updatedAt": "2026-06-01T03:59:59Z",
+    "submissionId": 1,
+    "userId": 11
+  },
+  {
+    "id": 15,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-06-02T03:59:59Z",
+    "updatedAt": "2026-06-02T03:59:59Z",
+    "submissionId": 1,
+    "userId": 12
+  },
+  {
+    "id": 16,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-06-03T03:59:59Z",
+    "updatedAt": "2026-06-03T03:59:59Z",
+    "submissionId": 1,
+    "userId": 8
+  },
+  {
+    "id": 17,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-03T05:59:59Z",
+    "updatedAt": "2026-06-04T03:59:59Z",
+    "submissionId": 1,
+    "userId": 9
+  },
+  {
+    "id": 18,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-06-04T03:59:59Z",
+    "updatedAt": "2026-06-04T03:59:59Z",
+    "submissionId": 1,
+    "userId": 5
+  },
+  {
+    "id": 19,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-05T03:59:59Z",
+    "updatedAt": "2026-06-05T03:59:59Z",
+    "submissionId": 1,
+    "userId": 6
+  },
+  {
+    "id": 20,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-06-11T03:59:59Z",
+    "updatedAt": "2026-06-11T03:59:59Z",
+    "submissionId": 1,
+    "userId": 9
+  },
+  {
+    "id": 21,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-06-12T03:59:59Z",
+    "updatedAt": "2026-06-12T03:59:59Z",
+    "submissionId": 1,
+    "userId": 3
+  },
+  {
+    "id": 22,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-06-12T05:59:59Z",
+    "updatedAt": "2026-06-13T03:59:59Z",
+    "submissionId": 1,
+    "userId": 7
+  },
+  {
+    "id": 23,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-06-13T03:59:59Z",
+    "updatedAt": "2026-06-13T03:59:59Z",
+    "submissionId": 1,
+    "userId": 3
+  },
+  {
+    "id": 24,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-06-14T03:59:59Z",
+    "updatedAt": "2026-06-14T03:59:59Z",
+    "submissionId": 1,
+    "userId": 7
+  },
+  {
+    "id": 25,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-15T03:59:59Z",
+    "updatedAt": "2026-06-15T03:59:59Z",
+    "submissionId": 1,
+    "userId": 10
+  },
+  {
+    "id": 26,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-06-21T03:59:59Z",
+    "updatedAt": "2026-06-21T03:59:59Z",
+    "submissionId": 5,
+    "userId": 11
+  },
+  {
+    "id": 27,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-06-21T05:59:59Z",
+    "updatedAt": "2026-06-22T03:59:59Z",
+    "submissionId": 5,
+    "userId": 8
+  },
+  {
+    "id": 28,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-06-22T03:59:59Z",
+    "updatedAt": "2026-06-22T03:59:59Z",
+    "submissionId": 5,
+    "userId": 12
+  },
+  {
+    "id": 29,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-06-23T03:59:59Z",
+    "updatedAt": "2026-06-23T03:59:59Z",
+    "submissionId": 5,
+    "userId": 8
+  },
+  {
+    "id": 30,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-06-24T03:59:59Z",
+    "updatedAt": "2026-06-24T03:59:59Z",
+    "submissionId": 5,
+    "userId": 7
+  },
+  {
+    "id": 31,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-25T03:59:59Z",
+    "updatedAt": "2026-06-25T03:59:59Z",
+    "submissionId": 5,
+    "userId": 9
+  },
+  {
+    "id": 32,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-06-25T05:59:59Z",
+    "updatedAt": "2026-06-26T03:59:59Z",
+    "submissionId": 5,
+    "userId": 3
+  },
+  {
+    "id": 33,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-07-01T03:59:59Z",
+    "updatedAt": "2026-07-01T03:59:59Z",
+    "submissionId": 5,
+    "userId": 9
+  },
+  {
+    "id": 34,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-07-02T03:59:59Z",
+    "updatedAt": "2026-07-02T03:59:59Z",
+    "submissionId": 5,
+    "userId": 2
+  },
+  {
+    "id": 35,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-07-03T03:59:59Z",
+    "updatedAt": "2026-07-03T03:59:59Z",
+    "submissionId": 5,
+    "userId": 4
+  },
+  {
+    "id": 36,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-07-04T03:59:59Z",
+    "updatedAt": "2026-07-04T03:59:59Z",
+    "submissionId": 5,
+    "userId": 7
+  },
+  {
+    "id": 37,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-07-04T05:59:59Z",
+    "updatedAt": "2026-07-05T03:59:59Z",
+    "submissionId": 5,
+    "userId": 11
+  },
+  {
+    "id": 38,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-26T18:00:00Z",
+    "updatedAt": "2026-06-26T18:00:00Z",
+    "submissionId": 5,
+    "userId": 10
+  },
+  {
+    "id": 39,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-06-27T18:00:00Z",
+    "updatedAt": "2026-06-27T18:00:00Z",
+    "submissionId": 5,
+    "userId": 11
+  },
+  {
+    "id": 40,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-06-27T18:00:00Z",
+    "updatedAt": "2026-06-27T18:00:00Z",
+    "submissionId": 5,
+    "userId": 12
+  },
+  {
+    "id": 41,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-06-29T18:00:00Z",
+    "updatedAt": "2026-06-29T18:00:00Z",
+    "submissionId": 5,
+    "userId": 8
+  },
+  {
+    "id": 42,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-06-29T20:00:00Z",
+    "updatedAt": "2026-06-30T18:00:00Z",
+    "submissionId": 5,
+    "userId": 9
+  },
+  {
+    "id": 43,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-06-30T18:00:00Z",
+    "updatedAt": "2026-06-30T18:00:00Z",
+    "submissionId": 5,
+    "userId": 5
+  },
+  {
+    "id": 44,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-07-02T18:00:00Z",
+    "updatedAt": "2026-07-02T18:00:00Z",
+    "submissionId": 5,
+    "userId": 7
+  },
+  {
+    "id": 45,
+    "content": "기술 용어가 일관되게 번역되어 이해하기 좋습니다.",
+    "createdAt": "2026-07-03T18:00:00Z",
+    "updatedAt": "2026-07-03T18:00:00Z",
+    "submissionId": 5,
+    "userId": 9
+  },
+  {
+    "id": 46,
+    "content": "첫 문장의 주어를 명확하게 다듬으면 더 자연스럽겠습니다.",
+    "createdAt": "2026-07-04T18:00:00Z",
+    "updatedAt": "2026-07-04T18:00:00Z",
+    "submissionId": 5,
+    "userId": 2
+  },
+  {
+    "id": 47,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-07-04T20:00:00Z",
+    "updatedAt": "2026-07-05T18:00:00Z",
+    "submissionId": 5,
+    "userId": 7
+  },
+  {
+    "id": 48,
+    "content": "원문의 코드 키워드는 번역하지 않고 유지한 점이 좋습니다.",
+    "createdAt": "2026-07-06T18:00:00Z",
+    "updatedAt": "2026-07-06T18:00:00Z",
+    "submissionId": 5,
+    "userId": 4
+  },
+  {
+    "id": 49,
+    "content": "문장이 조금 길어서 두 문장으로 나누는 것을 추천합니다.",
+    "createdAt": "2026-07-07T18:00:00Z",
+    "updatedAt": "2026-07-07T18:00:00Z",
+    "submissionId": 5,
+    "userId": 4
+  },
+  {
+    "id": 50,
+    "content": "직역보다 한국어 문맥에 맞게 표현한 부분이 좋습니다.",
+    "createdAt": "2026-07-16T18:00:00Z",
+    "updatedAt": "2026-07-16T18:00:00Z",
+    "submissionId": 5,
+    "userId": 10
+  }
+]

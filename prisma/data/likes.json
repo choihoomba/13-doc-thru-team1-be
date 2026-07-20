@@ -1,0 +1,614 @@
+[
+  {
+    "id": 1,
+    "createdAt": "2026-05-16T01:59:59Z",
+    "userId": 2,
+    "submissionId": 3
+  },
+  {
+    "id": 2,
+    "createdAt": "2026-05-16T02:59:59Z",
+    "userId": 3,
+    "submissionId": 3
+  },
+  {
+    "id": 3,
+    "createdAt": "2026-05-16T03:59:59Z",
+    "userId": 5,
+    "submissionId": 3
+  },
+  {
+    "id": 4,
+    "createdAt": "2026-05-16T04:59:59Z",
+    "userId": 6,
+    "submissionId": 3
+  },
+  {
+    "id": 5,
+    "createdAt": "2026-05-16T05:59:59Z",
+    "userId": 7,
+    "submissionId": 3
+  },
+  {
+    "id": 6,
+    "createdAt": "2026-05-16T06:59:59Z",
+    "userId": 8,
+    "submissionId": 3
+  },
+  {
+    "id": 7,
+    "createdAt": "2026-05-16T07:59:59Z",
+    "userId": 9,
+    "submissionId": 3
+  },
+  {
+    "id": 8,
+    "createdAt": "2026-05-16T11:59:59Z",
+    "userId": 2,
+    "submissionId": 2
+  },
+  {
+    "id": 9,
+    "createdAt": "2026-05-16T12:59:59Z",
+    "userId": 6,
+    "submissionId": 2
+  },
+  {
+    "id": 10,
+    "createdAt": "2026-05-16T13:59:59Z",
+    "userId": 8,
+    "submissionId": 2
+  },
+  {
+    "id": 11,
+    "createdAt": "2026-05-16T17:59:59Z",
+    "userId": 7,
+    "submissionId": 1
+  },
+  {
+    "id": 12,
+    "createdAt": "2026-05-16T18:59:59Z",
+    "userId": 9,
+    "submissionId": 1
+  },
+  {
+    "id": 13,
+    "createdAt": "2026-05-16T21:59:59Z",
+    "userId": 12,
+    "submissionId": 4
+  },
+  {
+    "id": 14,
+    "createdAt": "2026-05-16T21:59:59Z",
+    "userId": 12,
+    "submissionId": 5
+  },
+  {
+    "id": 15,
+    "createdAt": "2026-05-26T01:59:59Z",
+    "userId": 2,
+    "submissionId": 8
+  },
+  {
+    "id": 16,
+    "createdAt": "2026-05-26T02:59:59Z",
+    "userId": 3,
+    "submissionId": 8
+  },
+  {
+    "id": 17,
+    "createdAt": "2026-05-26T03:59:59Z",
+    "userId": 5,
+    "submissionId": 8
+  },
+  {
+    "id": 18,
+    "createdAt": "2026-05-26T04:59:59Z",
+    "userId": 6,
+    "submissionId": 8
+  },
+  {
+    "id": 19,
+    "createdAt": "2026-05-26T05:59:59Z",
+    "userId": 7,
+    "submissionId": 8
+  },
+  {
+    "id": 20,
+    "createdAt": "2026-05-26T06:59:59Z",
+    "userId": 8,
+    "submissionId": 8
+  },
+  {
+    "id": 21,
+    "createdAt": "2026-05-26T07:59:59Z",
+    "userId": 9,
+    "submissionId": 8
+  },
+  {
+    "id": 22,
+    "createdAt": "2026-05-26T11:59:59Z",
+    "userId": 2,
+    "submissionId": 7
+  },
+  {
+    "id": 23,
+    "createdAt": "2026-05-26T12:59:59Z",
+    "userId": 6,
+    "submissionId": 7
+  },
+  {
+    "id": 24,
+    "createdAt": "2026-05-26T13:59:59Z",
+    "userId": 8,
+    "submissionId": 7
+  },
+  {
+    "id": 25,
+    "createdAt": "2026-05-26T17:59:59Z",
+    "userId": 7,
+    "submissionId": 6
+  },
+  {
+    "id": 26,
+    "createdAt": "2026-05-26T18:59:59Z",
+    "userId": 9,
+    "submissionId": 6
+  },
+  {
+    "id": 27,
+    "createdAt": "2026-05-26T21:59:59Z",
+    "userId": 12,
+    "submissionId": 9
+  },
+  {
+    "id": 28,
+    "createdAt": "2026-05-26T21:59:59Z",
+    "userId": 12,
+    "submissionId": 10
+  },
+  {
+    "id": 29,
+    "createdAt": "2026-06-06T01:59:59Z",
+    "userId": 2,
+    "submissionId": 12
+  },
+  {
+    "id": 30,
+    "createdAt": "2026-06-06T02:59:59Z",
+    "userId": 3,
+    "submissionId": 12
+  },
+  {
+    "id": 31,
+    "createdAt": "2026-06-06T03:59:59Z",
+    "userId": 5,
+    "submissionId": 12
+  },
+  {
+    "id": 32,
+    "createdAt": "2026-06-06T04:59:59Z",
+    "userId": 6,
+    "submissionId": 12
+  },
+  {
+    "id": 33,
+    "createdAt": "2026-06-06T05:59:59Z",
+    "userId": 7,
+    "submissionId": 12
+  },
+  {
+    "id": 34,
+    "createdAt": "2026-06-06T06:59:59Z",
+    "userId": 8,
+    "submissionId": 12
+  },
+  {
+    "id": 35,
+    "createdAt": "2026-06-06T07:59:59Z",
+    "userId": 9,
+    "submissionId": 12
+  },
+  {
+    "id": 36,
+    "createdAt": "2026-06-06T11:59:59Z",
+    "userId": 2,
+    "submissionId": 11
+  },
+  {
+    "id": 37,
+    "createdAt": "2026-06-06T12:59:59Z",
+    "userId": 6,
+    "submissionId": 11
+  },
+  {
+    "id": 38,
+    "createdAt": "2026-06-06T13:59:59Z",
+    "userId": 8,
+    "submissionId": 11
+  },
+  {
+    "id": 39,
+    "createdAt": "2026-06-06T21:59:59Z",
+    "userId": 12,
+    "submissionId": 13
+  },
+  {
+    "id": 40,
+    "createdAt": "2026-06-06T21:59:59Z",
+    "userId": 12,
+    "submissionId": 14
+  },
+  {
+    "id": 41,
+    "createdAt": "2026-06-06T21:59:59Z",
+    "userId": 12,
+    "submissionId": 15
+  },
+  {
+    "id": 42,
+    "createdAt": "2026-06-16T01:59:59Z",
+    "userId": 2,
+    "submissionId": 18
+  },
+  {
+    "id": 43,
+    "createdAt": "2026-06-16T02:59:59Z",
+    "userId": 3,
+    "submissionId": 18
+  },
+  {
+    "id": 44,
+    "createdAt": "2026-06-16T03:59:59Z",
+    "userId": 5,
+    "submissionId": 18
+  },
+  {
+    "id": 45,
+    "createdAt": "2026-06-16T04:59:59Z",
+    "userId": 6,
+    "submissionId": 18
+  },
+  {
+    "id": 46,
+    "createdAt": "2026-06-16T05:59:59Z",
+    "userId": 7,
+    "submissionId": 18
+  },
+  {
+    "id": 47,
+    "createdAt": "2026-06-16T06:59:59Z",
+    "userId": 8,
+    "submissionId": 18
+  },
+  {
+    "id": 48,
+    "createdAt": "2026-06-16T07:59:59Z",
+    "userId": 9,
+    "submissionId": 18
+  },
+  {
+    "id": 49,
+    "createdAt": "2026-06-16T11:59:59Z",
+    "userId": 2,
+    "submissionId": 17
+  },
+  {
+    "id": 50,
+    "createdAt": "2026-06-16T12:59:59Z",
+    "userId": 6,
+    "submissionId": 17
+  },
+  {
+    "id": 51,
+    "createdAt": "2026-06-16T13:59:59Z",
+    "userId": 8,
+    "submissionId": 17
+  },
+  {
+    "id": 52,
+    "createdAt": "2026-06-16T17:59:59Z",
+    "userId": 7,
+    "submissionId": 16
+  },
+  {
+    "id": 53,
+    "createdAt": "2026-06-16T18:59:59Z",
+    "userId": 9,
+    "submissionId": 16
+  },
+  {
+    "id": 54,
+    "createdAt": "2026-06-16T21:59:59Z",
+    "userId": 12,
+    "submissionId": 19
+  },
+  {
+    "id": 55,
+    "createdAt": "2026-06-16T21:59:59Z",
+    "userId": 12,
+    "submissionId": 20
+  },
+  {
+    "id": 56,
+    "createdAt": "2026-06-26T01:59:59Z",
+    "userId": 2,
+    "submissionId": 22
+  },
+  {
+    "id": 57,
+    "createdAt": "2026-06-26T02:59:59Z",
+    "userId": 3,
+    "submissionId": 22
+  },
+  {
+    "id": 58,
+    "createdAt": "2026-06-26T03:59:59Z",
+    "userId": 5,
+    "submissionId": 22
+  },
+  {
+    "id": 59,
+    "createdAt": "2026-06-26T04:59:59Z",
+    "userId": 6,
+    "submissionId": 22
+  },
+  {
+    "id": 60,
+    "createdAt": "2026-06-26T05:59:59Z",
+    "userId": 7,
+    "submissionId": 22
+  },
+  {
+    "id": 61,
+    "createdAt": "2026-06-26T06:59:59Z",
+    "userId": 8,
+    "submissionId": 22
+  },
+  {
+    "id": 62,
+    "createdAt": "2026-06-26T07:59:59Z",
+    "userId": 9,
+    "submissionId": 22
+  },
+  {
+    "id": 63,
+    "createdAt": "2026-06-26T11:59:59Z",
+    "userId": 2,
+    "submissionId": 21
+  },
+  {
+    "id": 64,
+    "createdAt": "2026-06-26T12:59:59Z",
+    "userId": 6,
+    "submissionId": 21
+  },
+  {
+    "id": 65,
+    "createdAt": "2026-06-26T13:59:59Z",
+    "userId": 8,
+    "submissionId": 21
+  },
+  {
+    "id": 66,
+    "createdAt": "2026-06-26T21:59:59Z",
+    "userId": 12,
+    "submissionId": 23
+  },
+  {
+    "id": 67,
+    "createdAt": "2026-06-26T21:59:59Z",
+    "userId": 12,
+    "submissionId": 24
+  },
+  {
+    "id": 68,
+    "createdAt": "2026-06-26T21:59:59Z",
+    "userId": 11,
+    "submissionId": 25
+  },
+  {
+    "id": 69,
+    "createdAt": "2026-07-06T01:59:59Z",
+    "userId": 2,
+    "submissionId": 28
+  },
+  {
+    "id": 70,
+    "createdAt": "2026-07-06T02:59:59Z",
+    "userId": 3,
+    "submissionId": 28
+  },
+  {
+    "id": 71,
+    "createdAt": "2026-07-06T03:59:59Z",
+    "userId": 4,
+    "submissionId": 28
+  },
+  {
+    "id": 72,
+    "createdAt": "2026-07-06T04:59:59Z",
+    "userId": 6,
+    "submissionId": 28
+  },
+  {
+    "id": 73,
+    "createdAt": "2026-07-06T05:59:59Z",
+    "userId": 7,
+    "submissionId": 28
+  },
+  {
+    "id": 74,
+    "createdAt": "2026-07-06T06:59:59Z",
+    "userId": 8,
+    "submissionId": 28
+  },
+  {
+    "id": 75,
+    "createdAt": "2026-07-06T07:59:59Z",
+    "userId": 9,
+    "submissionId": 28
+  },
+  {
+    "id": 76,
+    "createdAt": "2026-07-06T11:59:59Z",
+    "userId": 2,
+    "submissionId": 26
+  },
+  {
+    "id": 77,
+    "createdAt": "2026-07-06T12:59:59Z",
+    "userId": 6,
+    "submissionId": 26
+  },
+  {
+    "id": 78,
+    "createdAt": "2026-07-06T13:59:59Z",
+    "userId": 8,
+    "submissionId": 26
+  },
+  {
+    "id": 79,
+    "createdAt": "2026-07-06T21:59:59Z",
+    "userId": 12,
+    "submissionId": 27
+  },
+  {
+    "id": 80,
+    "createdAt": "2026-07-06T21:59:59Z",
+    "userId": 12,
+    "submissionId": 29
+  },
+  {
+    "id": 81,
+    "createdAt": "2026-06-26T15:00:00Z",
+    "userId": 2,
+    "submissionId": 31
+  },
+  {
+    "id": 82,
+    "createdAt": "2026-06-26T17:00:00Z",
+    "userId": 4,
+    "submissionId": 31
+  },
+  {
+    "id": 83,
+    "createdAt": "2026-06-27T15:00:00Z",
+    "userId": 2,
+    "submissionId": 32
+  },
+  {
+    "id": 84,
+    "createdAt": "2026-06-27T17:00:00Z",
+    "userId": 4,
+    "submissionId": 32
+  },
+  {
+    "id": 85,
+    "createdAt": "2026-06-27T17:00:00Z",
+    "userId": 4,
+    "submissionId": 33
+  },
+  {
+    "id": 86,
+    "createdAt": "2026-06-27T21:00:00Z",
+    "userId": 8,
+    "submissionId": 33
+  },
+  {
+    "id": 87,
+    "createdAt": "2026-06-29T15:00:00Z",
+    "userId": 2,
+    "submissionId": 35
+  },
+  {
+    "id": 88,
+    "createdAt": "2026-06-29T17:00:00Z",
+    "userId": 4,
+    "submissionId": 35
+  },
+  {
+    "id": 89,
+    "createdAt": "2026-06-30T15:00:00Z",
+    "userId": 2,
+    "submissionId": 37
+  },
+  {
+    "id": 90,
+    "createdAt": "2026-06-30T17:00:00Z",
+    "userId": 4,
+    "submissionId": 37
+  },
+  {
+    "id": 91,
+    "createdAt": "2026-07-02T15:00:00Z",
+    "userId": 2,
+    "submissionId": 39
+  },
+  {
+    "id": 92,
+    "createdAt": "2026-07-02T17:00:00Z",
+    "userId": 4,
+    "submissionId": 39
+  },
+  {
+    "id": 93,
+    "createdAt": "2026-07-03T17:00:00Z",
+    "userId": 4,
+    "submissionId": 40
+  },
+  {
+    "id": 94,
+    "createdAt": "2026-07-03T21:00:00Z",
+    "userId": 8,
+    "submissionId": 40
+  },
+  {
+    "id": 95,
+    "createdAt": "2026-07-04T15:00:00Z",
+    "userId": 2,
+    "submissionId": 41
+  },
+  {
+    "id": 96,
+    "createdAt": "2026-07-04T17:00:00Z",
+    "userId": 4,
+    "submissionId": 41
+  },
+  {
+    "id": 97,
+    "createdAt": "2026-07-06T15:00:00Z",
+    "userId": 2,
+    "submissionId": 43
+  },
+  {
+    "id": 98,
+    "createdAt": "2026-07-06T17:00:00Z",
+    "userId": 4,
+    "submissionId": 43
+  },
+  {
+    "id": 99,
+    "createdAt": "2026-07-07T15:00:00Z",
+    "userId": 2,
+    "submissionId": 45
+  },
+  {
+    "id": 100,
+    "createdAt": "2026-07-07T17:00:00Z",
+    "userId": 4,
+    "submissionId": 45
+  },
+  {
+    "id": 101,
+    "createdAt": "2026-07-16T15:00:00Z",
+    "userId": 2,
+    "submissionId": 47
+  },
+  {
+    "id": 102,
+    "createdAt": "2026-07-16T17:00:00Z",
+    "userId": 4,
+    "submissionId": 47
+  }
+]
