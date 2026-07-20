@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as submissionController from '../controllers/submission.controller.js';
-import { requireAuth } from '../middlewares/auth.middleware.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
@@ -47,8 +47,7 @@ const router = Router();
  *                               likes: { type: integer, example: 3 }
  *                               feedbacks: { type: integer, example: 2 }
  */
-router.get('/', submissionController.getSubmissionList);
-// router.get('/', requireAuth, submissionController.getSubmissionList);
+router.get('/', authenticate, submissionController.getSubmissionList);
 
 /**
  * @openapi
@@ -92,8 +91,7 @@ router.get('/', submissionController.getSubmissionList);
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
-router.get('/:id', submissionController.getSubmissionById);
-// router.get('/:id', requireAuth, submissionController.getSubmissionById);
+router.get('/:id', authenticate, submissionController.getSubmissionById);
 
 /**
  * @openapi
@@ -172,8 +170,7 @@ router.post('/', submissionController.createSubmission);
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
-router.patch('/:id', submissionController.updateSubmission);
-// router.patch('/:id', requireAuth, submissionController.updateSubmission);
+router.patch('/:id', authenticate, submissionController.updateSubmission);
 
 /**
  * @openapi
@@ -202,7 +199,6 @@ router.patch('/:id', submissionController.updateSubmission);
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
-router.delete('/:id', submissionController.deleteSubmission);
-// router.delete('/:id', requireAuth, submissionController.deleteSubmission);
+router.delete('/:id', authenticate, submissionController.deleteSubmission);
 
 export default router;
