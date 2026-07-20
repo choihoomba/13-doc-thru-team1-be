@@ -1,4 +1,3 @@
-// 뼈대만 잡아놓은 상태
 // src/config/swagger.js
 import swaggerJSDoc from 'swagger-jsdoc';
 
@@ -13,6 +12,50 @@ const options = {
     servers: [{ url: 'http://localhost:4000' }],
     components: {
       schemas: {
+        // 공통 성공 응답 래퍼 — data는 엔드포인트별 실제 타입으로 오버라이드
+        SuccessResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              nullable: true,
+              description: '엔드포인트별 실제 데이터 (없으면 null)',
+            },
+          },
+        },
+        // 공통 에러 응답 래퍼
+        ErrorResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            message: {
+              type: 'string',
+              example: '유효하지 않은 인증 정보입니다.',
+            },
+            code: {
+              type: 'string',
+              example: 'UNAUTHORIZED',
+              // 실제 code는 utils/errors.js와 error.middleware.js 참고
+              // (팀 전체 code 확정되면 enum 고려)
+            },
+          },
+        },
+        AuthUser: {
+          type: 'object',
+          description: '본인 인증 응답용 유저 정보',
+          properties: {
+            id: { type: 'integer', example: 1 },
+            role: { type: 'string', enum: ['ADMIN', 'USER'] },
+            email: {
+              type: 'string',
+              format: 'email',
+              example: 'user@example.com',
+            },
+            nickname: { type: 'string', example: '만두' },
+            grade: { type: 'string', enum: ['GENERAL', 'EXPERT'] },
+          },
+        },
         User: {
           type: 'object',
           properties: {
@@ -154,7 +197,7 @@ const options = {
       },
     },
   },
-  apis: ['./src/routes/*.js'],
+  apis: ['./src/routes/*.js', './src/docs/*.js'],
 };
 
 export default swaggerJSDoc(options);

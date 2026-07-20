@@ -1,1 +1,127 @@
-@baseUrl = http://localhost:4000
+@BASE_URL = http://localhost:4000
+
+# seed 계정 (README 기준) — 비밀번호는 전부 test1234!
+# admin@docsru.dev  (ADMIN)
+# jihoon@docsru.dev (USER / GENERAL)
+# react@docsru.dev  (USER / EXPERT)
+# docs@docsru.dev   (USER / EXPERT)
+
+# ============================================================
+# [정상 흐름] 위에서부터 순서대로 실행하세요.
+# REST Client가 signin 쿠키를 자동으로 이후 요청에 실어줍니다.
+# (자동 전송 안 되면 설정에서 rest-client.rememberCookiesForSubscribeRequests = true)
+# ============================================================
+
+
+### 1. signin — 로그인 (쿠키 발급)
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. me — 본인 정보 조회 (쿠키 인증)
+GET {{BASE_URL}}/auth/me
+
+### 3. refresh — 토큰 재발급 (쿠키 갱신 + DB 해시 회전)
+### DBeaver로 해당 유저 refreshToken 값이 전후로 바뀌는지 확인
+POST {{BASE_URL}}/auth/refresh
+
+### 4. me — refresh 후에도 정상 조회되는지
+GET {{BASE_URL}}/auth/me
+
+### 5. signout — 로그아웃 (쿠키 삭제 + DB refreshToken null)
+POST {{BASE_URL}}/auth/signout
+
+### 6. me — signout 후엔 401 (쿠키 삭제됨)
+GET {{BASE_URL}}/auth/me
+
+### 7. refresh — signout 후엔 401 (refreshToken 없음)
+POST {{BASE_URL}}/auth/refresh
+
+
+# ============================================================
+# [signup]
+# ============================================================
+
+
+### signup — 신규 가입 (201)
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "newuser@docsru.dev",
+  "password": "test1234!",
+  "nickname": "신규유저"
+}
+
+
+# ============================================================
+# [에러 케이스] 독립 실행 (순서 무관)
+# ============================================================
+
+
+### signin — 비밀번호 불일치 (401 UNAUTHORIZED)
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "wrongpassword"
+}
+
+### signin — 존재하지 않는 이메일 (401 UNAUTHORIZED)
+### 비번 불일치와 같은 응답이어야 함 (계정 존재 여부 노출 방지)
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "nobody@docsru.dev",
+  "password": "test1234!"
+}
+
+### signin — body 없음 (400 VALIDATION_ERROR)
+POST {{BASE_URL}}/auth/signin
+
+### signup — 중복 이메일 (409 CONFLICT)
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!",
+  "nickname": "중복시도"
+}
+
+### signup — body 없음 (400 VALIDATION_ERROR)
+POST {{BASE_URL}}/auth/signup
+
+### signup — email 누락 (400 VALIDATION_ERROR)
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "password": "test1234!",
+  "nickname": "이메일없음"
+}
+
+### signup — 잘못된 email 형식 (400 VALIDATION_ERROR)
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "not-an-email",
+  "password": "test1234!",
+  "nickname": "형식오류"
+}
+
+### signup — password 누락 (400 VALIDATION_ERROR)
+POST {{BASE_URL}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "nopw@docsru.dev",
+  "nickname": "비번없음"
+}
