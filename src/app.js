@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
+import participationRouter from './routes/participations.route.js';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
+app.use('/participations', participationRouter);
 
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);

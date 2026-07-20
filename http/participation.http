@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# REST Client의 쿠키 저장이 파일마다 다르게 동작할 수 있어
+# 이 파일 안에서 직접 로그인부터 실행합니다. (1번 먼저 실행 후 2번, 3번 실행)
+# @name signin: VS Code REST Client 확장의 요청 이름 지정 문법 
+# ============================================================
+
+### 1. signin — 로그인 (쿠키 발급)
+# @name signin
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. 작업 도전하기
+POST {{baseUrl}}/participations
+Content-Type: application/json
+Cookie: {{signin.response.headers.Set-Cookie}}
+
+{
+  "challengeId" : 15
+}
+
+### 3. 작업 도전 포기하기
+PATCH {{baseUrl}}/participations/64
+Content-Type: application/json
+Cookie: {{signin.response.headers.Set-Cookie}}
