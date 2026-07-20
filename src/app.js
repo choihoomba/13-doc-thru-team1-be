@@ -6,11 +6,12 @@ import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 import errorHandler from './middlewares/error.middleware.js';
+import authRouter from './routes/auth.route.js';
 
 const app = express();
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(morgan('dev'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(
   cors({
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
 
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);
