@@ -1,4 +1,3 @@
-// src/utils/errors.js
 // 커스텀 에러 — 서비스 레이어에서 throw하면 error.middleware가 받아 처리한다.
 // code 필드로 프론트가 에러 종류를 분기할 수 있게 한다.
 

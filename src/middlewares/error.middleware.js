@@ -1,4 +1,4 @@
-// src/middlewares/error.middleware.js
+
 import { AppError } from '../utils/errors.js';
 import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
