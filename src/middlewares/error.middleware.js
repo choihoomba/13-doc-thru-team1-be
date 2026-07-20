@@ -1,5 +1,5 @@
 // src/middlewares/error.middleware.js
-import { AppError } from '../utils/errors.js'; 
+import { AppError } from '../utils/errors.js';
 import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
 
@@ -21,23 +21,24 @@ function errorHandler(err, req, res, next) {
   }
 
   // 2) Zod 유효성 검사 실패
-  // 사용자가 잘못된 값을 보낸 것이므로 400으로 변환.
-  // issues 전체 대신 첫 메시지만 사용해 공통 응답 형식을 유지한다.
+  // 상태코드는 400이지만 code는 VALIDATION_ERROR로 분리한다.
+  // 서비스 로직의 BadRequest와 "스키마 검증 실패"를 응답만 보고 구분하기 위함.
   if (err instanceof ZodError) {
     return res.status(400).json({
       success: false,
       message: err.issues[0]?.message ?? '입력값이 유효하지 않습니다.',
-      code: 'BAD_REQUEST',
+      code: 'VALIDATION_ERROR',
     });
   }
 
   // 3) Prisma의 알려진 요청 에러
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     // P2025: 수정/삭제 대상 레코드가 없음 → 404
+    // 메시지는 NotFoundError의 기본 메시지와 통일
     if (err.code === 'P2025') {
       return res.status(404).json({
         success: false,
-        message: '존재하지 않는 리소스입니다.',
+        message: '요청한 리소스를 찾을 수 없습니다.',
         code: 'NOT_FOUND',
       });
     }
