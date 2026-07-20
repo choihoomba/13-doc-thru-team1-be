@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
+import errorHandler from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -25,6 +26,6 @@ app.use(cookieParser());
 // app.use('/auth', authRouter);
 
 // 에러 핸들러 (항상 마지막)
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
