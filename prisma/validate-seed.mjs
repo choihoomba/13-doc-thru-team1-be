@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const dataDirectory = path.join(root, 'prisma', 'data');
+const dataDirectory = path.join(root, 'data');
 const read = (name) =>
   JSON.parse(fs.readFileSync(path.join(dataDirectory, `${name}.json`), 'utf8'));
 const data = Object.fromEntries(

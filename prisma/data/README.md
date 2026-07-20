@@ -158,7 +158,7 @@ Seed 데이터에는 자기 작업물 추천과 중복 추천이 없습니다.
 - `isRead`: 알림 읽음 여부입니다.
 - `userId`: 알림 수신 사용자입니다.
 
-`targetType + targetId`는 DB 외래키가 아닌 다형 참조이므로 `validate-prisma-seed.mjs`에서 대상 존재 여부를 검증합니다.
+`targetType + targetId`는 DB 외래키가 아닌 다형 참조이므로 `prisma/validate-seed.mjs`에서 대상 존재 여부를 검증합니다.
 
 ## 전체 관계 구조
 
@@ -243,7 +243,7 @@ JSON에는 평문 비밀번호를 저장하지 않으며, `prisma/seed.js` 실�
 프로젝트 루트에서 다음 명령을 실행합니다.
 
 ```bash
-node validate-prisma-seed.mjs
+npm run seed:validate
 ```
 
 검증기는 DB 연결 없이 다음 내용을 확인합니다.
@@ -272,25 +272,27 @@ node validate-prisma-seed.mjs
 Prisma seed validation passed.
 ```
 
-## Seed 실행 방법
+`npm run seed`를 실행하면 이 검증을 먼저 통과한 경우에만 실제 seed가 실행됩니다.
 
-### 1. Prisma 스키마 검사
+## 초기 환경 설정
+
+다음 명령은 seed를 실행할 때마다 반복하는 절차가 아닙니다. 프로젝트를 처음 설정하거나 Prisma 스키마가 변경된 경우에 실행합니다.
+
+### Prisma 스키마 검사
 
 ```bash
 npx prisma validate
 ```
 
-### 2. Prisma Client 생성
+### Prisma Client 생성
 
 ```bash
 npx prisma generate
 ```
 
-### 3. DB 연결 확인
+### Migration 적용 상태 확인
 
-`.env`의 `DATABASE_URL`이 개인 로컬 또는 테스트 PostgreSQL을 가리키는지 확인합니다.
-
-기존 migration 적용 상태는 다음 명령으로 확인할 수 있습니다.
+`.env`의 `DATABASE_URL`이 개인 로컬 또는 테스트 PostgreSQL을 가리키는지 확인한 후 기존 migration 적용 상태를 확인합니다.
 
 ```bash
 npx prisma migrate status
@@ -302,19 +304,38 @@ npx prisma migrate status
 npx prisma migrate deploy
 ```
 
-### 4. Seed 실행
+## Seed 실행 방법
+
+### 1. DB 연결 확인
+
+`.env`의 `DATABASE_URL`이 개인 로컬 또는 테스트 PostgreSQL을 가리키는지 반드시 확인합니다.
+
+### 2. 검증 후 Seed 실행
+
+프로젝트 루트에서 다음 명령 하나를 실행합니다.
 
 ```bash
-node prisma/seed.js
+npm run seed
 ```
+
+`npm run seed`는 다음 순서로 실행됩니다.
+
+```text
+npm run seed:validate
+→ node prisma/validate-seed.mjs
+→ node prisma/seed.js
+```
+
+JSON 데이터 검증에 실패하면 `prisma/seed.js`는 실행되지 않으므로 DB 데이터도 변경되지 않습니다.
 
 정상 완료 시 다음 메시지가 출력됩니다.
 
 ```text
+Prisma seed validation passed.
 Docsru seed completed.
 ```
 
-### 5. 데이터 확인
+### 3. 데이터 확인
 
 ```bash
 npx prisma studio

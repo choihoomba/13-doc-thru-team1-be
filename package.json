@@ -16,6 +16,8 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "seed:validate": "node prisma/validate-seed.mjs",
+    "seed": "npm run seed:validate && node prisma/seed.js",
     "start": "node src/server.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
