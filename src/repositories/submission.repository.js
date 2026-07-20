@@ -42,13 +42,22 @@ export function getSubmissionList({ challengeId, orderBy, include }) {
   });
 }
 
-// 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함)
-export function getSubmissionById(id, include) {
-  return prisma.submission.findFirst({
+// 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
+export async function getSubmissionById(
+  id,
+  include,
+  { page, limit } = {}
+) {
+  const submission = await prisma.submission.findFirst({
     where: { id, deletedAt: null },
     include: {
       user: { select: { id: true, nickname: true } },
-      _count: { select: { likes: true } },
+      _count: {
+        select: {
+          likes: true,
+          ...(include === 'feedback' && { feedbacks: true }),
+        },
+      },
       ...(include === 'feedback' && {
         feedbacks: {
           select: {
@@ -58,10 +67,24 @@ export function getSubmissionById(id, include) {
             user: { select: { id: true, nickname: true } },
           },
           orderBy: { createdAt: 'asc' },
+          skip: (page - 1) * limit,
+          take: limit,
         },
       }),
     },
   });
+
+  if (submission && include === 'feedback') {
+    const totalCount = submission._count.feedbacks;
+    submission.feedbackPagination = {
+      page,
+      limit,
+      totalCount,
+      hasMore: page * limit < totalCount,
+    };
+  }
+
+  return submission;
 }
 
 // 작업물 도전하기 페이지: 소유권/상태 확인용 원본 조회 (수정, 삭제, 제출 전 검증)

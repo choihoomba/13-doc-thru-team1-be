@@ -14,6 +14,8 @@ const submissionListQuerySchema = z.object({
 
 const submissionDetailQuerySchema = z.object({
   include: z.enum(['feedback']).optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(50).default(3),
 });
 
 const createSubmissionSchema = z.object({
@@ -32,11 +34,16 @@ export async function getSubmissionList(req, res) {
   res.status(200).json({ success: true, data: submissions });
 }
 
-// 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함)
+// 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, ?page=&limit=으로 더보기)
 export async function getSubmissionById(req, res) {
   const { id } = submissionIdParamSchema.parse(req.params);
-  const { include } = submissionDetailQuerySchema.parse(req.query);
-  const submission = await submissionService.getSubmissionById(id, include);
+  const { include, page, limit } = submissionDetailQuerySchema.parse(
+    req.query
+  );
+  const submission = await submissionService.getSubmissionById(id, include, {
+    page,
+    limit,
+  });
   res.status(200).json({ success: true, data: submission });
 }
 
