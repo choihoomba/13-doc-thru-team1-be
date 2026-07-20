@@ -53,7 +53,7 @@ router.get('/', authenticate, submissionController.getSubmissionList);
  * @openapi
  * /submissions/{id}:
  *   get:
- *     summary: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함)
+ *     summary: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:
@@ -64,6 +64,14 @@ router.get('/', authenticate, submissionController.getSubmissionList);
  *       - in: query
  *         name: include
  *         schema: { type: string, enum: [feedback] }
+ *       - in: query
+ *         name: page
+ *         description: 피드백 페이지 (include=feedback일 때만 사용, 기본값 1)
+ *         schema: { type: integer, default: 1 }
+ *       - in: query
+ *         name: limit
+ *         description: 피드백 페이지당 개수 (include=feedback일 때만 사용, 기본값 3, 최대 50)
+ *         schema: { type: integer, default: 3 }
  *     responses:
  *       200:
  *         description: 작업물 상세
@@ -88,6 +96,14 @@ router.get('/', authenticate, submissionController.getSubmissionList);
  *                           type: array
  *                           items:
  *                             $ref: '#/components/schemas/Feedback'
+ *                         feedbackPagination:
+ *                           type: object
+ *                           description: include=feedback일 때만 포함
+ *                           properties:
+ *                             page: { type: integer, example: 1 }
+ *                             limit: { type: integer, example: 3 }
+ *                             totalCount: { type: integer, example: 8 }
+ *                             hasMore: { type: boolean, example: true }
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
