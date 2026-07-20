@@ -5,6 +5,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
+import feedbackRouter from './routes/feedback.route.js';
+import errorHandler from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -22,9 +24,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
+app.use('/', feedbackRouter);
 // app.use('/auth', authRouter);
 
 // 에러 핸들러 (항상 마지막)
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
