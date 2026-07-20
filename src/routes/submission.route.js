@@ -24,6 +24,28 @@ const router = Router();
  *     responses:
  *       200:
  *         description: 작업물 목록
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     allOf:
+ *                       - $ref: '#/components/schemas/Submission'
+ *                       - type: object
+ *                         properties:
+ *                           user:
+ *                             $ref: '#/components/schemas/User'
+ *                           draft:
+ *                             $ref: '#/components/schemas/Draft'
+ *                           _count:
+ *                             type: object
+ *                             properties:
+ *                               likes: { type: integer, example: 3 }
+ *                               feedbacks: { type: integer, example: 2 }
  */
 router.get('/', submissionController.getSubmissionList);
 // router.get('/', requireAuth, submissionController.getSubmissionList);
@@ -46,6 +68,27 @@ router.get('/', submissionController.getSubmissionList);
  *     responses:
  *       200:
  *         description: 작업물 상세
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   allOf:
+ *                     - $ref: '#/components/schemas/Submission'
+ *                     - type: object
+ *                       properties:
+ *                         user:
+ *                           $ref: '#/components/schemas/User'
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             likes: { type: integer, example: 3 }
+ *                         feedbacks:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/Feedback'
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
@@ -72,6 +115,22 @@ router.get('/:id', submissionController.getSubmissionById);
  *     responses:
  *       201:
  *         description: 생성된 작업물
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   $ref: '#/components/schemas/Submission'
+ *       400:
+ *         description: 참여 중인 챌린지에 대한 제출이 아님
+ *       403:
+ *         description: 본인의 참여 내역이 아님
+ *       404:
+ *         description: 참여 내역을 찾을 수 없음
+ *       409:
+ *         description: 이미 제출된 작업물이 있음
  */
 router.post('/', submissionController.createSubmission);
 // router.post('/', requireAuth, submissionController.createSubmission);
@@ -100,6 +159,18 @@ router.post('/', submissionController.createSubmission);
  *     responses:
  *       200:
  *         description: 수정된 작업물
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   $ref: '#/components/schemas/Submission'
+ *       403:
+ *         description: 본인이 작성한 작업물이 아님
+ *       404:
+ *         description: 작업물을 찾을 수 없음
  */
 router.patch('/:id', submissionController.updateSubmission);
 // router.patch('/:id', requireAuth, submissionController.updateSubmission);
@@ -117,8 +188,19 @@ router.patch('/:id', submissionController.updateSubmission);
  *         required: true
  *         schema: { type: integer }
  *     responses:
- *       204:
+ *       200:
  *         description: 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data: { nullable: true, example: null }
+ *       403:
+ *         description: 본인이 작성한 작업물이 아님
+ *       404:
+ *         description: 작업물을 찾을 수 없음
  */
 router.delete('/:id', submissionController.deleteSubmission);
 // router.delete('/:id', requireAuth, submissionController.deleteSubmission);

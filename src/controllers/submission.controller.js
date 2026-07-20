@@ -1,0 +1,70 @@
+import { z } from 'zod';
+import * as submissionService from '../services/submission.service.js';
+
+// Zod
+const submissionIdParamSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
+const submissionListQuerySchema = z.object({
+  challengeId: z.coerce.number().int().positive().optional(),
+  orderBy: z.enum(['likeDesc']).optional(),
+  include: z.enum(['user', 'draft']).optional(),
+});
+
+const submissionDetailQuerySchema = z.object({
+  include: z.enum(['feedback']).optional(),
+});
+
+const createSubmissionSchema = z.object({
+  participationId: z.coerce.number().int().positive(),
+  content: z.string().min(1, '내용을 입력해주세요'),
+});
+
+const updateSubmissionSchema = z.object({
+  content: z.string().min(1, '내용을 입력해주세요'),
+});
+
+// 작업물 목록 조회
+export async function getSubmissionList(req, res) {
+  const query = submissionListQuerySchema.parse(req.query);
+  const submissions = await submissionService.getSubmissionList(query);
+  res.status(200).json({ success: true, data: submissions });
+}
+
+// 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함)
+export async function getSubmissionById(req, res) {
+  const { id } = submissionIdParamSchema.parse(req.params);
+  const { include } = submissionDetailQuerySchema.parse(req.query);
+  const submission = await submissionService.getSubmissionById(id, include);
+  res.status(200).json({ success: true, data: submission });
+}
+
+// 작업물 생성 (제출하기)
+export async function createSubmission(req, res) {
+  const data = createSubmissionSchema.parse(req.body);
+  const submission = await submissionService.createSubmission(
+    req.user.id,
+    data
+  );
+  res.status(201).json({ success: true, data: submission });
+}
+
+// 작업물 수정
+export async function updateSubmission(req, res) {
+  const { id } = submissionIdParamSchema.parse(req.params);
+  const { content } = updateSubmissionSchema.parse(req.body);
+  const submission = await submissionService.updateSubmission(
+    req.user.id,
+    id,
+    content
+  );
+  res.status(200).json({ success: true, data: submission });
+}
+
+// 작업물 삭제
+export async function deleteSubmission(req, res) {
+  const { id } = submissionIdParamSchema.parse(req.params);
+  await submissionService.deleteSubmission(req.user.id, id);
+  res.status(200).json({ success: true, data: null });
+}
