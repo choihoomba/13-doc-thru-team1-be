@@ -9,7 +9,6 @@ import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
-import submissionRouter from './routes/submission.route.js';
 
 const app = express();
 
