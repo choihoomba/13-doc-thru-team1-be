@@ -111,11 +111,3 @@ export function findSubmissionById(id) {
 export function updateSubmissionContent(id, content) {
   return prisma.submission.update({ where: { id }, data: { content } });
 }
-
-// 작업물 삭제 (soft delete)
-export function softDeleteSubmission(id) {
-  return prisma.submission.update({
-    where: { id },
-    data: { deletedAt: new Date() },
-  });
-}

@@ -39,17 +39,3 @@ export async function updateSubmission(userId, id, content) {
 
   return submissionRepository.updateSubmissionContent(id, content);
 }
-
-// 작업물 삭제
-export async function deleteSubmission(userId, id) {
-  const submission = await submissionRepository.findSubmissionById(id);
-
-  if (!submission || submission.deletedAt) {
-    throw new NotFoundError('작업물을 찾을 수 없습니다');
-  }
-  if (submission.userId !== userId) {
-    throw new ForbiddenError('본인이 작성한 작업물만 삭제할 수 있습니다');
-  }
-
-  await submissionRepository.softDeleteSubmission(id);
-}

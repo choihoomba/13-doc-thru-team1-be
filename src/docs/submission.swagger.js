@@ -153,31 +153,3 @@
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
-
-/**
- * @openapi
- * /submissions/{id}:
- *   delete:
- *     summary: 작업물 삭제 (soft delete)
- *     tags: [Submission]
- *     security: [{ cookieAuth: [] }]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *     responses:
- *       200:
- *         description: 삭제 성공
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success: { type: boolean, example: true }
- *                 data: { nullable: true, example: null }
- *       403:
- *         description: 본인이 작성한 작업물이 아님
- *       404:
- *         description: 작업물을 찾을 수 없음
- */

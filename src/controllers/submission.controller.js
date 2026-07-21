@@ -55,10 +55,3 @@ export async function updateSubmission(req, res) {
   );
   res.status(200).json({ success: true, data: submission });
 }
-
-// 작업물 삭제
-export async function deleteSubmission(req, res) {
-  const { id } = submissionIdParamSchema.parse(req.params);
-  await submissionService.deleteSubmission(req.user.userId, id);
-  res.status(200).json({ success: true, data: null });
-}
