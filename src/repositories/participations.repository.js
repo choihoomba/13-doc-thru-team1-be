@@ -65,7 +65,7 @@ async function create({ userId, challengeId }) {
     });
 
     return { participation, submission };
-  };);
+  });
 }
 
 /** 작업 도전 포기하기 */
