@@ -37,13 +37,22 @@
  *                             $ref: '#/components/schemas/Draft'
  *                           _count:
  *                             type: object
-<<<<<<< HEAD
  *                             description: include=draft일 때는 응답에 포함되지 않음
-=======
->>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
  *                             properties:
  *                               likes: { type: integer, example: 3 }
  *                               feedbacks: { type: integer, example: 2 }
+ *       400:
+ *         description: 유효성 검사 실패 (VALIDATION_ERROR)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: 인증 실패 (UNAUTHORIZED)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 /**
@@ -115,59 +124,31 @@
  *                             limit: { type: integer, example: 3 }
  *                             totalCount: { type: integer, example: 8 }
  *                             hasMore: { type: boolean, example: true }
- *       404:
- *         description: 작업물을 찾을 수 없음
- */
-
-/**
- * @openapi
-<<<<<<< HEAD
- * /submissions/{id}:
- *   patch:
- *     summary: 작업물 수정 (참여 등록 시 생성된 빈 작업물에 최초 제출 시에도 사용)
-=======
- * /submissions:
- *   post:
- *     summary: 작업물 생성 (제출하기)
- *     tags: [Submission]
- *     security: [{ cookieAuth: [] }]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [participationId, content]
- *             properties:
- *               participationId: { type: integer }
- *               content: { type: string }
- *     responses:
- *       201:
- *         description: 생성된 작업물
+ *       400:
+ *         description: 유효성 검사 실패 (VALIDATION_ERROR)
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success: { type: boolean, example: true }
- *                 data:
- *                   $ref: '#/components/schemas/Submission'
- *       400:
- *         description: 참여 중인 챌린지에 대한 제출이 아님
- *       403:
- *         description: 본인의 참여 내역이 아님
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: 인증 실패 (UNAUTHORIZED)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: 참여 내역을 찾을 수 없음
- *       409:
- *         description: 이미 제출된 작업물이 있음
+ *         description: 작업물을 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 /**
  * @openapi
  * /submissions/{id}:
  *   patch:
- *     summary: 작업물 수정
->>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
+ *     summary: 작업물 수정 (참여 등록 시 생성된 빈 작업물에 최초 제출 시에도 사용)
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:
@@ -195,39 +176,34 @@
  *                 success: { type: boolean, example: true }
  *                 data:
  *                   $ref: '#/components/schemas/Submission'
- *       403:
- *         description: 본인이 작성한 작업물이 아님
- *       404:
- *         description: 작업물을 찾을 수 없음
- */
-<<<<<<< HEAD
-=======
-
-/**
- * @openapi
- * /submissions/{id}:
- *   delete:
- *     summary: 작업물 삭제 (soft delete)
- *     tags: [Submission]
- *     security: [{ cookieAuth: [] }]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *     responses:
- *       200:
- *         description: 삭제 성공
+ *       400:
+ *         description: 유효성 검사 실패 (VALIDATION_ERROR)
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success: { type: boolean, example: true }
- *                 data: { nullable: true, example: null }
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: 인증 실패 (UNAUTHORIZED)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: 본인이 작성한 작업물이 아님
+ *         description: 본인이 작성한 작업물이 아님 (FORBIDDEN)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: 작업물을 찾을 수 없음
+ *         description: 작업물을 찾을 수 없음 (NOT_FOUND)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       409:
+ *         description: 마감된 챌린지의 작업물은 수정할 수 없음 (CONFLICT)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
->>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
