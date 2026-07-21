@@ -40,10 +40,12 @@ export async function getSubmissionById(req, res) {
   const { include, page, limit } = submissionDetailQuerySchema.parse(
     req.query
   );
-  const submission = await submissionService.getSubmissionById(id, include, {
-    page,
-    limit,
-  });
+  const submission = await submissionService.getSubmissionById(
+    id,
+    req.user.userId,
+    include,
+    { page, limit }
+  );
   res.status(200).json({ success: true, data: submission });
 }
 
