@@ -106,26 +106,33 @@
  *               title:
  *                 type: string
  *                 maxLength: 100
+ *                 example: MDN Fetch API 번역 챌린지
  *               field:
  *                 type: string
  *                 enum: [NEXTJS, REACT, MODERNJS, TYPESCRIPT, API, WEB, CAREER]
+ *                 example: API
  *               docType:
  *                 type: string
  *                 enum: [OFFICIAL, BLOG, BOOK, ETC]
+ *                 example: OFFICIAL
  *               content:
  *                 type: string
  *                 maxLength: 5000
+ *                 example: MDN Fetch API 문서를 함께 번역합니다.
  *               originalUrl:
  *                 type: string
  *                 format: uri
+ *                 example: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
  *               deadline:
  *                 type: string
  *                 format: date-time
  *                 description: 현재 시간보다 이후인 마감일
+ *                 example: 2026-12-20T23:59:59.000Z
  *               maxParticipants:
  *                 type: integer
  *                 minimum: 1
  *                 description: 현재 참여 인원보다 작게 변경할 수 없습니다.
+ *                 example: 6
  *     responses:
  *       200:
  *         description: 챌린지 수정 성공
