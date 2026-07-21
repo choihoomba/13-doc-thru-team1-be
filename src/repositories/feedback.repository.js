@@ -27,8 +27,11 @@ export function findManyBySubmission(submissionId, { cursor, take }) {
 
 // 피드백 1건 + 소속 챌린지 상태 (권한/마감 판단용)
 export function findByIdWithChallenge(feedbackId) {
-  return prisma.feedback.findUnique({
-    where: { id: feedbackId },
+  return prisma.feedback.findFirst({
+    where: {
+      id: feedbackId,
+      submission: { deletedAt: null }, // 삭제된 작업물의 피드백은 조회 안 됨
+    },
     include: {
       submission: {
         include: { challenge: { select: { status: true, deadline: true } } },
