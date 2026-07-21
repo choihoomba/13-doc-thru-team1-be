@@ -81,6 +81,17 @@
  *                       properties:
  *                         user:
  *                           $ref: '#/components/schemas/User'
+ *                         challenge:
+ *                           type: object
+ *                           description: 페이지 메인 헤딩용 원본 문서 제목 (draft.title 없을 때 폴백)
+ *                           properties:
+ *                             title: { type: string }
+ *                         draft:
+ *                           type: object
+ *                           nullable: true
+ *                           description: 임시저장 내역이 없으면 null. 헤딩은 draft.title ?? challenge.title 순으로 사용
+ *                           properties:
+ *                             title: { type: string, nullable: true }
  *                         _count:
  *                           type: object
  *                           properties:

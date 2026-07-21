@@ -52,6 +52,8 @@ export async function getSubmissionById(
     where: { id, deletedAt: null },
     include: {
       user: { select: { id: true, nickname: true } },
+      challenge: { select: { title: true } },
+      draft: { select: { title: true } },
       _count: {
         select: {
           likes: true,
