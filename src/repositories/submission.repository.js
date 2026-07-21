@@ -8,11 +8,16 @@ const baseSelect = {
   updatedAt: true,
   challengeId: true,
   userId: true,
-  _count: { select: { likes: true, feedbacks: true } },
 };
 
 function buildListSelect(include) {
-  const select = { ...baseSelect };
+  const select = {
+    ...baseSelect,
+    // 작업물 도전하기 페이지(include=draft)는 좋아요/피드백 수가 필요 없어서 제외
+    ...(include !== 'draft' && {
+      _count: { select: { likes: true, feedbacks: true } },
+    }),
+  };
   // 챌린지 상세 페이지
   if (include === 'user') {
     select.user = { select: { id: true, nickname: true } };
@@ -31,24 +36,38 @@ function buildListSelect(include) {
 export function getSubmissionList({ challengeId, orderBy, include }) {
   return prisma.submission.findMany({
     where: {
-      deletedAt: null,
+      // 작업물 도전하기 페이지(include=draft)는 삭제된 챌린지/작업물이어도 제목은 보여줘야 해서 소프트 삭제 필터 제외
+      ...(include !== 'draft' && { deletedAt: null }),
       ...(challengeId && { challengeId }),
     },
     orderBy:
       orderBy === 'likeDesc'
-        ? { likes: { _count: 'desc' } }
+        ? [{ likes: { _count: 'desc' } }, { createdAt: 'desc' }]
         : { createdAt: 'desc' },
     select: buildListSelect(include),
   });
 }
 
-// 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함)
-export function getSubmissionById(id, include) {
-  return prisma.submission.findFirst({
+// 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
+export async function getSubmissionById(
+  id,
+  userId,
+  include,
+  { page, limit } = {}
+) {
+  const submission = await prisma.submission.findFirst({
     where: { id, deletedAt: null },
     include: {
       user: { select: { id: true, nickname: true } },
-      _count: { select: { likes: true } },
+      challenge: { select: { title: true } },
+      draft: { select: { title: true } },
+      likes: { where: { userId }, select: { id: true }, take: 1 },
+      _count: {
+        select: {
+          likes: true,
+          ...(include === 'feedback' && { feedbacks: true }),
+        },
+      },
       ...(include === 'feedback' && {
         feedbacks: {
           select: {
@@ -58,46 +77,40 @@ export function getSubmissionById(id, include) {
             user: { select: { id: true, nickname: true } },
           },
           orderBy: { createdAt: 'asc' },
+          skip: (page - 1) * limit,
+          take: limit,
         },
       }),
     },
   });
+
+  if (submission) {
+    submission.isLiked = submission.likes.length > 0;
+    delete submission.likes;
+  }
+
+  if (submission && include === 'feedback') {
+    const totalCount = submission._count.feedbacks;
+    submission.feedbackPagination = {
+      page,
+      limit,
+      totalCount,
+      hasMore: page * limit < totalCount,
+    };
+  }
+
+  return submission;
 }
 
-// 작업물 도전하기 페이지: 소유권/상태 확인용 원본 조회 (수정, 삭제, 제출 전 검증)
+// 작업물 도전하기 페이지: 소유권/상태 확인용 원본 조회 (수정, 삭제, 제출 전 검증)-> 마감 판단을 위해 challenge도 include
 export function findSubmissionById(id) {
-  return prisma.submission.findUnique({ where: { id } });
-}
-
-// 작업물 도전하기 페이지: 제출하려는 참여 내역이 본인 것인지, 이미 제출했는지 확인하기 위한 조회
-export function findParticipationById(participationId) {
-  return prisma.participation.findUnique({
-    where: { id: participationId },
-    include: { submission: true },
-  });
-}
-
-// 작업물 생성 (제출하기)
-export function createSubmission({
-  participationId,
-  challengeId,
-  userId,
-  content,
-}) {
-  return prisma.submission.create({
-    data: { participationId, challengeId, userId, content },
+  return prisma.submission.findUnique({
+    where: { id },
+    include: { challenge: { select: { status: true, deadline: true } } },
   });
 }
 
 // 작업물 수정
 export function updateSubmissionContent(id, content) {
   return prisma.submission.update({ where: { id }, data: { content } });
-}
-
-// 작업물 삭제 (soft delete)
-export function softDeleteSubmission(id) {
-  return prisma.submission.update({
-    where: { id },
-    data: { deletedAt: new Date() },
-  });
 }

@@ -5,8 +5,10 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
+import feedbackRouter from './routes/feedback.route.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
+import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
 import draftRouter from './routes/draft.route.js';
 
@@ -29,6 +31,8 @@ app.use(cookieParser());
 app.use('/auth', authRouter);
 app.use('/participations', participationRouter);
 app.use('/draft', draftRouter);
+app.use('/submissions', submissionRouter);
+app.use('/', feedbackRouter);
 
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);
