@@ -51,7 +51,7 @@ export async function getSubmissionById(req, res) {
 export async function createSubmission(req, res) {
   const data = createSubmissionSchema.parse(req.body);
   const submission = await submissionService.createSubmission(
-    req.user.id,
+    req.user.userId,
     data
   );
   res.status(201).json({ success: true, data: submission });
@@ -62,7 +62,7 @@ export async function updateSubmission(req, res) {
   const { id } = submissionIdParamSchema.parse(req.params);
   const { content } = updateSubmissionSchema.parse(req.body);
   const submission = await submissionService.updateSubmission(
-    req.user.id,
+    req.user.userId,
     id,
     content
   );
@@ -72,6 +72,6 @@ export async function updateSubmission(req, res) {
 // 작업물 삭제
 export async function deleteSubmission(req, res) {
   const { id } = submissionIdParamSchema.parse(req.params);
-  await submissionService.deleteSubmission(req.user.id, id);
+  await submissionService.deleteSubmission(req.user.userId, id);
   res.status(200).json({ success: true, data: null });
 }
