@@ -1,5 +1,5 @@
 // 비즈니스 규칙만 담당 — DB 접근은 repository에 위임한다.
-import feedbackRepository from '../repositories/feedback.repository.js';
+import * as feedbackRepository from '../repositories/feedback.repository.js';
 import {
   NotFoundError,
   ForbiddenError,
@@ -13,9 +13,9 @@ const DEFAULT_TAKE = 5;
 // ────────────────────────────────────────────
 // 조회 (R) : 작업물 상세 페이지의 피드백 목록
 // ────────────────────────────────────────────
-async function getFeedbacks(
+export async function getFeedbacks(
   submissionId,
-  { cursor, take = DEFAULT_TAKE } = {},
+  { cursor, take = DEFAULT_TAKE } = {}
 ) {
   // 작업물이 실제로 있는지(soft delete 제외) 먼저 확인
   const submission =
@@ -52,7 +52,7 @@ async function ensureCanMutateFeedback(feedbackId, userId, userRole) {
   //    (어드민이라도 마감된 챌린지는 수정할 수 없다)
   if (isChallengeClosed(feedback.submission.challenge)) {
     throw new ConflictError(
-      '마감된 챌린지의 피드백은 수정하거나 삭제할 수 없습니다.',
+      '마감된 챌린지의 피드백은 수정하거나 삭제할 수 없습니다.'
     );
   }
 
@@ -70,7 +70,7 @@ async function ensureCanMutateFeedback(feedbackId, userId, userRole) {
 // ────────────────────────────────────────────
 // 생성 (C)
 // ────────────────────────────────────────────
-async function createFeedback(submissionId, userId, content) {
+export async function createFeedback(submissionId, userId, content) {
   const submission =
     await feedbackRepository.findSubmissionWithChallenge(submissionId);
 
@@ -90,7 +90,7 @@ async function createFeedback(submissionId, userId, content) {
 // ────────────────────────────────────────────
 // 수정 (U)
 // ────────────────────────────────────────────
-async function updateFeedback(feedbackId, userId, userRole, content) {
+export async function updateFeedback(feedbackId, userId, userRole, content) {
   await ensureCanMutateFeedback(feedbackId, userId, userRole);
   return feedbackRepository.update(feedbackId, content);
 }
@@ -98,14 +98,7 @@ async function updateFeedback(feedbackId, userId, userRole, content) {
 // ────────────────────────────────────────────
 // 삭제 (D)
 // ────────────────────────────────────────────
-async function deleteFeedback(feedbackId, userId, userRole) {
+export async function deleteFeedback(feedbackId, userId, userRole) {
   await ensureCanMutateFeedback(feedbackId, userId, userRole);
   return feedbackRepository.remove(feedbackId);
 }
-
-export default {
-  getFeedbacks,
-  createFeedback,
-  updateFeedback,
-  deleteFeedback,
-};

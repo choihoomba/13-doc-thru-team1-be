@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 import feedbackRouter from './routes/feedback.route.js';
 import errorHandler from './middlewares/error.middleware.js';
+import likeRouter from './routes/like.route.js';
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
 app.use('/', feedbackRouter);
+app.use('/', likeRouter);
+
 // app.use('/auth', authRouter);
 
 // 에러 핸들러 (항상 마지막)
