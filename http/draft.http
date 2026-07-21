@@ -71,7 +71,7 @@ Content-Type: application/json
 ### 임시저장 삭제
 DELETE {{baseUrl}}/draft/1
 
-### 임시저장 삭제 - draft가 없는 작업물 (본인 소유는 맞지만 저장한 적 없음, 404 확인용)
+### 임시저장 삭제 - draft가 없는 작업물 (챌린지에 참여는 했지만 임시저장한 적 없음, 404 확인용)
 DELETE {{baseUrl}}/draft/16
 
 ### 임시저장 삭제 - 본인 소유가 아닌 작업물 (403 확인용)
