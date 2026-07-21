@@ -117,47 +117,9 @@
 
 /**
  * @openapi
- * /submissions:
- *   post:
- *     summary: 작업물 생성 (제출하기)
- *     tags: [Submission]
- *     security: [{ cookieAuth: [] }]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [participationId, content]
- *             properties:
- *               participationId: { type: integer }
- *               content: { type: string }
- *     responses:
- *       201:
- *         description: 생성된 작업물
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success: { type: boolean, example: true }
- *                 data:
- *                   $ref: '#/components/schemas/Submission'
- *       400:
- *         description: 참여 중인 챌린지에 대한 제출이 아님
- *       403:
- *         description: 본인의 참여 내역이 아님
- *       404:
- *         description: 참여 내역을 찾을 수 없음
- *       409:
- *         description: 이미 제출된 작업물이 있음
- */
-
-/**
- * @openapi
  * /submissions/{id}:
  *   patch:
- *     summary: 작업물 수정
+ *     summary: 작업물 수정 (참여 등록 시 생성된 빈 작업물에 최초 제출 시에도 사용)
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:

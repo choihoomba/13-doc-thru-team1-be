@@ -101,26 +101,6 @@ export function findSubmissionById(id) {
   return prisma.submission.findUnique({ where: { id } });
 }
 
-// 작업물 도전하기 페이지: 제출하려는 참여 내역이 본인 것인지, 이미 제출했는지 확인하기 위한 조회
-export function findParticipationById(participationId) {
-  return prisma.participation.findUnique({
-    where: { id: participationId },
-    include: { submission: true },
-  });
-}
-
-// 작업물 생성 (제출하기)
-export function createSubmission({
-  participationId,
-  challengeId,
-  userId,
-  content,
-}) {
-  return prisma.submission.create({
-    data: { participationId, challengeId, userId, content },
-  });
-}
-
 // 작업물 수정
 export function updateSubmissionContent(id, content) {
   return prisma.submission.update({ where: { id }, data: { content } });

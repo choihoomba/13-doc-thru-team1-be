@@ -6,7 +6,6 @@ const router = Router();
 
 router.get('/', authenticate, submissionController.getSubmissionList);
 router.get('/:id', authenticate, submissionController.getSubmissionById);
-router.post('/', authenticate, submissionController.createSubmission);
 router.patch('/:id', authenticate, submissionController.updateSubmission);
 router.delete('/:id', authenticate, submissionController.deleteSubmission);
 

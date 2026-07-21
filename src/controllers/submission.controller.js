@@ -18,11 +18,6 @@ const submissionDetailQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(50).default(3),
 });
 
-const createSubmissionSchema = z.object({
-  participationId: z.coerce.number().int().positive(),
-  content: z.string().min(1, '내용을 입력해주세요'),
-});
-
 const updateSubmissionSchema = z.object({
   content: z.string().min(1, '내용을 입력해주세요'),
 });
@@ -47,16 +42,6 @@ export async function getSubmissionById(req, res) {
     { page, limit }
   );
   res.status(200).json({ success: true, data: submission });
-}
-
-// 작업물 생성 (제출하기)
-export async function createSubmission(req, res) {
-  const data = createSubmissionSchema.parse(req.body);
-  const submission = await submissionService.createSubmission(
-    req.user.userId,
-    data
-  );
-  res.status(201).json({ success: true, data: submission });
 }
 
 // 작업물 수정

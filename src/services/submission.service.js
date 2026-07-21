@@ -1,10 +1,5 @@
 import * as submissionRepository from '../repositories/submission.repository.js';
-import {
-  BadRequestError,
-  ConflictError,
-  ForbiddenError,
-  NotFoundError,
-} from '../utils/errors.js';
+import { ForbiddenError, NotFoundError } from '../utils/errors.js';
 
 // 작업물 목록 조회
 export async function getSubmissionList({ challengeId, orderBy, include }) {
@@ -29,32 +24,6 @@ export async function getSubmissionById(id, userId, include, pagination) {
   }
 
   return submission;
-}
-
-// 작업물 생성 (제출하기)
-export async function createSubmission(userId, { participationId, content }) {
-  const participation =
-    await submissionRepository.findParticipationById(participationId);
-
-  if (!participation) {
-    throw new NotFoundError('참여 내역을 찾을 수 없습니다');
-  }
-  if (participation.userId !== userId) {
-    throw new ForbiddenError('본인의 참여 내역에만 작업물을 제출할 수 있습니다');
-  }
-  if (participation.status !== 'ACTIVE') {
-    throw new BadRequestError('참여 중인 챌린지에만 작업물을 제출할 수 있습니다');
-  }
-  if (participation.submission) {
-    throw new ConflictError('이미 제출된 작업물이 있습니다');
-  }
-
-  return submissionRepository.createSubmission({
-    participationId,
-    challengeId: participation.challengeId,
-    userId,
-    content,
-  });
 }
 
 // 작업물 수정
