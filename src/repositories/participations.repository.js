@@ -19,7 +19,7 @@ async function create({ userId, challengeId }) {
 
     // 승인된 챌린지 인지 확인
     if (!challenge || challenge.status !== 'APPROVED') {
-      throw new NotFoundError('참여할 수 없는 챌린지입니다.');
+      throw new ConflictError('참여할 수 없는 챌린지입니다.');
     }
 
     // 챌린지 신청자 본인은 참여할 수 없는지 확인

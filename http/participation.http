@@ -7,7 +7,6 @@
 # ============================================================
 
 ### 1. signin — 로그인 (쿠키 발급)
-# @name signin
 POST {{baseUrl}}/auth/signin
 Content-Type: application/json
 
@@ -19,7 +18,6 @@ Content-Type: application/json
 ### 2. 작업 도전하기
 POST {{baseUrl}}/participations
 Content-Type: application/json
-Cookie: {{signin.response.headers.Set-Cookie}}
 
 {
   "challengeId" : 15
@@ -28,4 +26,3 @@ Cookie: {{signin.response.headers.Set-Cookie}}
 ### 3. 작업 도전 포기하기
 PATCH {{baseUrl}}/participations/64
 Content-Type: application/json
-Cookie: {{signin.response.headers.Set-Cookie}}

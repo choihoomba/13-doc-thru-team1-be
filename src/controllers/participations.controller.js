@@ -11,8 +11,8 @@ async function createParticipation(req, res, next) {
   const data = createParticipationSchema.parse(req.body); // 검증 실패 시 에러핸들러로
 
   const result = await participationService.create({
-    userId: parseInt(req.user.userId, 10),
-    challengeId: parseInt(data.challengeId, 10),
+    userId: req.user.userId,
+    challengeId: data.challengeId,
   });
 
   res.status(201).json({ success: true, data: result });
@@ -25,7 +25,7 @@ async function cancelParticipation(req, res, next) {
   const { id } = cancelParticipationSchema.parse(req.params); // 검증 실패 시 에러핸들러로
 
   const result = await participationService.cancel({
-    userId: parseInt(req.user.userId, 10),
+    userId: req.user.userId,
     participationId: id,
   });
 
