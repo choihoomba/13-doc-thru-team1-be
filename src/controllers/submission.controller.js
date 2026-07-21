@@ -1,26 +1,10 @@
-import { z } from 'zod';
-import * as submissionService from '../services/submission.service.js';
-
-// Zod
-const submissionIdParamSchema = z.object({
-  id: z.coerce.number().int().positive(),
-});
-
-const submissionListQuerySchema = z.object({
-  challengeId: z.coerce.number().int().positive().optional(),
-  orderBy: z.enum(['likeDesc']).optional(),
-  include: z.enum(['user', 'draft']).optional(),
-});
-
-const submissionDetailQuerySchema = z.object({
-  include: z.enum(['feedback']).optional(),
-  page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(50).default(3),
-});
-
-const updateSubmissionSchema = z.object({
-  content: z.string().min(1, '내용을 입력해주세요'),
-});
+import submissionService from '../services/submission.service.js';
+import {
+  submissionIdParamSchema,
+  submissionListQuerySchema,
+  submissionDetailQuerySchema,
+  updateSubmissionSchema,
+} from '../validations/submission.validation.js';
 
 // 작업물 목록 조회
 export async function getSubmissionList(req, res) {
@@ -48,6 +32,7 @@ export async function updateSubmission(req, res) {
   const { content } = updateSubmissionSchema.parse(req.body);
   const submission = await submissionService.updateSubmission(
     req.user.userId,
+    req.user.role,
     id,
     content
   );

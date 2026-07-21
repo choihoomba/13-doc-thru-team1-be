@@ -42,7 +42,7 @@ export function getSubmissionList({ challengeId, orderBy, include }) {
     },
     orderBy:
       orderBy === 'likeDesc'
-        ? { likes: { _count: 'desc' } }
+        ? [{ likes: { _count: 'desc' } }, { createdAt: 'desc' }]
         : { createdAt: 'desc' },
     select: buildListSelect(include),
   });
@@ -102,9 +102,12 @@ export async function getSubmissionById(
   return submission;
 }
 
-// 작업물 도전하기 페이지: 소유권/상태 확인용 원본 조회 (수정, 삭제, 제출 전 검증)
+// 작업물 도전하기 페이지: 소유권/상태 확인용 원본 조회 (수정, 삭제, 제출 전 검증)-> 마감 판단을 위해 challenge도 include
 export function findSubmissionById(id) {
-  return prisma.submission.findUnique({ where: { id } });
+  return prisma.submission.findUnique({
+    where: { id },
+    include: { challenge: { select: { status: true, deadline: true } } },
+  });
 }
 
 // 작업물 수정
