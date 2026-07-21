@@ -18,6 +18,14 @@ const submissionDetailQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(50).default(3),
 });
 
+<<<<<<< HEAD
+=======
+const createSubmissionSchema = z.object({
+  participationId: z.coerce.number().int().positive(),
+  content: z.string().min(1, '내용을 입력해주세요'),
+});
+
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
 const updateSubmissionSchema = z.object({
   content: z.string().min(1, '내용을 입력해주세요'),
 });
@@ -44,6 +52,19 @@ export async function getSubmissionById(req, res) {
   res.status(200).json({ success: true, data: submission });
 }
 
+<<<<<<< HEAD
+=======
+// 작업물 생성 (제출하기)
+export async function createSubmission(req, res) {
+  const data = createSubmissionSchema.parse(req.body);
+  const submission = await submissionService.createSubmission(
+    req.user.userId,
+    data
+  );
+  res.status(201).json({ success: true, data: submission });
+}
+
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
 // 작업물 수정
 export async function updateSubmission(req, res) {
   const { id } = submissionIdParamSchema.parse(req.params);
@@ -55,3 +76,13 @@ export async function updateSubmission(req, res) {
   );
   res.status(200).json({ success: true, data: submission });
 }
+<<<<<<< HEAD
+=======
+
+// 작업물 삭제
+export async function deleteSubmission(req, res) {
+  const { id } = submissionIdParamSchema.parse(req.params);
+  await submissionService.deleteSubmission(req.user.userId, id);
+  res.status(200).json({ success: true, data: null });
+}
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623

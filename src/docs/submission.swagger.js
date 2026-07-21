@@ -37,7 +37,10 @@
  *                             $ref: '#/components/schemas/Draft'
  *                           _count:
  *                             type: object
+<<<<<<< HEAD
  *                             description: include=draft일 때는 응답에 포함되지 않음
+=======
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
  *                             properties:
  *                               likes: { type: integer, example: 3 }
  *                               feedbacks: { type: integer, example: 2 }
@@ -118,9 +121,53 @@
 
 /**
  * @openapi
+<<<<<<< HEAD
  * /submissions/{id}:
  *   patch:
  *     summary: 작업물 수정 (참여 등록 시 생성된 빈 작업물에 최초 제출 시에도 사용)
+=======
+ * /submissions:
+ *   post:
+ *     summary: 작업물 생성 (제출하기)
+ *     tags: [Submission]
+ *     security: [{ cookieAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [participationId, content]
+ *             properties:
+ *               participationId: { type: integer }
+ *               content: { type: string }
+ *     responses:
+ *       201:
+ *         description: 생성된 작업물
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   $ref: '#/components/schemas/Submission'
+ *       400:
+ *         description: 참여 중인 챌린지에 대한 제출이 아님
+ *       403:
+ *         description: 본인의 참여 내역이 아님
+ *       404:
+ *         description: 참여 내역을 찾을 수 없음
+ *       409:
+ *         description: 이미 제출된 작업물이 있음
+ */
+
+/**
+ * @openapi
+ * /submissions/{id}:
+ *   patch:
+ *     summary: 작업물 수정
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:
@@ -153,3 +200,34 @@
  *       404:
  *         description: 작업물을 찾을 수 없음
  */
+<<<<<<< HEAD
+=======
+
+/**
+ * @openapi
+ * /submissions/{id}:
+ *   delete:
+ *     summary: 작업물 삭제 (soft delete)
+ *     tags: [Submission]
+ *     security: [{ cookieAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data: { nullable: true, example: null }
+ *       403:
+ *         description: 본인이 작성한 작업물이 아님
+ *       404:
+ *         description: 작업물을 찾을 수 없음
+ */
+>>>>>>> aab66dbaf3c24239e56707395a155b3e77dd9623
