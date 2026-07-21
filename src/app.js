@@ -27,7 +27,6 @@ app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
-app.use('/submissions', submissionRouter);
 app.use('/participations', participationRouter);
 app.use('/submissions', submissionRouter);
 
