@@ -15,7 +15,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: [env.CLIENT_URL, env.SERVER_URL], // 프론트 + 백엔드(swagger) 오리진 허용
     credentials: true,
   })
 );
