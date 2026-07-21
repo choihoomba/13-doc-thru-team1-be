@@ -6,8 +6,9 @@ const draftParamSchema = z.object({
 });
 
 const upsertDraftSchema = z.object({
-  title: z.string().optional(), // 제목은 challenge에서 가져와서 써서 seed로 넣지 않는 이상 null 값으로 되어있을것 같음
-  // 아니면 따로 임시저장을 누르면 제목을 입력하라는 모달 등이 떠야함
+  title: z.string().optional(),
+  // 제목은 challenge에서 가져와서씀
+  // 따로 임시저장을 누르면 제목을 입력하라는 모달 등이 떠야함
   content: z.string().min(1, '내용을 입력해주세요'),
 });
 

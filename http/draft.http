@@ -1,5 +1,13 @@
 @baseUrl = http://localhost:4000
 
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
 ### 임시저장 생성 (처음 저장 - draft 없는 submission)
 PUT {{baseUrl}}/draft/1
 Content-Type: application/json
@@ -23,7 +31,7 @@ Content-Type: application/json
 
 {
   "title": "수정된 제목",
-  "content": "수정된 임시저장 내용입니다."
+  "content": "수정된 임시저장 내용."
 }
 
 ### 임시저장 수정 - title 생략 (직전에 저장한 title이 유지되는지 확인용)
@@ -61,7 +69,7 @@ Content-Type: application/json
 }
 
 ### 임시저장 삭제
-DELETE {{baseUrl}}/draft/46
+DELETE {{baseUrl}}/draft/1
 
 ### 임시저장 삭제 - draft가 없는 작업물 (본인 소유는 맞지만 저장한 적 없음, 404 확인용)
 DELETE {{baseUrl}}/draft/16
