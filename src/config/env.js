@@ -4,7 +4,7 @@
 //
 // 서버가 뜨는 시점에 .env 값을 zod로 검증하고, 하나라도 없거나
 // 형식이 틀리면 즉시 프로세스를 종료합니다.
-// 검증 없이 두면 process.env.JWT_SECRET이 undefined인 채로 서버가 뜨고,
+// 검증 없이 두면 process.env.JWT_ACCESS_SECRET이 undefined인 채로 서버가 뜨고,
 // 나중에 로그인 요청이 들어왔을 때야 엉뚱한 에러가 나서 원인 추적이 어렵습니다.
 //
 // 다른 파일에서는 process.env를 직접 읽지 말고 이 파일의 env 객체를
@@ -19,9 +19,11 @@ import { z } from 'zod';
 const EXPIRES_IN_REGEX = /^\d+[smhd]$/;
 
 const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
   PORT: z.coerce.number().default(4000), // process.env 값은 전부 문자열이라 coerce로 숫자 변환
   DATABASE_URL: z.string().min(1, 'DATABASE_URL은 필수입니다'),
-  JWT_SECRET: z.string().min(1, 'JWT_SECRET은 필수입니다'),
+  JWT_ACCESS_SECRET: z.string().min(1, 'JWT_ACCESS_SECRET은 필수입니다'),
+  JWT_REFRESH_SECRET: z.string().min(1, 'JWT_REFRESH_SECRET은 필수입니다'),
 
   // default는 환경변수가 '없을 때'만 적용되므로, 값이 있으면 형식 검증이 필요합니다.
   // 형식이 틀리면(예: 15mm) 서버는 정상 기동하고 첫 로그인 시점에야 에러가 납니다.
@@ -41,6 +43,7 @@ const envSchema = z.object({
     .default('7d'),
 
   CLIENT_URL: z.url('CLIENT_URL은 올바른 URL이어야 합니다'), // cors origin 설정에 사용
+  SERVER_URL: z.url('SERVER_URL은 올바른 URL이어야 합니다'), // swagger 등 백엔드 자체 오리진 (cors 허용용)
 });
 
 const parsed = envSchema.safeParse(process.env);
