@@ -8,11 +8,16 @@ const baseSelect = {
   updatedAt: true,
   challengeId: true,
   userId: true,
-  _count: { select: { likes: true, feedbacks: true } },
 };
 
 function buildListSelect(include) {
-  const select = { ...baseSelect };
+  const select = {
+    ...baseSelect,
+    // 작업물 도전하기 페이지(include=draft)는 좋아요/피드백 수가 필요 없어서 제외
+    ...(include !== 'draft' && {
+      _count: { select: { likes: true, feedbacks: true } },
+    }),
+  };
   // 챌린지 상세 페이지
   if (include === 'user') {
     select.user = { select: { id: true, nickname: true } };
@@ -31,7 +36,8 @@ function buildListSelect(include) {
 export function getSubmissionList({ challengeId, orderBy, include }) {
   return prisma.submission.findMany({
     where: {
-      deletedAt: null,
+      // 작업물 도전하기 페이지(include=draft)는 삭제된 챌린지/작업물이어도 제목은 보여줘야 해서 소프트 삭제 필터 제외
+      ...(include !== 'draft' && { deletedAt: null }),
       ...(challengeId && { challengeId }),
     },
     orderBy:

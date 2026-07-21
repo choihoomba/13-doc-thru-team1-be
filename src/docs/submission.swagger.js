@@ -37,6 +37,7 @@
  *                             $ref: '#/components/schemas/Draft'
  *                           _count:
  *                             type: object
+ *                             description: include=draft일 때는 응답에 포함되지 않음
  *                             properties:
  *                               likes: { type: integer, example: 3 }
  *                               feedbacks: { type: integer, example: 2 }
