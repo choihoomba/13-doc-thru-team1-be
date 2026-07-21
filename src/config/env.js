@@ -43,6 +43,7 @@ const envSchema = z.object({
     .default('7d'),
 
   CLIENT_URL: z.url('CLIENT_URL은 올바른 URL이어야 합니다'), // cors origin 설정에 사용
+  SERVER_URL: z.url('SERVER_URL은 올바른 URL이어야 합니다'), // swagger 등 백엔드 자체 오리진 (cors 허용용)
 });
 
 const parsed = envSchema.safeParse(process.env);

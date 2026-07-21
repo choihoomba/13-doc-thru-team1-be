@@ -8,6 +8,7 @@ import swaggerSpec from './config/swagger.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
+import participationRouter from './routes/participations.route.js';
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: [env.CLIENT_URL, env.SERVER_URL], // 프론트 + 백엔드(swagger) 오리진 허용
     credentials: true,
   })
 );
@@ -27,6 +28,7 @@ app.use(cookieParser());
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
 app.use('/submissions', submissionRouter);
+app.use('/participations', participationRouter);
 
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);
