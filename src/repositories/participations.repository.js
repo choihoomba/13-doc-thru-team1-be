@@ -17,8 +17,13 @@ async function create({ userId, challengeId }) {
       where: { id: challengeId },
     });
 
+    // 챌린지 존재 여부 확인
+    if (!challenge) {
+      throw new NotFoundError('존재하지 않는 챌린지입니다.');
+    }
+
     // 승인된 챌린지 인지 확인
-    if (!challenge || challenge.status !== 'APPROVED') {
+    if (challenge.status !== 'APPROVED') {
       throw new ConflictError('참여할 수 없는 챌린지입니다.');
     }
 
@@ -60,7 +65,7 @@ async function create({ userId, challengeId }) {
     });
 
     return { participation, submission };
-  });
+  };);
 }
 
 /** 작업 도전 포기하기 */
