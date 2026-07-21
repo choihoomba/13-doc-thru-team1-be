@@ -45,6 +45,7 @@ export function getSubmissionList({ challengeId, orderBy, include }) {
 // 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
 export async function getSubmissionById(
   id,
+  userId,
   include,
   { page, limit } = {}
 ) {
@@ -54,6 +55,7 @@ export async function getSubmissionById(
       user: { select: { id: true, nickname: true } },
       challenge: { select: { title: true } },
       draft: { select: { title: true } },
+      likes: { where: { userId }, select: { id: true }, take: 1 },
       _count: {
         select: {
           likes: true,
@@ -75,6 +77,11 @@ export async function getSubmissionById(
       }),
     },
   });
+
+  if (submission) {
+    submission.isLiked = submission.likes.length > 0;
+    delete submission.likes;
+  }
 
   if (submission && include === 'feedback') {
     const totalCount = submission._count.feedbacks;
