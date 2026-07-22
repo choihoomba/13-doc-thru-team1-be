@@ -11,6 +11,7 @@ import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
 import draftRouter from './routes/draft.route.js';
+import likeRouter from './routes/like.route.js';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use('/auth', authRouter);
 app.use('/participations', participationRouter);
 app.use('/draft', draftRouter);
+app.use('/', likeRouter);
 app.use('/submissions', submissionRouter);
 app.use('/', feedbackRouter);
 
