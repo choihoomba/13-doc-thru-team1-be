@@ -11,6 +11,14 @@ const options = {
     },
     servers: [{ url: 'http://localhost:4000' }],
     components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'accessToken',
+          description: '로그인 시 HttpOnly 쿠키로 발급되는 accessToken',
+        },
+      },
       schemas: {
         // 공통 성공 응답 래퍼 — data는 엔드포인트별 실제 타입으로 오버라이드
         SuccessResponse: {
