@@ -1,5 +1,6 @@
 import * as notificationRepository from '../repositories/notification.repository.js';
 import { NotFoundError } from '../utils/errors.js';
+import { notificationCreateSchema } from '../validations/notification.validation.js';
 
 async function getNotifications(userId) {
   return notificationRepository.findManyByUserId(userId);
@@ -11,16 +12,15 @@ async function createNotification(
   { userId, type, targetType, targetId, message },
   transactionClient
 ) {
-  return notificationRepository.create(
-    {
-      userId,
-      type,
-      targetType,
-      targetId,
-      message,
-    },
-    transactionClient
-  );
+  const validated = notificationCreateSchema.parse({
+    userId,
+    type,
+    targetType,
+    targetId,
+    message,
+  });
+
+  return notificationRepository.create(validated, transactionClient);
 }
 
 async function markAsRead(userId, notificationId) {
