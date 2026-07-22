@@ -1,0 +1,53 @@
+@BASE_URL = http://localhost:4000
+
+# seed 계정 (README 기준) — 비밀번호는 전부 test1234!
+# admin@docsru.dev  (ADMIN)
+# jihoon@docsru.dev (USER / GENERAL)
+# react@docsru.dev  (USER / EXPERT)
+
+# ============================================================
+# [정상 흐름] 위에서부터 순서대로 실행하세요.
+# submissionId=31 은 진행 중 챌린지(7번)에 속한 작업물입니다.
+# jihoon 계정은 seed 기준 작업물 31에 이미 좋아요가 있습니다.
+# REST Client가 signin 쿠키를 자동으로 이후 요청에 실어줍니다.
+# ============================================================
+
+### 1. signin — 로그인 (쿠키 발급)
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. 좋아요 취소 (seed에 이미 눌려있는 상태 → 200, likeCount 감소)
+DELETE {{BASE_URL}}/submissions/31/likes
+
+### 3. 취소 후 재취소 (안 누른 상태 → 404 NOT_FOUND)
+DELETE {{BASE_URL}}/submissions/31/likes
+
+### 4. 좋아요 등록 (→ 201, likeCount 증가)
+POST {{BASE_URL}}/submissions/31/likes
+
+### 5. 중복 등록 (이미 누름 → 409 CONFLICT)
+POST {{BASE_URL}}/submissions/31/likes
+
+# ============================================================
+# [권한/상태 케이스] 독립 실행 (순서 무관)
+# ============================================================
+
+### 등록 — 마감된 챌린지의 작업물 (409 CONFLICT)
+### submissionId=1 은 마감된 챌린지(1번) 소속
+POST {{BASE_URL}}/submissions/1/likes
+
+### 등록 — 존재하지 않는 작업물 (404 NOT_FOUND)
+POST {{BASE_URL}}/submissions/999999/likes
+
+### 등록 — 비로그인 (401 UNAUTHORIZED)
+### 쿠키 없이 새 요청으로 실행하거나 signout 후 실행
+POST {{BASE_URL}}/submissions/31/likes
+
+### 등록 — 잘못된 id 형식 (400 VALIDATION_ERROR)
+### authenticate가 먼저 실행되므로, 로그인 상태에서 실행해야 zod 검증(400)까지 도달
+POST {{BASE_URL}}/submissions/abc/likes
