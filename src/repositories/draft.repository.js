@@ -2,9 +2,12 @@ import prisma from '../config/prisma.js';
 
 // 작업물(Submission) 소유자 확인용 - draft 생성/삭제 권한 체크에 사용
 export function findSubmissionOwner(submissionId) {
-  return prisma.submission.findUnique({
-    where: { id: submissionId },
-    select: { userId: true },
+  return prisma.submission.findFirst({
+    where: { id: submissionId, deletedAt: null },
+    select: {
+      userId: true,
+      challenge: { select: { status: true, deadline: true } },
+    },
   });
 }
 

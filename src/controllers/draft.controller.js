@@ -1,16 +1,8 @@
-import { z } from 'zod';
-import * as draftService from '../services/draft.service.js';
-
-const draftParamSchema = z.object({
-  id: z.coerce.number().int().positive(),
-});
-
-const upsertDraftSchema = z.object({
-  title: z.string().optional(),
-  // 제목은 challenge에서 가져와서씀
-  // 따로 임시저장을 누르면 제목을 입력하라는 모달 등이 떠야함
-  content: z.string().min(1, '내용을 입력해주세요'),
-});
+import draftService from '../services/draft.service.js';
+import {
+  draftParamSchema,
+  upsertDraftSchema,
+} from '../validations/draft.validation.js';
 
 // 임시저장 (upsert)
 export async function upsertDraft(req, res) {
