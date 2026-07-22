@@ -5,10 +5,13 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
+import feedbackRouter from './routes/feedback.route.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
+import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
 import notificationRouter from './routes/notification.route.js';
+import likeRouter from './routes/like.route.js';
 
 const app = express();
 
@@ -29,6 +32,9 @@ app.use(cookieParser());
 app.use('/auth', authRouter);
 app.use('/participations', participationRouter);
 app.use('/notifications', notificationRouter);
+app.use('/', likeRouter);
+app.use('/submissions', submissionRouter);
+app.use('/', feedbackRouter);
 
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);
