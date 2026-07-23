@@ -13,6 +13,7 @@ import participationRouter from './routes/participations.route.js';
 import draftRouter from './routes/draft.route.js';
 import notificationRouter from './routes/notification.route.js';
 import likeRouter from './routes/like.route.js';
+import myChallengeRoute from './routes/myChallenge.route.js';
 import challengesRouter from './routes/challenges.route.js';
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/notifications', notificationRouter);
 app.use('/', likeRouter);
 app.use('/submissions', submissionRouter);
 app.use('/', feedbackRouter);
+app.use('/challenges', myChallengeRoute); // 먼저 등록 -> type=me 먼저 가로챔
 app.use('/challenges', challengesRouter);
 // 에러 핸들러 (항상 마지막)
 app.use(errorHandler);
