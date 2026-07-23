@@ -12,15 +12,7 @@ export const getMyChallengesQuerySchema = z.object({
   status: z.enum(['ACTIVE', 'CLOSED']),
 
   // 제목 검색어 (요구사항: 검색(제목))
-  search: z.string().trim().min(1).optional(),
-
-  // 분야 필터 (요구사항: 필터링(분야, 문서타입))
-  field: z
-    .enum(['NEXTJS', 'REACT', 'MODERNJS', 'TYPESCRIPT', 'API', 'WEB', 'CAREER'])
-    .optional(),
-
-  // 문서타입 필터
-  docType: z.enum(['OFFICIAL', 'BLOG', 'BOOK', 'ETC']).optional(),
+  keyword: z.string().trim().min(1).optional(),
 
   // 무한 스크롤 커서 - 이전 응답의 nextCursor를 그대로 다시 보내는 값
   cursor: z.coerce.number().int().positive().optional(),

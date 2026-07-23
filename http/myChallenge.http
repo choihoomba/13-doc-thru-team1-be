@@ -38,13 +38,62 @@ GET {{BASE_URL}}/auth/me
 
 ### 나의 챌린지 (참여중인 챌린지 조회)
 GET {{BASE_URL}}/challenges?type=me&status=ACTIVE
-
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 7,
+        "title": "JavaScript Promise 사용 가이드",
+        "field": "MODERNJS",
+        "docType": "OFFICIAL",
+        "deadline": "2026-07-25T23:59:59.000Z",
+        "status": "APPROVED",
+        "currentParticipants": 3,
+        "maxParticipants": 8,
+        "mySubmissionID": 30
+      },]}
+}
 ### 나의 챌린지 (완료중인 챌린지 조회)
 GET {{BASE_URL}}/challenges?type=me&status=CLOSED
-
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 1,
+        "title": "React Hooks Reference 번역",
+        "field": "REACT",
+        "docType": "OFFICIAL",
+        "deadline": "2026-05-15T23:59:59.000Z",
+        "status": "CLOSED",
+        "currentParticipants": 5,
+        "maxParticipants": 8,
+        "mySubmissionID": 1
+      },]}
+}
 ### 제목 검색
-GET {{BASE_URL}}/challenges?type=me&status=ACTIVE&search=api
-
+GET {{BASE_URL}}/challenges?type=me&status=ACTIVE&keyword=api
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 12,
+        "title": "MDN Fetch API 사용하기",
+        "field": "API",
+        "docType": "OFFICIAL",
+        "deadline": "2026-08-31T23:59:59.000Z",
+        "status": "APPROVED",
+        "currentParticipants": 3,
+        "maxParticipants": 6,
+        "mySubmissionID": 46
+      }
+    ],
+    "nextCursor": null,
+    "hasMore": false
+  }
+}
 ### limit 테스트
 GET {{BASE_URL}}/challenges?type=me&status=ACTIVE&limit=2
 
@@ -57,14 +106,28 @@ GET {{BASE_URL}}/challenges?type=me&status=ACTIVE&limit=5
 ### 참여 중인 나의 챌린지 — 검색 결과 없음
 ### 200, data 빈 배열 확인
 GET {{BASE_URL}}/challenges?type=me&status=ACTIVE&keyword=없는제목99999
-
+{
+  "success": true,
+  "data": {
+    "data": [],
+    "nextCursor": null,
+    "hasMore": false
+  }
+}
 ### 완료된 나의 챌린지 — 무한 스크롤 첫 요청
 GET {{BASE_URL}}/challenges?type=me&status=CLOSED&limit=5
 
 ### 완료된 나의 챌린지 — 검색 결과 없음
 ### 200, data 빈 배열 확인
 GET {{BASE_URL}}/challenges?type=me&status=CLOSED&keyword=없는제목99999
-
+{
+  "success": true,
+  "data": {
+    "data": [],
+    "nextCursor": null,
+    "hasMore": false
+  }
+}
 # ============================================================
    #마이챌린지 에러 케이스
 # ============================================================
@@ -72,12 +135,29 @@ GET {{BASE_URL}}/challenges?type=me&status=CLOSED&keyword=없는제목99999
 ### 조회 — 비로그인 (401 UNAUTHORIZED)
 ### 로그아웃하거나 쿠키 삭제 후 실행
 GET {{BASE_URL}}/challenges?type=me&status=ACTIVE
-
+{
+  "success": false,
+  "message": "로그인이 필요합니다.",
+  "code": "UNAUTHORIZED"
+}
 ### 조회 — type 값 오류 (400 VALIDATION_ERROR)
 GET {{BASE_URL}}/challenges?type=mine&status=ACTIVE
-
+{
+  "success": false,
+  "message": "Invalid option: expected one of \"APPROVED\"|\"CLOSED\"",
+  "code": "VALIDATION_ERROR"
+}
 ### 조회 — status 누락 (400 VALIDATION_ERROR)
 GET {{BASE_URL}}/challenges?type=me
-
+{
+  "success": false,
+  "message": "Invalid option: expected one of \"ACTIVE\"|\"CLOSED\"",
+  "code": "VALIDATION_ERROR"
+}
 ### 조회 — 지원하지 않는 status (400 VALIDATION_ERROR)
 GET {{BASE_URL}}/challenges?type=me&status=COMPLETED
+{
+  "success": false,
+  "message": "Invalid option: expected one of \"ACTIVE\"|\"CLOSED\"",
+  "code": "VALIDATION_ERROR"
+}

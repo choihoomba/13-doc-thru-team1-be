@@ -62,8 +62,8 @@ export async function findParticipatedList({
         },
       },
       // 검색어/필터는 값이 있을 때만 조건에 포함
-      ...(search && {
-        title: { contains: search, mode: 'insensitive' },
+      ...(keyword && {
+        title: { contains: keyword, mode: 'insensitive' },
       }),
       // field와 docType은 필터로 사용하지 않으므로
       // where 조건에는 넣지 않는다.
