@@ -1,0 +1,132 @@
+@baseUrl = http://localhost:4000
+@approvedChallengeId = 12
+
+# Challenge 생성·수정 API 수동 테스트입니다.
+# VS Code REST Client는 로그인 응답의 HttpOnly 쿠키를 이후 요청에 자동으로 전달합니다.
+# 쿠키가 유지되지 않으면 rest-client.rememberCookiesForSubsequentRequests 설정을 확인합니다.
+
+### 1. 일반 사용자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. 신규 챌린지 신청 - 201
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "Express Router 공식 문서 번역",
+  "field": "WEB",
+  "docType": "OFFICIAL",
+  "content": "Express Router 공식 문서를 함께 번역합니다.",
+  "originalUrl": "https://expressjs.com/en/guide/routing.html",
+  "deadline": "2026-12-20T23:59:59.000Z",
+  "maxParticipants": 8
+}
+
+### 3. 지난 마감일로 신규 신청 - 400
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "마감일 검증 테스트",
+  "field": "WEB",
+  "docType": "OFFICIAL",
+  "content": "지난 마감일은 허용하지 않습니다.",
+  "originalUrl": "https://example.com/docs",
+  "deadline": "2025-01-01T00:00:00.000Z",
+  "maxParticipants": 5
+}
+
+### 4. 일반 사용자의 관리자 수정 요청 - 403
+PATCH {{baseUrl}}/challenges/{{approvedChallengeId}}
+Content-Type: application/json
+
+{
+  "maxParticipants": 6,
+  "reason": "관리자 권한 검증 요청입니다."
+}
+
+### 5. 관리자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+### 6. 진행 중인 챌린지 수정 및 신청자 알림 생성 - 200
+# seed 기준 12번은 APPROVED이고 신청자는 userId 2입니다.
+PATCH {{baseUrl}}/challenges/{{approvedChallengeId}}
+Content-Type: application/json
+
+{
+  "maxParticipants": 6,
+  "reason": "현재 참여 인원을 확인하고 모집 정원을 유지했습니다."
+}
+
+### 7. 수정 사유 누락 - 400
+PATCH {{baseUrl}}/challenges/{{approvedChallengeId}}
+Content-Type: application/json
+
+{
+  "maxParticipants": 6
+}
+
+### 8. 수정 필드 없이 사유만 전달 - 400
+PATCH {{baseUrl}}/challenges/{{approvedChallengeId}}
+Content-Type: application/json
+
+{
+  "reason": "실제 수정 필드가 없습니다."
+}
+
+### 9. 존재하지 않는 챌린지 수정 - 404
+PATCH {{baseUrl}}/challenges/999999
+Content-Type: application/json
+
+{
+  "title": "존재하지 않는 챌린지",
+  "reason": "존재하지 않는 ID 검증입니다."
+}
+
+### 10. 수정 알림을 받을 신청자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 11. 챌린지 수정 알림 확인 - 200
+# 최신 알림의 type은 CONTENT_CHANGED, targetType은 CHALLENGE, targetId는 12여야 합니다.
+GET {{baseUrl}}/notifications
+
+### 12. 관리자도 신규 챌린지 신청 가능 - 201
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "관리자 신청 권한 테스트",
+  "field": "API",
+  "docType": "ETC",
+  "content": "USER와 ADMIN 모두 신규 챌린지를 신청할 수 있습니다.",
+  "originalUrl": "https://example.com/admin",
+  "deadline": "2026-12-31T23:59:59.000Z",
+  "maxParticipants": 5
+}

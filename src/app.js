@@ -9,7 +9,7 @@ import feedbackRouter from './routes/feedback.route.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
-import challengeRouter from './routes/challenge.route.js';
+import challengeManageRouter from './routes/challenge-manage.route.js';
 import participationRouter from './routes/participations.route.js';
 import draftRouter from './routes/draft.route.js';
 import notificationRouter from './routes/notification.route.js';
@@ -32,7 +32,10 @@ app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
-app.use('/challenges', challengeRouter);
+// Challenge API는 세 명이 기능별 Router를 나누어도 같은 기본 경로에 연결할 수 있습니다.
+// 현재 Router는 POST와 PATCH만 등록하므로 다른 담당자의 GET/DELETE Router와 충돌하지 않습니다.
+// 병합할 때 한 Router로 덮어쓰지 말고 각 Router import와 app.use를 모두 유지해야 합니다.
+app.use('/challenges', challengeManageRouter);
 app.use('/participations', participationRouter);
 app.use('/draft', draftRouter);
 app.use('/notifications', notificationRouter);
