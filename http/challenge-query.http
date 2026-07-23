@@ -103,8 +103,8 @@ GET {{BASE_URL}}/challenges?view=public&search=router
 ### 공개 챌린지 목록 — 한글 제목 검색
 # 기대 결과:
 # - 200 OK
-# - 제목에 "리액트"가 포함된 챌린지 조회
-GET {{BASE_URL}}/challenges?view=public&search=리액트
+# - 제목에 "웹"가 포함된 챌린지 조회
+GET {{BASE_URL}}/challenges?view=public&search=웹
 
 
 ### 공개 챌린지 목록 — 분야 필터
@@ -141,7 +141,7 @@ GET {{BASE_URL}}/challenges?view=public&status=CLOSED
 # 기대 결과:
 # - 200 OK
 # - 모든 조건을 동시에 만족하는 데이터만 조회
-GET {{BASE_URL}}/challenges?view=public&search=react&field=REACT&docType=OFFICIAL&status=APPROVED&page=1&limit=10
+GET {{BASE_URL}}/challenges?view=public&search=API&field=API&docType=OFFICIAL&status=APPROVED&page=1&limit=10
 
 
 # ============================================================
@@ -173,13 +173,7 @@ GET {{BASE_URL}}/challenges?view=public&sort=deadlineDesc
 # ============================================================
 
 ### 참여 중인 챌린지 — 기본 조회
-# 조회 조건:
-#
-# - 로그인 사용자의 ACTIVE 참여 기록 존재
-# - Challenge.status = APPROVED
-# - Challenge.deadline > 현재 시각
-# - Challenge.deletedAt = null
-#
+
 # 기대 결과:
 # - 200 OK
 # - participations에 현재 사용자의 참여 기록 포함
@@ -238,12 +232,6 @@ GET {{BASE_URL}}/challenges?view=participating&search=존재하지않는챌린�
 # ============================================================
 
 ### 완료한 챌린지 — 기본 조회
-# 조회 조건:
-#
-# - 로그인 사용자의 ACTIVE 참여 기록 존재
-# - Challenge.deletedAt = null
-# - Challenge.status가 CLOSED이거나 deadline이 현재 시각 이하
-#
 # 기대 결과:
 # - 200 OK
 # - CLOSED 챌린지 포함
@@ -321,19 +309,22 @@ GET {{BASE_URL}}/challenges?view=admin
 # 기대 결과:
 # - 200 OK
 # - 기존 USER 쿠키가 ADMIN 계정 쿠키로 변경
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
 
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
 
 # ============================================================
 # 8. 관리자 챌린지 신청 관리 목록
 # ============================================================
 
 ### 관리자 신청 관리 — 기본 조회
-# status를 생략하면 Service에서 PENDING을 기본값으로 사용합니다.
-#
+# status 를 생략시 상태 필터 없이 전체 상태를 조회합니다.
 # 기대 결과:
 # - 200 OK
-# - PENDING 상태만 조회
-# - user에 신청자 id, nickname, email 포함
 GET {{BASE_URL}}/challenges?view=admin
 
 
@@ -348,8 +339,8 @@ GET {{BASE_URL}}/challenges?view=admin&page=1&limit=5
 ### 관리자 신청 관리 — 제목 검색
 # 기대 결과:
 # - 200 OK
-# - PENDING 신청 중 제목에 리액트가 포함된 데이터 조회
-GET {{BASE_URL}}/challenges?view=admin&search=리액트
+# - PENDING 신청 중 제목에 웹이 포함된 데이터 조회
+GET {{BASE_URL}}/challenges?view=admin&search=웹
 
 
 ### 관리자 신청 관리 — 분야 필터
@@ -430,7 +421,7 @@ GET {{BASE_URL}}/challenges?view=admin&status=PENDING&sort=deadlineDesc
 ### 관리자 신청 관리 — 복합 검색·필터·정렬
 # 기대 결과:
 # - 200 OK
-GET {{BASE_URL}}/challenges?view=admin&search=express&field=WEB&docType=OFFICIAL&status=PENDING&sort=oldest&page=1&limit=10
+GET {{BASE_URL}}/challenges?view=admin&search=웹s&field=WEB&docType=OFFICIAL&status=PENDING&sort=latest&page=1&limit=10
 
 
 # ============================================================

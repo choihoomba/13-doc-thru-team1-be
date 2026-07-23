@@ -46,31 +46,12 @@ const challengeSelect = {
  *
  * @returns {object} Prisma select 객체
  */
-function buildListSelect({ includeApplicant, participantUserId }) {
+function buildListSelect({ participantUserId }) {
   return {
     /**
      * 모든 view에서 공통으로 반환할 Challenge 필드입니다.
      */
     ...challengeSelect,
-
-    /**
-     * 관리자 신청 관리 목록에서만 신청자 정보를 추가합니다.
-     *
-     * Service에서 view=admin인 경우
-     * includeApplicant=true를 전달합니다.
-     *
-     * 비밀번호, refreshToken 등 목록에 필요하지 않은 개인정보는
-     * 조회하지 않고 id, nickname, email만 조회합니다.
-     */
-    ...(includeApplicant && {
-      user: {
-        select: {
-          id: true,
-          nickname: true,
-          email: true,
-        },
-      },
-    }),
 
     /**
      * 참여 중 또는 완료 목록에서만
@@ -149,14 +130,7 @@ function buildListSelect({ includeApplicant, participantUserId }) {
  *   challenges: 조회한 챌린지 목록
  *   total: 검색 및 필터 조건에 맞는 전체 개수
  */
-async function findMany({
-  where,
-  orderBy,
-  page,
-  limit,
-  includeApplicant = false,
-  participantUserId,
-}) {
+async function findMany({ where, orderBy, page, limit, participantUserId }) {
   /**
    * 현재 페이지의 시작 위치를 계산합니다.
    *
@@ -192,7 +166,6 @@ async function findMany({
       skip,
       take: limit,
       select: buildListSelect({
-        includeApplicant,
         participantUserId,
       }),
     }),

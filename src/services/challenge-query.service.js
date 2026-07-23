@@ -26,7 +26,7 @@ const ORDER_BY_MAP = {
   /**
    * 마감일이 빠른 순
    */
-  deadlineAsc: [{ deadline: 'asc' }, { id: 'asc' }],
+  deadlineAsc: [{ deadline: 'asc' }, { id: 'desc' }],
 
   /**
    * 마감일이 늦은 순
@@ -217,13 +217,8 @@ function buildViewWhere({ view, status, userId, commonWhere }) {
     case 'admin':
       return {
         ...commonWhere,
-
-        /**
-         * nullish 병합 연산자입니다.
-         *
-         * status가 undefined 또는 null이면 PENDING을 사용합니다.
-         */
-        status: status ?? 'PENDING',
+        // status 필터가 지정된 경우에만 조건에 포함 (미지정 시 모든 상태 조회)
+        ...(status && { status }),
       };
 
     /**
@@ -323,14 +318,6 @@ async function getChallenges({ userId, userRole, query }) {
   const orderBy = ORDER_BY_MAP[query.sort];
 
   /**
-   * 관리자 목록에서만 신청자 정보를 조회합니다.
-   *
-   * Repository는 includeApplicant=true를 받으면
-   * Challenge를 신청한 User의 id, nickname, email을 포함합니다.
-   */
-  const includeApplicant = query.view === 'admin';
-
-  /**
    * 참여 중·완료 목록에서만 로그인 사용자의
    * Participation과 Submission 정보를 조회합니다.
    *
@@ -355,7 +342,6 @@ async function getChallenges({ userId, userRole, query }) {
     orderBy,
     page: query.page,
     limit: query.limit,
-    includeApplicant,
     participantUserId,
   });
 

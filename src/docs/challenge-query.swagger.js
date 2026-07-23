@@ -4,44 +4,42 @@
  *   get:
  *     summary: 챌린지 목록 조회
  *     description: |
- *       `view` 쿼리를 사용하여 화면별 챌린지 목록을 조회합니다.
- *
- *       지원하는 view:
+ *       `view` 쿼리를 이용해 다음 네 가지 챌린지 목록을 조회합니다.
  *
  *       - `public`: 전체 공개 챌린지 목록
- *       - `participating`: 로그인 사용자가 참여 중인 챌린지 목록
- *       - `completed`: 로그인 사용자가 참여한 완료 챌린지 목록
+ *       - `participating`: 내가 참여 중인 챌린지 목록
+ *       - `completed`: 내가 완료한 챌린지 목록
  *       - `admin`: 관리자 챌린지 신청 관리 목록
  *
- *       view별 조회 조건:
+ *       제목 검색, 분야, 문서 유형, 상태, 정렬, 페이지네이션을 지원합니다.
  *
- *       **public**
- *       - APPROVED 또는 CLOSED 상태
- *       - 삭제되지 않은 챌린지
+ *       ### public
+ *       - APPROVED 또는 CLOSED 상태만 조회합니다.
+ *       - 삭제된 챌린지는 제외합니다.
+ *       - status를 생략하면 APPROVED와 CLOSED를 모두 조회합니다.
  *
- *       **participating**
- *       - 로그인 사용자의 ACTIVE 참여 기록 존재
- *       - Challenge 상태가 APPROVED
- *       - 마감일이 현재 시각보다 이후
- *       - 삭제되지 않은 챌린지
- *       - status 쿼리 사용 불가
+ *       ### participating
+ *       - 로그인 사용자의 ACTIVE 참여 기록이 있는 챌린지를 조회합니다.
+ *       - APPROVED 상태이면서 마감일이 지나지 않은 챌린지만 조회합니다.
+ *       - 삭제된 챌린지는 제외합니다.
+ *       - status 쿼리를 사용할 수 없습니다.
  *
- *       **completed**
- *       - 로그인 사용자의 ACTIVE 참여 기록 존재
- *       - Challenge 상태가 CLOSED이거나 마감일 경과
- *       - 삭제되지 않은 챌린지
- *       - status 쿼리 사용 불가
+ *       ### completed
+ *       - 로그인 사용자의 ACTIVE 참여 기록이 있는 챌린지를 조회합니다.
+ *       - CLOSED 상태이거나 마감일이 지난 챌린지를 조회합니다.
+ *       - 삭제된 챌린지는 제외합니다.
+ *       - status 쿼리를 사용할 수 없습니다.
  *
- *       **admin**
- *       - ADMIN만 조회 가능
- *       - status를 생략하면 PENDING 목록 조회
- *       - 신청자 정보 포함
+ *       ### admin
+ *       - ADMIN만 조회할 수 있습니다.
+ *       - status를 전달하면 해당 상태만 조회합니다.
+ *       - status를 생략하면 상태 필터 없이 전체 상태를 조회합니다.
  *
- *       목록 API이므로 상세 화면에서 사용하는 `content`와
- *       `originalUrl`은 응답에 포함하지 않습니다.
+ *       모든 view는 `data.challenges`와 `data.pagination`으로 구성된
+ *       동일한 응답 형식을 사용합니다.
  *
- *       모든 목록은 동일한 `challenges + pagination` 응답 구조를
- *       사용합니다.
+ *       목록 응답에는 상세 조회용 `content`, `originalUrl`과
+ *       신청자 관계 정보인 `user` 객체가 포함되지 않습니다.
  *
  *     tags:
  *       - Challenges
@@ -54,8 +52,8 @@
  *         name: view
  *         required: false
  *         description: |
- *           조회할 챌린지 목록 화면입니다.
- *           전달하지 않으면 public을 기본값으로 사용합니다.
+ *           조회할 목록 종류입니다.
+ *           생략하면 `public`을 기본값으로 사용합니다.
  *         schema:
  *           type: string
  *           enum:
@@ -71,7 +69,7 @@
  *         required: false
  *         description: |
  *           챌린지 제목 검색어입니다.
- *           제목에 검색어가 포함된 챌린지를 대소문자 구분 없이 조회합니다.
+ *           제목에 검색어가 포함된 챌린지를 영문 대소문자 구분 없이 조회합니다.
  *         schema:
  *           type: string
  *           maxLength: 100
@@ -96,7 +94,7 @@
  *       - in: query
  *         name: docType
  *         required: false
- *         description: 번역 문서 유형 필터입니다.
+ *         description: 번역할 문서 유형 필터입니다.
  *         schema:
  *           type: string
  *           enum:
@@ -112,14 +110,12 @@
  *         description: |
  *           챌린지 상태 필터입니다.
  *
- *           view별 사용 규칙:
- *
  *           - public: APPROVED 또는 CLOSED만 사용 가능
- *           - admin: 모든 Challenge 상태 사용 가능
  *           - participating: 사용 불가
  *           - completed: 사용 불가
+ *           - admin: 모든 Challenge 상태 사용 가능
  *
- *           admin view에서 status를 생략하면 PENDING을 사용합니다.
+ *           admin에서 status를 생략하면 상태 필터 없이 전체 상태를 조회합니다.
  *         schema:
  *           type: string
  *           enum:
@@ -128,7 +124,7 @@
  *             - REJECTED
  *             - DELETED
  *             - CLOSED
- *         example: APPROVED
+ *         example: PENDING
  *
  *       - in: query
  *         name: sort
@@ -136,8 +132,8 @@
  *         description: |
  *           목록 정렬 방법입니다.
  *
- *           - latest: 최신 등록 순
- *           - oldest: 오래된 등록 순
+ *           - latest: 최신 생성 순
+ *           - oldest: 오래된 생성 순
  *           - deadlineAsc: 마감일이 빠른 순
  *           - deadlineDesc: 마감일이 늦은 순
  *         schema:
@@ -207,7 +203,9 @@
  *                           - maxParticipants
  *                           - currentParticipants
  *                           - status
+ *                           - userId
  *                           - createdAt
+ *                           - updatedAt
  *                         properties:
  *                           id:
  *                             type: integer
@@ -271,45 +269,45 @@
  *                               - CLOSED
  *                             example: APPROVED
  *
+ *                           reason:
+ *                             type: string
+ *                             nullable: true
+ *                             description: 거절 또는 삭제 사유
+ *                             example: null
+ *
+ *                           deletedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             nullable: true
+ *                             description: soft delete 처리 일시
+ *                             example: null
+ *
+ *                           userId:
+ *                             type: integer
+ *                             description: 챌린지를 생성한 사용자 ID
+ *                             example: 3
+ *
  *                           createdAt:
  *                             type: string
  *                             format: date-time
- *                             description: 챌린지 신청 또는 생성 일시
+ *                             description: 챌린지 생성 일시
  *                             example: '2026-07-20T09:00:00.000Z'
  *
- *                           user:
- *                             type: object
- *                             description: |
- *                               챌린지를 신청한 사용자 정보입니다.
- *                               `view=admin`인 경우에만 포함됩니다.
- *                             required:
- *                               - id
- *                               - nickname
- *                               - email
- *                             properties:
- *                               id:
- *                                 type: integer
- *                                 description: 신청자 ID
- *                                 example: 3
- *
- *                               nickname:
- *                                 type: string
- *                                 description: 신청자 닉네임
- *                                 example: 리액트전문가
- *
- *                               email:
- *                                 type: string
- *                                 format: email
- *                                 description: 신청자 이메일
- *                                 example: react@docsru.dev
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             description: 챌린지 마지막 수정 일시
+ *                             example: '2026-07-20T09:00:00.000Z'
  *
  *                           participations:
  *                             type: array
  *                             description: |
- *                               현재 로그인 사용자의 참여 기록입니다.
+ *                               현재 로그인 사용자의 ACTIVE 참여 기록입니다.
  *
- *                               `view=participating` 또는
- *                               `view=completed`인 경우에만 포함됩니다.
+ *                               `view=participating` 또는 `view=completed`인
+ *                               경우에만 응답에 포함됩니다.
+ *
+ *                               public과 admin 응답에는 포함되지 않습니다.
  *                             items:
  *                               type: object
  *                               required:
@@ -335,7 +333,7 @@
  *                                   nullable: true
  *                                   description: |
  *                                     참여 기록과 연결된 번역 작업물입니다.
- *                                     작업물이 생성되지 않았다면 null일 수 있습니다.
+ *                                     아직 작업물이 생성되지 않았다면 null일 수 있습니다.
  *                                   properties:
  *                                     id:
  *                                       type: integer
@@ -350,7 +348,7 @@
  *                                     createdAt:
  *                                       type: string
  *                                       format: date-time
- *                                       description: 작업물 생성 일시
+ *                                       description: 번역 작업물 생성 일시
  *                                       example: '2026-07-20T09:30:00.000Z'
  *
  *                     pagination:
@@ -372,13 +370,13 @@
  *                           type: integer
  *                           minimum: 1
  *                           maximum: 100
- *                           description: 한 페이지에 조회하는 개수
+ *                           description: 한 페이지에 조회하는 챌린지 개수
  *                           example: 10
  *
  *                         total:
  *                           type: integer
  *                           minimum: 0
- *                           description: 검색 및 필터 조건에 맞는 전체 개수
+ *                           description: 검색 및 필터 조건에 맞는 전체 챌린지 개수
  *                           example: 18
  *
  *                         totalPages:
@@ -402,7 +400,11 @@
  *                         maxParticipants: 8
  *                         currentParticipants: 3
  *                         status: APPROVED
+ *                         reason: null
+ *                         deletedAt: null
+ *                         userId: 3
  *                         createdAt: '2026-07-20T09:00:00.000Z'
+ *                         updatedAt: '2026-07-20T09:00:00.000Z'
  *                     pagination:
  *                       page: 1
  *                       limit: 10
@@ -423,7 +425,11 @@
  *                         maxParticipants: 8
  *                         currentParticipants: 3
  *                         status: APPROVED
+ *                         reason: null
+ *                         deletedAt: null
+ *                         userId: 3
  *                         createdAt: '2026-07-20T09:00:00.000Z'
+ *                         updatedAt: '2026-07-20T09:00:00.000Z'
  *                         participations:
  *                           - id: 12
  *                             status: ACTIVE
@@ -451,7 +457,11 @@
  *                         maxParticipants: 8
  *                         currentParticipants: 5
  *                         status: CLOSED
+ *                         reason: null
+ *                         deletedAt: null
+ *                         userId: 2
  *                         createdAt: '2026-04-10T09:00:00.000Z'
+ *                         updatedAt: '2026-05-16T00:00:00.000Z'
  *                         participations:
  *                           - id: 3
  *                             status: ACTIVE
@@ -479,27 +489,27 @@
  *                         maxParticipants: 10
  *                         currentParticipants: 0
  *                         status: PENDING
+ *                         reason: null
+ *                         deletedAt: null
+ *                         userId: 3
  *                         createdAt: '2026-07-14T08:00:00.000Z'
- *                         user:
- *                           id: 3
- *                           nickname: 리액트전문가
- *                           email: react@docsru.dev
+ *                         updatedAt: '2026-07-14T08:00:00.000Z'
  *                     pagination:
  *                       page: 1
  *                       limit: 10
- *                       total: 1
+ *                       total: 5
  *                       totalPages: 1
  *
  *       400:
  *         description: |
  *           쿼리스트링 유효성 검사 실패
  *
- *           다음과 같은 경우 발생할 수 있습니다.
+ *           발생 예시:
  *
  *           - 지원하지 않는 view
  *           - 지원하지 않는 field 또는 docType
  *           - 지원하지 않는 status 또는 sort
- *           - public에서 PENDING, REJECTED, DELETED status 사용
+ *           - public에서 PENDING, REJECTED, DELETED 상태 사용
  *           - participating 또는 completed에서 status 사용
  *           - page가 1 미만이거나 정수가 아님
  *           - limit이 1~100 범위를 벗어남
@@ -508,10 +518,20 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               success: false
- *               message: 참여 중/완료 목록에서는 status를 함께 사용할 수 없습니다.
- *               code: VALIDATION_ERROR
+ *             examples:
+ *               invalidStatusCombination:
+ *                 summary: 참여·완료 목록에서 status 사용
+ *                 value:
+ *                   success: false
+ *                   message: 참여 중/완료 목록에서는 status를 함께 사용할 수 없습니다.
+ *                   code: VALIDATION_ERROR
+ *
+ *               invalidPublicStatus:
+ *                 summary: 공개 목록에서 비공개 상태 사용
+ *                 value:
+ *                   success: false
+ *                   message: 공개 목록의 status는 APPROVED 또는 CLOSED만 사용할 수 있습니다.
+ *                   code: VALIDATION_ERROR
  *
  *       401:
  *         description: 로그인이 필요하거나 인증 정보가 유효하지 않음
@@ -526,9 +546,9 @@
  *
  *       403:
  *         description: |
- *           관리자 신청 관리 목록에 대한 접근 권한 없음
+ *           관리자 챌린지 신청 관리 목록에 대한 접근 권한이 없습니다.
  *
- *           `view=admin` 요청을 ADMIN이 아닌 사용자가 보낸 경우 발생합니다.
+ *           ADMIN이 아닌 사용자가 `view=admin`을 요청하면 발생합니다.
  *         content:
  *           application/json:
  *             schema:
