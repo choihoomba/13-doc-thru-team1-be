@@ -10,7 +10,7 @@ import * as challengesRepository from '../repositories/challenges.repository.js'
  */
 
 export async function getChallenges(query) {
-  const { page, pageSize, search, field, docType, status } = query;
+  const { page, pageSize, keyword, field, docType, status } = query;
 
   // 1. Prisma where 조건 조립
   const where = {
@@ -26,9 +26,9 @@ export async function getChallenges(query) {
     status: status ? status : { in: ['APPROVED', 'CLOSED'] },
 
     // 제목 검색 (대소문자 구분 없이 검색)
-    ...(search && {
+    ...(keyword && {
       title: {
-        contains: search,
+        contains: keyword,
         mode: 'insensitive',
       },
     }),

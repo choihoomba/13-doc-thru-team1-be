@@ -6,7 +6,7 @@ import * as challengesRepository from '../repositories/challenges.repository.js'
 export async function getList({
   userId,
   status,
-  search,
+  keyword,
   field,
   docType,
   cursor,
@@ -18,7 +18,7 @@ export async function getList({
   const rows = await challengesRepository.findParticipatedList({
     userId,
     status: challengeStatus,
-    search,
+    keyword,
     field,
     docType,
     cursor,

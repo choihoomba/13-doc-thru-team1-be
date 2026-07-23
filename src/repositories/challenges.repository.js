@@ -5,7 +5,7 @@ export async function findAndCount(where, skip, take) {
   // 목록과 총 개수를 동시에 요청
   const [data, totalCount] = await Promise.all([
     prisma.challenge.findMany({
-      where, // Service에서 만든 검색(search), 필터(field, status 등) 조건
+      where, // Service에서 만든 검색(keyword), 필터(field, status 등) 조건
       skip, // 시작 위치 / 몇 개를 건너뛸지 (페이지네이션)
       take, // 한 페이지에 가져올 데이터 개수(페이지네이션)
       orderBy: { createdAt: 'desc' }, // 최신 챌린지가 먼저 보이도록
@@ -37,7 +37,7 @@ export async function findAndCount(where, skip, take) {
 export async function findParticipatedList({
   userId,
   status,
-  search,
+  keyword,
   field,
   docType,
   cursor,
@@ -98,4 +98,33 @@ export async function findParticipatedList({
       },
     },
   });
+}
+
+// ------------------------------------------------------------
+// 여기서부터 (어드민 - 신청 관리, 페이지네이션)
+// ------------------------------------------------------------
+
+// 관리자 - 신청 목록 조회 (검색/필터/정렬/페이지네이션)
+export async function findApplicationsAndCount(where, skip, take, orderBy) {
+  const [data, totalCount] = await Promise.all([
+    prisma.challenge.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+      select: {
+        id: true,
+        field: true,
+        docType: true,
+        title: true,
+        maxParticipants: true,
+        createdAt: true,
+        deadline: true,
+        status: true,
+      },
+    }),
+    prisma.challenge.count({ where }),
+  ]);
+
+  return { data, totalCount };
 }

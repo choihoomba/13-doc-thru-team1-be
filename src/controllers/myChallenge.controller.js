@@ -13,7 +13,7 @@ export async function getList(req, res) {
   const result = await myChallengeService.getList({
     userId: req.user.userId,
     status: query.status,
-    search: query.search,
+    keyword: query.keyword,
     field: query.field,
     docType: query.docType,
     cursor: query.cursor,

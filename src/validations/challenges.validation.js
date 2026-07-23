@@ -12,7 +12,7 @@ export const getChallengesQuerySchema = z.object({
 
   // 제목 검색
   // 값이 없으면 검색 조건에서 제외
-  search: z.string().trim().min(1).optional(),
+  keyword: z.string().trim().min(1).optional(),
 
   // 분야 필터 - 실제 Prisma Field enum 값 그대로 사용
   field: z
