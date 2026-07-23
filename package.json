@@ -19,6 +19,7 @@
     "seed:validate": "node prisma/validate-seed.mjs",
     "seed": "npm run seed:validate && node prisma/seed.js",
     "start": "node src/server.js",
+    "test:challenge": "node --test tests/challenge.api.test.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

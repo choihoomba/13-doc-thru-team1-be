@@ -1,0 +1,148 @@
+@baseUrl = http://localhost:4000
+@approvedChallengeId = 12
+
+# Challenge API 통합 수동 테스트입니다.
+# VS Code REST Client는 로그인 응답의 HttpOnly 쿠키를 다음 요청에 자동으로 전달합니다.
+# 로컬 seed DB에서 위에서 아래 순서대로 실행합니다.
+
+### 1. 일반 사용자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. 공개 챌린지 목록 - 기본 view=public
+GET {{baseUrl}}/challenges
+
+### 3. 공개 목록 검색·필터·페이지네이션
+GET {{baseUrl}}/challenges?view=public&search=Router&field=WEB&docType=OFFICIAL&sort=deadlineAsc&page=1&limit=5
+
+### 4. 참여 중인 챌린지
+GET {{baseUrl}}/challenges?view=participating
+
+### 5. 완료한 챌린지
+GET {{baseUrl}}/challenges?view=completed
+
+### 6. 내가 신청한 챌린지
+GET {{baseUrl}}/challenges?view=applied
+
+### 7. 일반 사용자의 관리자 신청 목록 요청 - 403
+GET {{baseUrl}}/challenges?view=admin
+
+### 8. 챌린지 상세
+GET {{baseUrl}}/challenges/{{approvedChallengeId}}
+
+### 9. 신규 챌린지 신청
+# @name createPendingChallenge
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "Challenge 통합 API 승인 테스트",
+  "field": "WEB",
+  "docType": "OFFICIAL",
+  "content": "승인, 수정, 삭제와 알림 트랜잭션을 확인합니다.",
+  "originalUrl": "https://expressjs.com/en/guide/routing.html",
+  "deadline": "2026-12-20T23:59:59.000Z",
+  "maxParticipants": 8
+}
+
+### 10. 방금 신청한 챌린지 취소용 신청 생성
+# @name createCancelChallenge
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "Challenge 신청 취소 테스트",
+  "field": "API",
+  "docType": "ETC",
+  "content": "신청자가 PENDING 상태에서 취소할 수 있는지 확인합니다.",
+  "originalUrl": "https://example.com/cancel-test",
+  "deadline": "2026-12-31T23:59:59.000Z",
+  "maxParticipants": 5
+}
+
+### 11. 신청자 본인의 PENDING 신청 취소
+PATCH {{baseUrl}}/challenges/{{createCancelChallenge.response.body.$.data.id}}
+Content-Type: application/json
+
+{
+  "action": "CANCEL"
+}
+
+### 12. 일반 사용자의 정보 수정 - 403
+PATCH {{baseUrl}}/challenges/{{approvedChallengeId}}
+Content-Type: application/json
+
+{
+  "maxParticipants": 10,
+  "reason": "일반 사용자 권한 차단 테스트입니다."
+}
+
+### 13. 관리자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+### 14. 관리자 승인 대기 목록 - 기본 status=PENDING
+GET {{baseUrl}}/challenges?view=admin&sort=oldest
+
+### 15. 챌린지 승인과 신청자 알림 생성
+PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
+Content-Type: application/json
+
+{
+  "status": "APPROVED"
+}
+
+### 16. 승인된 챌린지 정보 수정과 신청자 알림 생성
+PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
+Content-Type: application/json
+
+{
+  "maxParticipants": 10,
+  "reason": "승인 후 모집 정원을 조정했습니다."
+}
+
+### 17. 정보 수정과 상태 변경을 섞은 요청 - 400
+PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
+Content-Type: application/json
+
+{
+  "status": "REJECTED",
+  "title": "동시에 수정할 수 없습니다.",
+  "reason": "본문 형식 충돌 테스트"
+}
+
+### 18. 진행 중인 챌린지 관리자 삭제와 신청자 알림 생성
+DELETE {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
+Content-Type: application/json
+
+{
+  "reason": "통합 API 삭제 및 알림 테스트입니다."
+}
+
+### 19. 신청자 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 20. 신청 목록에서 관리자 삭제 상태와 사유 확인
+GET {{baseUrl}}/challenges?view=applied&status=DELETED
+
+### 21. 삭제된 챌린지 상세에서 삭제 사유 확인
+GET {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
+
+### 22. 승인·수정·삭제 알림 확인
+GET {{baseUrl}}/notifications

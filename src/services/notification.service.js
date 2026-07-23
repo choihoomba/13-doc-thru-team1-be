@@ -1,17 +1,41 @@
 import * as notificationRepository from '../repositories/notification.repository.js';
 import { NotFoundError } from '../utils/errors.js';
 import { notificationCreateSchema } from '../validations/notification.validation.js';
+import { closeExpiredChallenges } from '../jobs/deadline.job.js';
 
+/**
+ * 로그인 사용자의 알림 목록을 조회합니다.
+ *
+ * 실시간 알림 대신 사용자가 새로고침하거나 알림 패널을 여는 시점에 fetch하는
+ * 요구사항이므로, 조회 전에 만료 Challenge를 CLOSED로 동기화합니다. 이를 통해
+ * 별도 cron 실행 여부와 관계없이 최신 마감 알림까지 한 응답에서 확인할 수 있습니다.
+ */
 async function getNotifications(userId) {
+  await closeExpiredChallenges();
   return notificationRepository.findManyByUserId(userId);
 }
 
-// 알림은 이벤트를 처리한 Challenge, Submission, Feedback Service에서 생성합니다.
-// transactionClient를 받으면 원본 변경과 알림 저장을 같은 트랜잭션으로 처리할 수 있습니다.
+/**
+ * 도메인 Service가 사용하는 내부 알림 생성 공통 함수입니다.
+ *
+ * 외부 `POST /notifications`를 만들지 않는 이유:
+ * - 클라이언트가 수신자와 메시지를 조작해 허위 알림을 만들 수 있음
+ * - 원본 변경 요청과 알림 요청이 분리되어 한쪽만 성공할 수 있음
+ *
+ * 따라서 Challenge 승인/거절/수정/삭제를 실제로 처리한 Service가 DB에서 확인한
+ * 신청자 ID와 실제 target ID로 이 함수를 호출합니다.
+ *
+ * @param {object} notification 알림 수신자, 종류, 대상, 문구
+ * @param {object|undefined} transactionClient 원본 변경과 같은 Prisma client
+ *
+ * transactionClient가 전달되면 Notification Repository도 같은 작업 단위에
+ * 참여하므로 원본 변경과 알림은 함께 commit 또는 rollback됩니다.
+ */
 async function createNotification(
   { userId, type, targetType, targetId, message },
   transactionClient
 ) {
+  // 내부 호출이라도 enum, ID, 메시지 길이를 공통 Schema로 다시 검증합니다.
   const validated = notificationCreateSchema.parse({
     userId,
     type,
@@ -23,15 +47,22 @@ async function createNotification(
   return notificationRepository.create(validated, transactionClient);
 }
 
+/**
+ * PATCH /notifications/:id/read의 읽음 처리를 수행합니다.
+ *
+ * - 본인의 알림만 변경 가능
+ * - 다른 사용자의 알림도 "존재하지만 권한 없음"을 노출하지 않고 404
+ * - 이미 읽은 알림은 그대로 반환해 반복 PATCH가 같은 결과를 내는 멱등 처리
+ */
 async function markAsRead(userId, notificationId) {
   const notification = await notificationRepository.findById(notificationId);
 
-  // 다른 사용자의 알림 존재 여부가 노출되지 않도록 소유자가 달라도 404로 처리합니다.
+  // 소유자가 아니어도 레코드 존재 여부를 유추할 수 없게 같은 404를 반환합니다.
   if (!notification || notification.userId !== userId) {
     throw new NotFoundError('알림을 찾을 수 없습니다.');
   }
 
-  // 이미 읽은 알림도 같은 결과를 반환하여 PATCH 요청을 반복해도 결과가 달라지지 않게 합니다.
+  // 이미 읽은 경우 불필요한 DB update 없이 현재 리소스를 반환합니다.
   if (notification.isRead) {
     return notification;
   }
