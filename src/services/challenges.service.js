@@ -31,7 +31,6 @@ async function getChallengeList({ field, docType, search, page, limit }) {
   };
 }
 
-/*[공개] 승인된 챌린지 상세 (참여 전 미리보기)*/
 async function getChallengeDetail(id) {
   const challenge = await challengeRepository.findApprovedById(id);
 
@@ -42,13 +41,11 @@ async function getChallengeDetail(id) {
   return toChallengeResponse(challenge);
 }
 
-/*[공개] 챌린지 신청(생성) — 생성 즉시 PENDING 상태로 어드민 승인 대기열에 들어감*/
 async function createChallenge(userId, data) {
   const challenge = await challengeRepository.create({ userId, ...data });
   return toChallengeResponse(challenge);
 }
 
-/*[유저] 내가 신청한 챌린지 목록*/
 async function getMyChallenges(userId, { status, sort, search }) {
   const orderBy = orderByMap[sort] || { createdAt: 'desc' };
   const queryStatus = status || { not: 'CLOSED' };
@@ -63,7 +60,6 @@ async function getMyChallenges(userId, { status, sort, search }) {
   return challenges.map(toChallengeResponse);
 }
 
-/*[유저] 내가 신청한 챌린지 상세*/
 async function getMyChallengeDetail(id, userId) {
   const challenge = await challengeRepository.findMyChallengeById(id, userId, {
     not: 'CLOSED',
@@ -78,7 +74,6 @@ async function getMyChallengeDetail(id, userId) {
   return toChallengeResponse(challenge);
 }
 
-/*[유저] 승인 대기(PENDING) 신청 취소*/
 async function cancelMyChallenge(id, userId) {
   const challenge = await challengeRepository.findById(id);
 
@@ -96,7 +91,6 @@ async function cancelMyChallenge(id, userId) {
   return { id };
 }
 
-/*[관리자] 챌린지 목록 (검색/필터/페이지네이션)*/
 async function getAdminChallenges({ status, search, page, limit }) {
   const currentPage = page ?? 1;
   const currentLimit = limit ?? 10;
@@ -116,7 +110,6 @@ async function getAdminChallenges({ status, search, page, limit }) {
   };
 }
 
-/*[관리자] 챌린지 상태 변경 (승인/거절)*/
 async function updateChallengeStatus(id, { status, reason }) {
   const challenge = await challengeRepository.findById(id);
 
@@ -139,7 +132,6 @@ async function updateChallengeStatus(id, { status, reason }) {
   return toChallengeResponse(updated);
 }
 
-/*[관리자] 챌린지 삭제 (Soft Delete) */
 async function softDeleteChallenge(id, reason) {
   const challenge = await challengeRepository.findById(id);
 

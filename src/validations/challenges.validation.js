@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { Field, DocType, ChallengeStatus } from '@prisma/client';
 
-/** 공통: 챌린지 id URL 파라미터 */
 export const challengeIdParamSchema = z.object({
   id: z.coerce
     .number()
@@ -9,7 +8,6 @@ export const challengeIdParamSchema = z.object({
     .positive('id는 1 이상이어야 합니다'),
 });
 
-/** 공개: 챌린지 목록 조회 쿼리 (승인된 챌린지만 노출) */
 export const challengeListQuerySchema = z.object({
   field: z.enum(Field).optional(),
   docType: z.enum(DocType).optional(),
@@ -18,7 +16,6 @@ export const challengeListQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(10),
 });
 
-/** 공개: 챌린지 신청(생성) — 생성 즉시 승인 대기(PENDING) 상태 */
 export const createChallengeSchema = z.object({
   title: z
     .string()
@@ -41,7 +38,6 @@ export const createChallengeSchema = z.object({
     .positive('maxParticipants는 1 이상이어야 합니다.'),
 });
 
-/** 유저: 내가 신청한 챌린지 목록 조회 쿼리 */
 export const myChallengesQuerySchema = z.object({
   status: z.enum(ChallengeStatus).optional(),
   sort: z
@@ -50,7 +46,6 @@ export const myChallengesQuerySchema = z.object({
   search: z.string().trim().max(100).optional(),
 });
 
-/** 어드민: 챌린지 목록 조회 쿼리 (검색/필터/페이지네이션) */
 export const adminChallengesQuerySchema = z.object({
   status: z.enum(ChallengeStatus).optional(),
   search: z.string().trim().max(100).optional(),
@@ -58,7 +53,6 @@ export const adminChallengesQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(10),
 });
 
-/** 어드민: 챌린지 상태 변경 (승인/거절) — 거절 시 사유 필수 */
 export const updateChallengeStatusSchema = z
   .object({
     status: z.enum(['APPROVED', 'REJECTED']),
@@ -69,7 +63,6 @@ export const updateChallengeStatusSchema = z
     path: ['reason'],
   });
 
-/** 어드민: 챌린지 삭제(Soft Delete) 사유 — 항상 필수 */
 export const deleteChallengeSchema = z.object({
   reason: z.string().trim().min(1, '삭제 사유를 입력해주세요.'),
 });

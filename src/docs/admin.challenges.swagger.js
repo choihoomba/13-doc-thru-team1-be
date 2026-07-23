@@ -79,7 +79,6 @@
  * /challenges/admin/{id}/status:
  *   patch:
  *     summary: 챌린지 승인/거절 (관리자)
- *     description: PENDING 상태인 챌린지만 처리할 수 있습니다. REJECTED로 변경 시 reason이 필수입니다.
  *     tags: [AdminChallenges]
  *     security:
  *       - cookieAuth: []

@@ -6,9 +6,6 @@ import {
   deleteChallengeSchema,
 } from '../validations/challenges.validation.js';
 
-/** 신청한 신규 챌린지 목록 조회
- * - GET /challenges/admin
- */
 async function getAdminChallenges(req, res, next) {
   try {
     const query = adminChallengesQuerySchema.parse(req.query);
@@ -24,9 +21,6 @@ async function getAdminChallenges(req, res, next) {
   }
 }
 
-/** 챌린지 상태 변경 (승인/거절)
- * - PATCH /challenges/admin/:id/status
- */
 async function updateChallengeStatus(req, res, next) {
   try {
     const { id } = challengeIdParamSchema.parse(req.params);
@@ -44,9 +38,6 @@ async function updateChallengeStatus(req, res, next) {
   }
 }
 
-/** 챌린지 Soft Delete
- * - DELETE /challenges/admin/:id
- */
 async function deleteChallenge(req, res, next) {
   try {
     const { id } = challengeIdParamSchema.parse(req.params);

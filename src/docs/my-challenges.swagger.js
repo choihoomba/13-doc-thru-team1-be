@@ -12,7 +12,6 @@
  * /challenges/users:
  *   get:
  *     summary: 내가 신청한 챌린지 목록 조회
- *     description: status를 지정하지 않으면 CLOSED를 제외한 전체 상태를 조회합니다.
  *     tags: [MyChallenges]
  *     security:
  *       - cookieAuth: []
@@ -98,7 +97,6 @@
  * /challenges/users/{id}/cancel:
  *   patch:
  *     summary: 승인 대기(PENDING) 신청 취소
- *     description: PENDING 상태인 본인의 챌린지 신청만 취소(Hard Delete)할 수 있습니다.
  *     tags: [MyChallenges]
  *     security:
  *       - cookieAuth: []

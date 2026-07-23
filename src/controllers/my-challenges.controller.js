@@ -4,9 +4,6 @@ import {
   challengeIdParamSchema,
 } from '../validations/challenges.validation.js';
 
-/** 신청한 챌린지 목록 조회
- * - GET /challenges/users
- */
 async function getMyChallenges(req, res, next) {
   try {
     const userId = req.user.userId;
@@ -24,9 +21,6 @@ async function getMyChallenges(req, res, next) {
   }
 }
 
-/** 신청한 챌린지 상세 조회
- * - GET /challenges/users/:id
- */
 async function getMyChallengeDetail(req, res, next) {
   try {
     const userId = req.user.userId;
@@ -44,9 +38,6 @@ async function getMyChallengeDetail(req, res, next) {
   }
 }
 
-/** 승인 대기 신청 취소
- * - PATCH /challenges/users/:id/cancel
- */
 async function cancelMyChallenge(req, res, next) {
   try {
     const userId = req.user.userId;

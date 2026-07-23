@@ -24,7 +24,6 @@ async function create({
   });
 }
 
-/*공개: 승인된(APPROVED) 챌린지 목록 조회 (soft delete 제외)*/
 async function findApprovedList({
   field,
   docType,

@@ -12,7 +12,6 @@
  * /challenges:
  *   get:
  *     summary: 승인된 챌린지 목록 조회
- *     description: status가 APPROVED이고 삭제되지 않은 챌린지만 조회됩니다.
  *     tags: [Challenges]
  *     security:
  *       - cookieAuth: []
@@ -69,7 +68,6 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  *   post:
  *     summary: 챌린지 신청(생성)
- *     description: 생성 즉시 status는 PENDING(승인 대기)이 됩니다. 어드민 승인 후 목록에 노출됩니다.
  *     tags: [Challenges]
  *     security:
  *       - cookieAuth: []
