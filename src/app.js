@@ -10,9 +10,11 @@ import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
-import draftRouter from './routes/draft.route.js';
 import notificationRouter from './routes/notification.route.js';
 import likeRouter from './routes/like.route.js';
+import challengesRouter from './routes/challenges.route.js'; // 공개: 목록/상세/신청
+import myChallengesRouter from './routes/my-challenges.route.js'; // 유저: 내 챌린지
+import adminChallengesRouter from './routes/admin.challenges.route.js'; // 어드민: 챌린지 관리
 
 const app = express();
 
@@ -31,8 +33,10 @@ app.use(cookieParser());
 
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
+app.use('/challenges', challengesRouter); // [추가] 공개 챌린지 조회/신청
+app.use('/challenges/users', myChallengesRouter); // [추가] 유저 - 내 챌린지
+app.use('/challenges/admin', adminChallengesRouter); // [추가] 어드민 - 챌린지 관리
 app.use('/participations', participationRouter);
-app.use('/draft', draftRouter);
 app.use('/notifications', notificationRouter);
 app.use('/', likeRouter);
 app.use('/submissions', submissionRouter);
