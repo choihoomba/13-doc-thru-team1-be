@@ -10,6 +10,7 @@ import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import submissionRouter from './routes/submission.route.js';
 import participationRouter from './routes/participations.route.js';
+import draftRouter from './routes/draft.route.js';
 import notificationRouter from './routes/notification.route.js';
 import likeRouter from './routes/like.route.js';
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 // 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
 app.use('/participations', participationRouter);
+app.use('/draft', draftRouter);
 app.use('/notifications', notificationRouter);
 app.use('/', likeRouter);
 app.use('/submissions', submissionRouter);
