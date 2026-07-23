@@ -1,0 +1,86 @@
+@BASE_URL = http://localhost:4000
+
+# seed 계정 (README 기준) — 비밀번호는 전부 test1234!
+# admin@docsru.dev  (ADMIN)
+# jihoon@docsru.dev (USER / GENERAL)
+# react@docsru.dev  (USER / EXPERT)
+# docs@docsru.dev   (USER / EXPERT)
+
+# ============================================================
+# [정상 흐름] 위에서부터 순서대로 실행하세요.
+# REST Client가 signin 쿠키를 자동으로 이후 요청에 실어줍니다.
+# (자동 전송 안 되면 설정에서 rest-client.rememberCookiesForSubscribeRequests = true)
+# ============================================================
+
+
+### 1. signin — 로그인 (쿠키 발급)
+POST {{BASE_URL}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "jihoon@docsru.dev",
+  "password": "test1234!"
+}
+
+### 2. me — 본인 정보 조회 (쿠키 인증)
+GET {{BASE_URL}}/auth/me
+
+### 3. refresh — 토큰 재발급 (쿠키 갱신 + DB 해시 회전)
+### DBeaver로 해당 유저 refreshToken 값이 전후로 바뀌는지 확인
+POST {{BASE_URL}}/auth/refresh
+
+### 4. me — refresh 후에도 정상 조회되는지
+GET {{BASE_URL}}/auth/me
+
+# ============================================================
+# [어드민 신청 관리 목록 — 정상 흐름]
+# 먼저 ADMIN 계정으로 로그인한 뒤 순서대로 실행합니다.
+# ============================================================
+
+### 어드민 신청 관리 목록 조회
+GET {{BASE_URL}}/challenges?type=admin
+
+### 어드민 신청 관리 목록 조회 — 페이지네이션
+GET {{BASE_URL}}/challenges?type=admin&page=1&pageSize=2
+
+### 어드민 신청 관리 목록 조회 — 제목 검색
+GET {{BASE_URL}}/challenges?type=admin&keyword=리액트
+
+
+### 어드민 신청 관리 목록 조회 — 승인 대기
+GET {{BASE_URL}}/challenges?type=admin&status=PENDING
+
+
+### 어드민 신청 관리 목록 조회 — 승인 완료
+GET {{BASE_URL}}/challenges?type=admin&status=APPROVED
+
+
+### 어드민 신청 관리 목록 조회 — 승인 거절
+GET {{BASE_URL}}/challenges?type=admin&status=REJECTED
+
+
+### 어드민 신청 관리 목록 조회 — 삭제됨
+GET {{BASE_URL}}/challenges?type=admin&status=DELETED
+
+### 신청 시간 빠른순
+GET {{BASE_URL}}/challenges?type=admin&status=PENDING&sort=appliedAtAsc
+
+### 신청 시간 느린순
+GET {{BASE_URL}}/challenges?type=admin&status=PENDING&sort=appliedAtDesc
+
+### 마감 기한 빠른순
+GET {{BASE_URL}}/challenges?type=admin&status=PENDING&sort=deadlineAsc
+
+### 마감 기한 느린순
+GET {{BASE_URL}}/challenges?type=admin&status=PENDING&sort=deadlineDesc
+
+# ============================================================
+# [어드민 신청 관리 목록 — 권한 에러]
+# ============================================================
+
+### 18. 비로그인 요청 — 401 UNAUTHORIZED
+### 로그아웃하거나 REST Client 쿠키를 삭제한 뒤 실행
+GET {{BASE_URL}}/challenges?type=admin
+
+### 20. 일반 유저가 어드민 목록 요청 — 403 FORBIDDEN
+GET {{BASE_URL}}/challenges?type=admin
