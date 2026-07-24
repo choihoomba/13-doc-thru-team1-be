@@ -58,14 +58,19 @@ npx prisma studio
 
 API 문서는 서버 실행 후 http://localhost:4000/api-docs 에서 확인할 수 있습니다.
 
+Challenge 담당 범위, 통합 구조, query/응답 계약, 알림 연동과 Git 절차는
+[`src/docs/challenge-api-guide.md`](src/docs/challenge-api-guide.md)에서 확인할
+수 있습니다.
+
 ## 스크립트
 
-| 명령어                 | 설명                     |
-| ---------------------- | ------------------------ |
-| `npm run dev`          | 개발 서버 실행 (nodemon) |
-| `npm start`            | 프로덕션 서버 실행       |
-| `npm run format`       | Prettier 포맷 적용       |
-| `npm run format:check` | 포맷 검사만 실행         |
+| 명령어                   | 설명                      |
+| ------------------------ | ------------------------- |
+| `npm run dev`            | 개발 서버 실행 (nodemon)  |
+| `npm start`              | 프로덕션 서버 실행        |
+| `npm run test:challenge` | Challenge 통합 API 테스트 |
+| `npm run format`         | Prettier 포맷 적용        |
+| `npm run format:check`   | 포맷 검사만 실행          |
 
 ## 폴더 구조
 

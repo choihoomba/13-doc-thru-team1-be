@@ -117,7 +117,7 @@ const options = {
             reason: {
               type: 'string',
               nullable: true,
-              description: '거절 사유',
+              description: '거절 또는 관리자 삭제 사유',
             },
             deletedAt: { type: 'string', format: 'date-time', nullable: true },
             userId: { type: 'integer', description: '신청자 id' },
