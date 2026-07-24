@@ -62,7 +62,6 @@ async function getChallenges(req, res) {
  * Service는 공개 여부와 신청자/관리자 여부를 판단하고 다음 화면 데이터를
  * 조합합니다.
  * - 챌린지 기본 정보와 originalUrl
- * - 신청자 정보
  * - 현재 사용자의 참여 및 작업물 ID
  * - 도전 가능 여부
  * - 마감된 경우 최다 추천 작업물

@@ -3,12 +3,13 @@ import prisma from '../config/prisma.js';
 /**
  * 만료된 APPROVED 챌린지를 CLOSED로 바꾸고 최다 추천 작업물과 알림을 기록합니다.
  *
- * 프로젝트 요구사항은 WebSocket, webhook, browser push 같은 실시간 채널이
- * 아니라 새로고침/fetch 시점의 동기화를 요구합니다. 따라서 별도 상시 실행
- * 서버를 전제로 하지 않고 다음 Service 진입점에서 이 함수를 호출합니다.
- * - GET /challenges 목록
- * - GET /challenges/:id 상세
- * - GET /notifications 알림 목록
+ * 이 파일은 매 자정 실행되는 Cron 작업에서 재사용할 마감 처리 함수만 제공합니다.
+ * 일반 목록·상세·알림 GET 요청에서는 호출하지 않습니다. 조회 요청마다 만료 후보
+ * 검색과 후속 트랜잭션을 실행하면 불필요한 DB 부하가 생기기 때문입니다.
+ *
+ * 실제 Cron 스케줄 등록은 별도 작업에서 담당하며, 이 파일 자체는 마감 상태 전환,
+ * 최다 추천 작업물 선정, 신청자 알림 생성을 하나의 처리 단위로 재사용하기 위해
+ * 유지합니다.
  *
  * 처리 단위:
  * 1. APPROVED이면서 deadline <= now인 챌린지 후보 조회

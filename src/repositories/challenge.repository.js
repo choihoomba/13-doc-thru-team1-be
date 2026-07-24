@@ -36,29 +36,18 @@ const challengeSelect = {
  * 목록 view에 따라 필요한 relation만 추가합니다.
  *
  * @param {object} options
- * @param {boolean} options.includeApplicant admin 신청 관리용 신청자 정보 포함 여부
  * @param {number|undefined} options.participantUserId 내 참여/완료 목록의 사용자 ID
  * @returns {object} Prisma ChallengeSelect
  *
- * - admin view: 신청자를 구분하는 데 필요한 id/nickname만 포함
  * - participating/completed view: 현재 사용자의 ACTIVE 참여와 연결 작업물 포함
- * - public/applied view: 관계 조회 없이 공통 Challenge 필드만 반환
+ * - public/applied/admin view: 관계 조회 없이 공통 Challenge 필드만 반환
  *
  * participantUserId를 로그인 사용자에게서만 전달하므로 다른 사용자의 참여
  * 기록을 query string으로 임의 조회할 수 없습니다.
  */
-function buildListSelect({ includeApplicant, participantUserId }) {
+function buildListSelect({ participantUserId }) {
   return {
     ...challengeSelect,
-    // 어드민 신청 관리 테이블과 신청 상세 연결에 필요한 최소 신청자 정보입니다.
-    ...(includeApplicant && {
-      user: {
-        select: {
-          id: true,
-          nickname: true,
-        },
-      },
-    }),
     // 내 챌린지 화면의 "계속 도전하기/내 번역문 보기" 이동에 필요한 ID입니다.
     ...(participantUserId && {
       participations: {
@@ -90,7 +79,6 @@ function buildListSelect({ includeApplicant, participantUserId }) {
  * @param {object|Array} options.orderBy 허용된 sort를 변환한 Prisma 정렬
  * @param {number} options.page 1부터 시작하는 페이지
  * @param {number} options.limit 페이지당 개수
- * @param {boolean} options.includeApplicant 신청자 relation 포함 여부
  * @param {number|undefined} options.participantUserId 참여 relation 대상 사용자
  * @returns {Promise<{challenges: Array, total: number}>}
  *
@@ -100,21 +88,14 @@ function buildListSelect({ includeApplicant, participantUserId }) {
  *
  * skip 계산은 `(page - 1) * limit`, take는 limit로 모든 view가 동일합니다.
  */
-async function findMany({
-  where,
-  orderBy,
-  page,
-  limit,
-  includeApplicant = false,
-  participantUserId,
-}) {
+async function findMany({ where, orderBy, page, limit, participantUserId }) {
   const [challenges, total] = await prisma.$transaction([
     prisma.challenge.findMany({
       where,
       orderBy,
       skip: (page - 1) * limit,
       take: limit,
-      select: buildListSelect({ includeApplicant, participantUserId }),
+      select: buildListSelect({ participantUserId }),
     }),
     prisma.challenge.count({ where }),
   ]);
@@ -130,7 +111,6 @@ async function findMany({
  * @param {number} viewerId 현재 로그인 사용자 ID
  *
  * 조회 relation:
- * - user: 신청자 구분에 필요한 id/nickname
  * - participations: 현재 사용자의 ACTIVE 참여 한정
  * - submissions: 마감 처리에서 지정한 최다 추천 작업물 한정
  *
@@ -142,12 +122,6 @@ async function findDetailById(id, viewerId) {
     where: { id },
     select: {
       ...challengeSelect,
-      user: {
-        select: {
-          id: true,
-          nickname: true,
-        },
-      },
       participations: {
         // viewer 본인의 참여만 포함해 상세 버튼 상태와 작업물 이동에 사용합니다.
         where: {

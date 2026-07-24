@@ -59,19 +59,37 @@ const VIEW_VALUES = [
  * 실제 Prisma orderBy 객체는 Service의 ORDER_BY_MAP에서 결정합니다.
  */
 const SORT_VALUES = ['latest', 'oldest', 'deadlineAsc', 'deadlineDesc'];
+const MIN_CHALLENGE_DEADLINE_DAYS = 7;
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /**
- * 생성과 수정에서 공통으로 사용하는 마감일 검증입니다.
+ * 생성과 수정에서 공통으로 사용하는 미래 마감일 검증입니다.
  *
  * HTML date/datetime input은 문자열을 전송하므로 z.coerce.date()로 Date 객체로
- * 변환합니다. 과거 마감일은 신규 신청과 진행 중 챌린지 수정 모두에서 허용하지
- * 않습니다. 승인 시점에도 시간이 지났을 수 있으므로 Service가 다시 검사합니다.
+ * 변환합니다. 과거 마감일은 진행 중 챌린지 수정에서도 허용하지 않습니다.
+ * 승인 시점에도 시간이 지났을 수 있으므로 Service가 다시 검사합니다.
  */
 const deadlineSchema = z.coerce
   .date('deadline은 올바른 날짜 형식이어야 합니다.')
   .refine((deadline) => deadline > new Date(), {
     message: '마감일은 현재 시간보다 이후여야 합니다.',
   });
+
+/**
+ * 신규 신청은 신청 시점으로부터 최소 7일 뒤를 마감일로 선택해야 합니다.
+ *
+ * 프론트 date input의 min 속성은 직접 API 요청으로 우회할 수 있으므로 서버에서도
+ * 같은 규칙을 검증합니다. 관리자 수정은 이미 진행 중인 챌린지의 일정 조정이므로
+ * 이 7일 제한을 재적용하지 않고 위 deadlineSchema의 미래 날짜 조건만 사용합니다.
+ */
+const createDeadlineSchema = deadlineSchema.refine(
+  (deadline) =>
+    deadline.getTime() >=
+    Date.now() + MIN_CHALLENGE_DEADLINE_DAYS * MILLISECONDS_PER_DAY,
+  {
+    message: `신규 챌린지 마감일은 신청일 기준 최소 ${MIN_CHALLENGE_DEADLINE_DAYS}일 이후여야 합니다.`,
+  }
+);
 
 /**
  * 신규 신청과 정보 수정이 공유하는 Challenge 입력 필드입니다.
@@ -117,7 +135,11 @@ const challengeFieldsSchema = z.object({
  * strict()를 사용하여 status, userId 같은 서버 관리 필드를 클라이언트가
  * 추가로 보내는 것을 거부합니다.
  */
-const createChallengeSchema = challengeFieldsSchema.strict();
+const createChallengeSchema = challengeFieldsSchema
+  .extend({
+    deadline: createDeadlineSchema,
+  })
+  .strict();
 
 /**
  * PATCH /challenges/:id - 관리자 정보 수정 body

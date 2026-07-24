@@ -6,7 +6,6 @@ import {
   NotFoundError,
 } from '../utils/errors.js';
 import { isChallengeClosed } from '../utils/challenge.js';
-import { closeExpiredChallenges } from '../jobs/deadline.job.js';
 import { createNotification } from './notification.service.js';
 
 /**
@@ -36,7 +35,7 @@ import { createNotification } from './notification.service.js';
 const ORDER_BY_MAP = {
   latest: [{ createdAt: 'desc' }, { id: 'desc' }],
   oldest: [{ createdAt: 'asc' }, { id: 'asc' }],
-  deadlineAsc: [{ deadline: 'asc' }, { id: 'asc' }],
+  deadlineAsc: [{ deadline: 'asc' }, { id: 'desc' }],
   deadlineDesc: [{ deadline: 'desc' }, { id: 'desc' }],
 };
 
@@ -74,13 +73,10 @@ function buildCommonWhere({ search, field, docType }) {
  *
  * view별 의미:
  * - participating: APPROVED + 마감 전 + 내 ACTIVE 참여
- * - completed: CLOSED + 내 ACTIVE 참여
+ * - completed: CLOSED 또는 마감일 경과 + 내 ACTIVE 참여
  * - applied: 내가 신청한 모든 상태, 선택적으로 status 필터
- * - admin: 전체 신청 상태, status 생략 시 승인 대기(PENDING)
+ * - admin: 전체 신청 상태, 선택적으로 status 필터
  * - public: APPROVED/CLOSED 공개 목록
- *
- * closeExpiredChallenges()가 이 함수보다 먼저 호출되므로 completed는 날짜와
- * 상태를 중복 해석하지 않고 CLOSED라는 단일 기준을 사용할 수 있습니다.
  */
 function buildViewWhere({ view, status, userId, commonWhere }) {
   const now = new Date();
@@ -102,11 +98,11 @@ function buildViewWhere({ view, status, userId, commonWhere }) {
       };
 
     case 'completed':
-      // 마감 동기화가 끝난 CLOSED 중 현재 사용자의 유효한 참여만 조회합니다.
+      // 자정 Cron 반영 전에도 마감일이 지난 챌린지를 완료 목록에서 확인할 수 있게 합니다.
       return {
         ...commonWhere,
-        status: 'CLOSED',
         deletedAt: null,
+        OR: [{ status: 'CLOSED' }, { deadline: { lte: now } }],
         participations: {
           some: {
             userId,
@@ -124,10 +120,10 @@ function buildViewWhere({ view, status, userId, commonWhere }) {
       };
 
     case 'admin':
-      // 어드민 신청 관리의 첫 화면은 요구사항상 승인 대기 목록입니다.
+      // status를 생략하면 전체 신청을, 전달하면 해당 상태만 조회합니다.
       return {
         ...commonWhere,
-        status: status ?? 'PENDING',
+        ...(status && { status }),
       };
 
     case 'public':
@@ -146,10 +142,9 @@ function buildViewWhere({ view, status, userId, commonWhere }) {
  *
  * 처리 순서:
  * 1. admin view 권한 확인
- * 2. 만료 챌린지를 CLOSED로 동기화
- * 3. 공통 검색/필터와 view별 조건 조합
- * 4. 같은 where로 목록과 total 조회
- * 5. 모든 화면이 동일한 pagination 응답 사용
+ * 2. 공통 검색/필터와 view별 조건 조합
+ * 3. 같은 where로 목록과 total 조회
+ * 4. 모든 화면이 동일한 pagination 응답 사용
  *
  * 참여 중/완료 화면에서만 현재 사용자의 Participation과 Submission ID를
  * 추가 조회합니다. 다른 화면에 불필요한 관계 데이터를 싣지 않으면서
@@ -173,9 +168,6 @@ async function getChallenges({ userId, userRole, query }) {
     );
   }
 
-  // 별도 실시간 채널 없이 일반 API fetch 시점에 마감 상태와 알림을 동기화합니다.
-  await closeExpiredChallenges();
-
   const commonWhere = buildCommonWhere(query);
   const where = buildViewWhere({
     view: query.view,
@@ -194,7 +186,6 @@ async function getChallenges({ userId, userRole, query }) {
     orderBy: ORDER_BY_MAP[query.sort],
     page: query.page,
     limit: query.limit,
-    includeApplicant: query.view === 'admin',
     participantUserId,
   });
 
@@ -231,8 +222,6 @@ async function getChallenges({ userId, userRole, query }) {
  * 조회하지만 Service가 상태에 맞는 공개 여부를 최종 결정합니다.
  */
 async function getChallenge({ challengeId, userId, userRole }) {
-  await closeExpiredChallenges();
-
   const challenge = await challengeRepository.findDetailById(
     challengeId,
     userId

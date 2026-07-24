@@ -1,17 +1,11 @@
 import * as notificationRepository from '../repositories/notification.repository.js';
 import { NotFoundError } from '../utils/errors.js';
 import { notificationCreateSchema } from '../validations/notification.validation.js';
-import { closeExpiredChallenges } from '../jobs/deadline.job.js';
 
 /**
  * 로그인 사용자의 알림 목록을 조회합니다.
- *
- * 실시간 알림 대신 사용자가 새로고침하거나 알림 패널을 여는 시점에 fetch하는
- * 요구사항이므로, 조회 전에 만료 Challenge를 CLOSED로 동기화합니다. 이를 통해
- * 별도 cron 실행 여부와 관계없이 최신 마감 알림까지 한 응답에서 확인할 수 있습니다.
  */
 async function getNotifications(userId) {
-  await closeExpiredChallenges();
   return notificationRepository.findManyByUserId(userId);
 }
 

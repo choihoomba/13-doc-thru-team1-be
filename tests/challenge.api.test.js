@@ -104,6 +104,21 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
   assert.equal(fullDetail.data.data.viewer.canParticipate, false);
 
   const title = `Codex Challenge API Test ${Date.now()}`;
+  const tooEarlyDeadline = await request('/challenges', {
+    cookie: userCookie,
+    method: 'POST',
+    body: {
+      title: `${title} Too Early`,
+      field: 'API',
+      docType: 'OFFICIAL',
+      content: '최소 7일 마감일 검증용 요청입니다.',
+      originalUrl: 'https://example.com/challenge-too-early-test',
+      deadline: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
+      maxParticipants: 5,
+    },
+  });
+  assert.equal(tooEarlyDeadline.response.status, 400);
+
   const created = await request('/challenges', {
     cookie: userCookie,
     method: 'POST',
@@ -171,9 +186,9 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
   assert.equal(pendingList.response.status, 200);
   assert.equal(pendingList.data.data.challenges[0].id, created.data.data.id);
   assert.equal(
-    'email' in pendingList.data.data.challenges[0].user,
+    'user' in pendingList.data.data.challenges[0],
     false,
-    '관리자 신청 목록에 신청자 이메일이 노출되면 안 됩니다.'
+    '관리자 신청 목록에 신청자 User relation이 노출되면 안 됩니다.'
   );
 
   const pendingDetail = await request(`/challenges/${created.data.data.id}`, {
@@ -181,9 +196,9 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
   });
   assert.equal(pendingDetail.response.status, 200);
   assert.equal(
-    'email' in pendingDetail.data.data.user,
+    'user' in pendingDetail.data.data,
     false,
-    '관리자 신청 상세에 신청자 이메일이 노출되면 안 됩니다.'
+    '관리자 신청 상세에 신청자 User relation이 노출되면 안 됩니다.'
   );
 
   const approved = await request(`/challenges/${created.data.data.id}`, {
@@ -261,6 +276,20 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
   );
   assert.equal(rejected.response.status, 200);
   assert.equal(rejected.data.data.status, 'REJECTED');
+
+  const allAdminApplications = await request(
+    `/challenges?view=admin&search=${encodeURIComponent(title)}`,
+    { cookie: adminCookie }
+  );
+  assert.equal(allAdminApplications.response.status, 200);
+  assert.deepEqual(
+    new Set(
+      allAdminApplications.data.data.challenges.map(
+        (challenge) => challenge.status
+      )
+    ),
+    new Set(['DELETED', 'REJECTED'])
+  );
 
   const appliedList = await request(
     `/challenges?view=applied&search=${encodeURIComponent(title)}`,

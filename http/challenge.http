@@ -91,10 +91,13 @@ Content-Type: application/json
   "password": "test1234!"
 }
 
-### 14. 관리자 승인 대기 목록 - 기본 status=PENDING
+### 14. 관리자 전체 신청 목록 - status 생략
 GET {{baseUrl}}/challenges?view=admin&sort=oldest
 
-### 15. 챌린지 승인과 신청자 알림 생성
+### 15. 관리자 승인 대기 목록 - status=PENDING
+GET {{baseUrl}}/challenges?view=admin&status=PENDING&sort=oldest
+
+### 16. 챌린지 승인과 신청자 알림 생성
 PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
 Content-Type: application/json
 
@@ -102,7 +105,7 @@ Content-Type: application/json
   "status": "APPROVED"
 }
 
-### 16. 승인된 챌린지 정보 수정과 신청자 알림 생성
+### 17. 승인된 챌린지 정보 수정과 신청자 알림 생성
 PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
 Content-Type: application/json
 
@@ -111,7 +114,7 @@ Content-Type: application/json
   "reason": "승인 후 모집 정원을 조정했습니다."
 }
 
-### 17. 정보 수정과 상태 변경을 섞은 요청 - 400
+### 18. 정보 수정과 상태 변경을 섞은 요청 - 400
 PATCH {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
 Content-Type: application/json
 
@@ -121,7 +124,7 @@ Content-Type: application/json
   "reason": "본문 형식 충돌 테스트"
 }
 
-### 18. 진행 중인 챌린지 관리자 삭제와 신청자 알림 생성
+### 19. 진행 중인 챌린지 관리자 삭제와 신청자 알림 생성
 DELETE {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
 Content-Type: application/json
 
@@ -129,7 +132,7 @@ Content-Type: application/json
   "reason": "통합 API 삭제 및 알림 테스트입니다."
 }
 
-### 19. 신청자 로그인
+### 20. 신청자 로그인
 POST {{baseUrl}}/auth/signin
 Content-Type: application/json
 
@@ -138,11 +141,11 @@ Content-Type: application/json
   "password": "test1234!"
 }
 
-### 20. 신청 목록에서 관리자 삭제 상태와 사유 확인
+### 21. 신청 목록에서 관리자 삭제 상태와 사유 확인
 GET {{baseUrl}}/challenges?view=applied&status=DELETED
 
-### 21. 삭제된 챌린지 상세에서 삭제 사유 확인
+### 22. 삭제된 챌린지 상세에서 삭제 사유 확인
 GET {{baseUrl}}/challenges/{{createPendingChallenge.response.body.$.data.id}}
 
-### 22. 승인·수정·삭제 알림 확인
+### 23. 승인·수정·삭제 알림 확인
 GET {{baseUrl}}/notifications

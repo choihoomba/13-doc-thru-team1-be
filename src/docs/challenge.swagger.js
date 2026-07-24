@@ -107,7 +107,7 @@
  *           enum: [OFFICIAL, BLOG, BOOK, ETC]
  *       - in: query
  *         name: status
- *         description: public, applied, admin view에서 사용합니다. public은 APPROVED와 CLOSED만 허용합니다.
+ *         description: public, applied, admin view에서 사용합니다. public은 APPROVED와 CLOSED만 허용하며, admin은 생략 시 전체 상태를 조회합니다.
  *         schema:
  *           type: string
  *           enum: [PENDING, APPROVED, REJECTED, DELETED, CLOSED]
@@ -201,6 +201,7 @@
  *
  *       userId는 로그인 쿠키의 사용자 정보로 결정하고 status,
  *       currentParticipants 같은 서버 관리 필드는 요청에서 받지 않습니다.
+ *       deadline은 신청 시점으로부터 최소 7일 이후여야 합니다.
  *     tags: [Challenges]
  *     security:
  *       - cookieAuth: []
@@ -230,6 +231,7 @@
  *               deadline:
  *                 type: string
  *                 format: date-time
+ *                 description: 신청 시점으로부터 최소 7일 이후의 마감일입니다.
  *               maxParticipants:
  *                 type: integer
  *                 minimum: 1
@@ -274,7 +276,6 @@
  * 정보를 설명합니다.
  *
  * - originalUrl: 프론트의 원문 보기 새 창에 사용
- * - user: 챌린지 신청자
  * - topSubmissions: CLOSED에서만 최다 추천 작업물
  * - viewer.isApplicant: 신청자 본인 여부
  * - viewer.participation: 현재 사용자의 ACTIVE 참여와 작업물 ID
@@ -321,9 +322,6 @@
  *                         - $ref: '#/components/schemas/Challenge'
  *                         - type: object
  *                           properties:
- *                             user:
- *                               description: 챌린지 신청자 정보입니다.
- *                               $ref: '#/components/schemas/User'
  *                             topSubmissions:
  *                               type: array
  *                               description: CLOSED 상태에서만 반환되는 최다 추천 작업물입니다.

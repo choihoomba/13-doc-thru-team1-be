@@ -14,7 +14,7 @@
 - 목록 query string과 공통 응답 형식
 - 상세·신청·수정·승인·거절·취소·삭제 규칙
 - Challenge에서 발생시키는 알림과 트랜잭션
-- 마감 상태, 최다 추천 작업물, 마감 알림 동기화
+- Cron에서 재사용할 마감 상태·최다 추천 작업물·마감 알림 처리
 - 상세 참여 현황에서 기존 Submission API를 사용하는 방법
 - Swagger, Prisma Studio, 자동 테스트 검수 결과
 - 커밋과 push 전 확인 순서
@@ -54,7 +54,7 @@ Swagger 주석 파일은 실행 가능한 API 문서를 만들기 위한 JavaScr
 - 승인·거절·신청 취소를 기존 PATCH 명세 안에서 구분
 - 삭제 상태와 사유를 신청자 상세에 보존
 - Challenge 변경과 알림을 같은 트랜잭션으로 연결
-- fetch 시점의 마감 상태·추천작·마감 알림 동기화
+- GET 요청과 분리된 자정 Cron용 마감 처리 함수 유지
 - Swagger와 Challenge 전용 통합 테스트 추가
 
 ## 3. 파일 통합 구조
@@ -278,13 +278,13 @@ GET /challenges?view=public&search=router&field=WEB&docType=OFFICIAL&status=APPR
 
 ### view별 DB 조건
 
-| view            | 실제 조건                                      | 화면                    |
-| --------------- | ---------------------------------------------- | ----------------------- |
-| `public`        | `APPROVED` 또는 `CLOSED`, `deletedAt=null`     | 일반/어드민 챌린지 보기 |
-| `participating` | `APPROVED`, 마감 전, 내 `ACTIVE` Participation | 나의 챌린지 - 참여 중   |
-| `completed`     | `CLOSED`, 내 `ACTIVE` Participation            | 나의 챌린지 - 완료      |
-| `applied`       | `userId=로그인 사용자`, 모든 신청 상태         | 내가 신청한 챌린지      |
-| `admin`         | ADMIN, status 생략 시 `PENDING`                | 어드민 신청 관리        |
+| view            | 실제 조건                                            | 화면                    |
+| --------------- | ---------------------------------------------------- | ----------------------- |
+| `public`        | `APPROVED` 또는 `CLOSED`, `deletedAt=null`           | 일반/어드민 챌린지 보기 |
+| `participating` | `APPROVED`, 마감 전, 내 `ACTIVE` Participation       | 나의 챌린지 - 참여 중   |
+| `completed`     | `CLOSED` 또는 마감일 경과, 내 `ACTIVE` Participation | 나의 챌린지 - 완료      |
+| `applied`       | `userId=로그인 사용자`, 모든 신청 상태               | 내가 신청한 챌린지      |
+| `admin`         | ADMIN, status 생략 시 전체 상태                      | 어드민 신청 관리        |
 
 `public`에서 `PENDING`, `REJECTED`, `DELETED`를 요청하면 400입니다.
 
@@ -318,7 +318,6 @@ latest: [{ createdAt: 'desc' }, { id: 'desc' }];
 - 현재/최대 참여 인원
 - 상태
 - 거절 또는 삭제 사유
-- 신청자 정보
 
 원문 보기 전용 API는 추가하지 않습니다. 프론트가 상세 응답의
 `originalUrl`을 새 창으로 엽니다.
@@ -413,6 +412,10 @@ currentParticipants = 0
 
 Validation은 strict이므로 클라이언트가 status, userId 같은 서버 필드를 추가로
 보내면 거부합니다.
+
+마감일은 신규 신청 시점으로부터 최소 7일 이후여야 합니다. 프론트의 날짜 입력
+제한과 별개로 백엔드 Validation에서도 같은 규칙을 검사합니다. 진행 중 챌린지를
+관리자가 수정할 때는 최소 7일 규칙을 다시 적용하지 않고 미래 날짜인지만 확인합니다.
 
 ## 11. PATCH `/challenges/:id` 단일 Handler
 
@@ -612,17 +615,15 @@ PATCH /notifications/:id/read
 Submission/Feedback 담당자는 원본 변경과 알림을 같은 transaction client로
 묶어야 합니다. Challenge 통합 작업에서는 해당 코드 파일을 수정하지 않습니다.
 
-## 14. 마감 상태 동기화
+## 14. Cron용 마감 처리
 
-요구사항은 WebSocket/Push가 아니라 fetch 기반입니다.
+`closeExpiredChallenges()`는 일반 GET 요청에서 호출하지 않습니다. 목록·상세·알림을
+조회할 때마다 만료 후보 조회와 트랜잭션을 실행하면 불필요한 DB 부하가 발생하기
+때문입니다.
 
-다음 요청 전에 `closeExpiredChallenges()`를 호출합니다.
-
-```text
-GET /challenges
-GET /challenges/:id
-GET /notifications
-```
+이 함수는 매 자정 실행되는 Cron 작업이 호출할 수 있도록
+`src/jobs/deadline.job.js`에 유지합니다. 실제 스케줄 등록은 별도 Cron 담당
+작업에서 연결합니다.
 
 처리:
 
@@ -632,7 +633,7 @@ GET /notifications
 4. 공동 1등까지 `isTopSubmission=true`
 5. 신청자에게 `DEADLINE` 알림 생성
 
-여러 fetch가 동시에 실행되어도 먼저 상태를 바꾼 요청만 updateMany count=1을
+Cron 작업이 중복 실행되더라도 먼저 상태를 바꾼 실행만 updateMany count=1을
 얻습니다. 나머지는 count=0으로 종료하여 중복 마감 알림을 만들지 않습니다.
 
 ## 15. 관련 파일
