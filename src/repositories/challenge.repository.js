@@ -40,7 +40,7 @@ const challengeSelect = {
  * @param {number|undefined} options.participantUserId 내 참여/완료 목록의 사용자 ID
  * @returns {object} Prisma ChallengeSelect
  *
- * - admin view: 신청자를 확인해야 하므로 id/nickname/email을 포함
+ * - admin view: 신청자를 구분하는 데 필요한 id/nickname만 포함
  * - participating/completed view: 현재 사용자의 ACTIVE 참여와 연결 작업물 포함
  * - public/applied view: 관계 조회 없이 공통 Challenge 필드만 반환
  *
@@ -56,7 +56,6 @@ function buildListSelect({ includeApplicant, participantUserId }) {
         select: {
           id: true,
           nickname: true,
-          email: true,
         },
       },
     }),
@@ -129,17 +128,16 @@ async function findMany({
  *
  * @param {number} id 챌린지 ID
  * @param {number} viewerId 현재 로그인 사용자 ID
- * @param {boolean} includeApplicantEmail ADMIN 상세의 이메일 포함 여부
  *
  * 조회 relation:
- * - user: 신청자 기본 정보, ADMIN에게만 email
+ * - user: 신청자 구분에 필요한 id/nickname
  * - participations: 현재 사용자의 ACTIVE 참여 한정
  * - submissions: 마감 처리에서 지정한 최다 추천 작업물 한정
  *
  * Service가 공개/신청자/관리자 권한을 최종 판단합니다. Repository는 DB 조회만
  * 담당하므로 여기서 ForbiddenError 같은 HTTP 의미의 오류를 만들지 않습니다.
  */
-async function findDetailById(id, viewerId, includeApplicantEmail) {
+async function findDetailById(id, viewerId) {
   return prisma.challenge.findUnique({
     where: { id },
     select: {
@@ -148,8 +146,6 @@ async function findDetailById(id, viewerId, includeApplicantEmail) {
         select: {
           id: true,
           nickname: true,
-          // 일반 사용자에게 신청자의 이메일을 불필요하게 노출하지 않습니다.
-          ...(includeApplicantEmail && { email: true }),
         },
       },
       participations: {

@@ -235,8 +235,7 @@ async function getChallenge({ challengeId, userId, userRole }) {
 
   const challenge = await challengeRepository.findDetailById(
     challengeId,
-    userId,
-    userRole === 'ADMIN'
+    userId
   );
 
   if (!challenge) {

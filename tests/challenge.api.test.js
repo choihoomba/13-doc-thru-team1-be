@@ -170,6 +170,21 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
   );
   assert.equal(pendingList.response.status, 200);
   assert.equal(pendingList.data.data.challenges[0].id, created.data.data.id);
+  assert.equal(
+    'email' in pendingList.data.data.challenges[0].user,
+    false,
+    '관리자 신청 목록에 신청자 이메일이 노출되면 안 됩니다.'
+  );
+
+  const pendingDetail = await request(`/challenges/${created.data.data.id}`, {
+    cookie: adminCookie,
+  });
+  assert.equal(pendingDetail.response.status, 200);
+  assert.equal(
+    'email' in pendingDetail.data.data.user,
+    false,
+    '관리자 신청 상세에 신청자 이메일이 노출되면 안 됩니다.'
+  );
 
   const approved = await request(`/challenges/${created.data.data.id}`, {
     cookie: adminCookie,
