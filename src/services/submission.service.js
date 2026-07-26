@@ -7,12 +7,31 @@ import {
 import { isChallengeClosed } from '../utils/challenge.js';
 
 // 작업물 목록 조회
-async function getSubmissionList({ challengeId, orderBy, include }) {
-  return submissionRepository.getSubmissionList({
-    challengeId,
-    orderBy,
-    include,
-  });
+async function getSubmissionList({
+  challengeId,
+  orderBy,
+  include,
+  page,
+  limit,
+}) {
+  const { submissions, totalCount } =
+    await submissionRepository.getSubmissionList({
+      challengeId,
+      orderBy,
+      include,
+      page,
+      limit,
+    });
+
+  return {
+    submissions,
+    pagination: {
+      page,
+      limit,
+      totalCount,
+      hasMore: page * limit < totalCount,
+    },
+  };
 }
 
 // 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, 더보기용 페이지네이션)

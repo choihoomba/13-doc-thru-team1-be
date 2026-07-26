@@ -20,7 +20,7 @@ function buildListSelect(include) {
   };
   // 챌린지 상세 페이지
   if (include === 'user') {
-    select.user = { select: { id: true, nickname: true } };
+    select.user = { select: { id: true, nickname: true, grade: true } };
   }
   // 작업물 도전하기 페이지
   if (include === 'draft') {
@@ -32,20 +32,35 @@ function buildListSelect(include) {
   return select;
 }
 
-// 챌린지 상세 페이지: 작업물 목록 조회 (?challengeId=, ?include=user|draft, ?orderBy=likeDesc)
-export function getSubmissionList({ challengeId, orderBy, include }) {
-  return prisma.submission.findMany({
-    where: {
-      // 작업물 도전하기 페이지(include=draft)는 삭제된 챌린지/작업물이어도 제목은 보여줘야 해서 소프트 삭제 필터 제외
-      ...(include !== 'draft' && { deletedAt: null }),
-      ...(challengeId && { challengeId }),
-    },
-    orderBy:
-      orderBy === 'likeDesc'
-        ? [{ likes: { _count: 'desc' } }, { createdAt: 'desc' }]
-        : { createdAt: 'desc' },
-    select: buildListSelect(include),
-  });
+// 챌린지 상세 페이지: 작업물 목록 조회 (?challengeId=, ?include=user|draft, ?orderBy=likeDesc, ?page=&limit=)
+export async function getSubmissionList({
+  challengeId,
+  orderBy,
+  include,
+  page,
+  limit,
+}) {
+  const where = {
+    // 작업물 도전하기 페이지(include=draft)는 삭제된 챌린지/작업물이어도 제목은 보여줘야 해서 소프트 삭제 필터 제외
+    ...(include !== 'draft' && { deletedAt: null }),
+    ...(challengeId && { challengeId }),
+  };
+
+  const [submissions, totalCount] = await prisma.$transaction([
+    prisma.submission.findMany({
+      where,
+      orderBy:
+        orderBy === 'likeDesc'
+          ? [{ likes: { _count: 'desc' } }, { createdAt: 'desc' }]
+          : { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: buildListSelect(include),
+    }),
+    prisma.submission.count({ where }),
+  ]);
+
+  return { submissions, totalCount };
 }
 
 // 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)

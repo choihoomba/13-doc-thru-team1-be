@@ -9,8 +9,8 @@ import {
 // 작업물 목록 조회
 export async function getSubmissionList(req, res) {
   const query = submissionListQuerySchema.parse(req.query);
-  const submissions = await submissionService.getSubmissionList(query);
-  res.status(200).json({ success: true, data: submissions });
+  const data = await submissionService.getSubmissionList(query);
+  res.status(200).json({ success: true, data });
 }
 
 // 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, ?page=&limit=으로 더보기)

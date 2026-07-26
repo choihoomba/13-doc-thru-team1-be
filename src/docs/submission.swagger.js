@@ -15,6 +15,13 @@
  *       - in: query
  *         name: include
  *         schema: { type: string, enum: [user, draft] }
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 1 }
+ *       - in: query
+ *         name: limit
+ *         description: 페이지당 개수 (기본값 5, 최대 50)
+ *         schema: { type: integer, default: 5 }
  *     responses:
  *       200:
  *         description: 작업물 목록
@@ -25,22 +32,36 @@
  *               properties:
  *                 success: { type: boolean, example: true }
  *                 data:
- *                   type: array
- *                   items:
- *                     allOf:
- *                       - $ref: '#/components/schemas/Submission'
- *                       - type: object
- *                         properties:
- *                           user:
- *                             $ref: '#/components/schemas/User'
- *                           draft:
- *                             $ref: '#/components/schemas/Draft'
- *                           _count:
- *                             type: object
- *                             description: include=draft일 때는 응답에 포함되지 않음
+ *                   type: object
+ *                   properties:
+ *                     submissions:
+ *                       type: array
+ *                       items:
+ *                         allOf:
+ *                           - $ref: '#/components/schemas/Submission'
+ *                           - type: object
  *                             properties:
- *                               likes: { type: integer, example: 3 }
- *                               feedbacks: { type: integer, example: 2 }
+ *                               user:
+ *                                 allOf:
+ *                                   - $ref: '#/components/schemas/User'
+ *                                   - type: object
+ *                                     properties:
+ *                                       grade: { type: string, example: EXPERT }
+ *                               draft:
+ *                                 $ref: '#/components/schemas/Draft'
+ *                               _count:
+ *                                 type: object
+ *                                 description: include=draft일 때는 응답에 포함되지 않음
+ *                                 properties:
+ *                                   likes: { type: integer, example: 3 }
+ *                                   feedbacks: { type: integer, example: 2 }
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         page: { type: integer, example: 1 }
+ *                         limit: { type: integer, example: 5 }
+ *                         totalCount: { type: integer, example: 12 }
+ *                         hasMore: { type: boolean, example: true }
  *       400:
  *         description: 유효성 검사 실패 (VALIDATION_ERROR)
  *         content:
