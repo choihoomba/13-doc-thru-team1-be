@@ -13,26 +13,17 @@ const baseSelect = {
 function buildListSelect(include) {
   const select = {
     ...baseSelect,
-    // 작업물 도전하기 페이지(include=draft)는 좋아요/피드백 수가 필요 없어서 제외
-    ...(include !== 'draft' && {
-      _count: { select: { likes: true, feedbacks: true } },
-    }),
+    _count: { select: { likes: true, feedbacks: true } },
   };
   // 챌린지 상세 페이지
   if (include === 'user') {
     select.user = { select: { id: true, nickname: true, grade: true } };
   }
-  // 작업물 도전하기 페이지
-  if (include === 'draft') {
-    select.draft = {
-      select: { id: true, title: true, content: true, updatedAt: true },
-    };
-  }
 
   return select;
 }
 
-// 챌린지 상세 페이지: 작업물 목록 조회 (?challengeId=, ?include=user|draft, ?orderBy=likeDesc, ?page=&limit=)
+// 챌린지 상세 페이지: 작업물 목록 조회 (?challengeId=, ?include=user, ?orderBy=likeDesc, ?page=&limit=)
 export async function getSubmissionList({
   challengeId,
   orderBy,
@@ -41,8 +32,7 @@ export async function getSubmissionList({
   limit,
 }) {
   const where = {
-    // 작업물 도전하기 페이지(include=draft)는 삭제된 챌린지/작업물이어도 제목은 보여줘야 해서 소프트 삭제 필터 제외
-    ...(include !== 'draft' && { deletedAt: null }),
+    deletedAt: null,
     ...(challengeId && { challengeId }),
   };
 
@@ -63,14 +53,16 @@ export async function getSubmissionList({
   return { submissions, totalCount };
 }
 
-// 작업물 상세 페이지: 작업물 상세 조회 (피드백은 GET /submissions/:submissionId/feedbacks로 별도 조회)
+// 작업물 상세 페이지: 작업물 상세 조회 (본인 것일 때만 draft.content 노출)
 export async function getSubmissionById(id, userId) {
   const submission = await prisma.submission.findFirst({
     where: { id, deletedAt: null },
     include: {
       user: { select: { id: true, nickname: true } },
       challenge: { select: { title: true } },
-      draft: { select: { title: true } },
+      draft: {
+        select: { id: true, title: true, content: true, updatedAt: true },
+      },
       likes: { where: { userId }, select: { id: true }, take: 1 },
       _count: { select: { likes: true } },
     },
@@ -79,6 +71,11 @@ export async function getSubmissionById(id, userId) {
   if (submission) {
     submission.isLiked = submission.likes.length > 0;
     delete submission.likes;
+
+    // 본인 작업물이 아니면 title만 남기고 content 등은 제거
+    if (submission.draft && submission.userId !== userId) {
+      submission.draft = { title: submission.draft.title };
+    }
   }
 
   return submission;

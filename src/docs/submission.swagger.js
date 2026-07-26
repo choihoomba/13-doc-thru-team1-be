@@ -14,7 +14,7 @@
  *         schema: { type: string, enum: [likeDesc] }
  *       - in: query
  *         name: include
- *         schema: { type: string, enum: [user, draft] }
+ *         schema: { type: string, enum: [user] }
  *       - in: query
  *         name: page
  *         schema: { type: integer, default: 1 }
@@ -47,11 +47,8 @@
  *                                   - type: object
  *                                     properties:
  *                                       grade: { type: string, example: EXPERT }
- *                               draft:
- *                                 $ref: '#/components/schemas/Draft'
  *                               _count:
  *                                 type: object
- *                                 description: include=draft일 때는 응답에 포함되지 않음
  *                                 properties:
  *                                   likes: { type: integer, example: 3 }
  *                                   feedbacks: { type: integer, example: 2 }
@@ -80,7 +77,7 @@
  * @openapi
  * /submissions/{id}:
  *   get:
- *     summary: 작업물 상세 조회 (피드백은 GET /submissions/{submissionId}/feedbacks로 별도 조회)
+ *     summary: 작업물 상세 조회
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:
