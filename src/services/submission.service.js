@@ -34,14 +34,9 @@ async function getSubmissionList({
   };
 }
 
-// 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, 더보기용 페이지네이션)
-async function getSubmissionById(id, userId, include, pagination) {
-  const submission = await submissionRepository.getSubmissionById(
-    id,
-    userId,
-    include,
-    pagination
-  );
+// 작업물 상세 조회 (피드백은 GET /submissions/:submissionId/feedbacks로 별도 조회)
+async function getSubmissionById(id, userId) {
+  const submission = await submissionRepository.getSubmissionById(id, userId);
 
   if (!submission) {
     throw new NotFoundError('작업물을 찾을 수 없습니다');
@@ -51,6 +46,7 @@ async function getSubmissionById(id, userId, include, pagination) {
 }
 
 // 작업물 수정
+// TODO: 제출 시 draft 삭제는 FE가 DELETE /draft/:id로 별도 처리 (여기선 draft 안 건드림)
 async function updateSubmission(userId, userRole, id, content) {
   const submission = await submissionRepository.findSubmissionById(id);
 

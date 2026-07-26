@@ -80,7 +80,7 @@
  * @openapi
  * /submissions/{id}:
  *   get:
- *     summary: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
+ *     summary: 작업물 상세 조회 (피드백은 GET /submissions/{submissionId}/feedbacks로 별도 조회)
  *     tags: [Submission]
  *     security: [{ cookieAuth: [] }]
  *     parameters:
@@ -88,17 +88,6 @@
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *       - in: query
- *         name: include
- *         schema: { type: string, enum: [feedback] }
- *       - in: query
- *         name: page
- *         description: 피드백 페이지 (include=feedback일 때만 사용, 기본값 1)
- *         schema: { type: integer, default: 1 }
- *       - in: query
- *         name: limit
- *         description: 피드백 페이지당 개수 (include=feedback일 때만 사용, 기본값 3, 최대 50)
- *         schema: { type: integer, default: 3 }
  *     responses:
  *       200:
  *         description: 작업물 상세
@@ -133,18 +122,6 @@
  *                         isLiked:
  *                           type: boolean
  *                           description: 현재 로그인한 사용자의 좋아요 여부
- *                         feedbacks:
- *                           type: array
- *                           items:
- *                             $ref: '#/components/schemas/Feedback'
- *                         feedbackPagination:
- *                           type: object
- *                           description: include=feedback일 때만 포함
- *                           properties:
- *                             page: { type: integer, example: 1 }
- *                             limit: { type: integer, example: 3 }
- *                             totalCount: { type: integer, example: 8 }
- *                             hasMore: { type: boolean, example: true }
  *       400:
  *         description: 유효성 검사 실패 (VALIDATION_ERROR)
  *         content:

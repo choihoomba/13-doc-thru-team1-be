@@ -63,13 +63,8 @@ export async function getSubmissionList({
   return { submissions, totalCount };
 }
 
-// 작업물 상세 페이지: 작업물 상세 조회 (?include=feedback 일 때만 피드백 포함, page/limit으로 더보기)
-export async function getSubmissionById(
-  id,
-  userId,
-  include,
-  { page, limit } = {}
-) {
+// 작업물 상세 페이지: 작업물 상세 조회 (피드백은 GET /submissions/:submissionId/feedbacks로 별도 조회)
+export async function getSubmissionById(id, userId) {
   const submission = await prisma.submission.findFirst({
     where: { id, deletedAt: null },
     include: {
@@ -77,41 +72,13 @@ export async function getSubmissionById(
       challenge: { select: { title: true } },
       draft: { select: { title: true } },
       likes: { where: { userId }, select: { id: true }, take: 1 },
-      _count: {
-        select: {
-          likes: true,
-          ...(include === 'feedback' && { feedbacks: true }),
-        },
-      },
-      ...(include === 'feedback' && {
-        feedbacks: {
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            user: { select: { id: true, nickname: true } },
-          },
-          orderBy: { createdAt: 'asc' },
-          skip: (page - 1) * limit,
-          take: limit,
-        },
-      }),
+      _count: { select: { likes: true } },
     },
   });
 
   if (submission) {
     submission.isLiked = submission.likes.length > 0;
     delete submission.likes;
-  }
-
-  if (submission && include === 'feedback') {
-    const totalCount = submission._count.feedbacks;
-    submission.feedbackPagination = {
-      page,
-      limit,
-      totalCount,
-      hasMore: page * limit < totalCount,
-    };
   }
 
   return submission;
