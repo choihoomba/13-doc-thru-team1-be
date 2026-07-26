@@ -4,7 +4,7 @@ POST {{baseUrl}}/auth/signin
 Content-Type: application/json
 
 {
-  "email": "typescript@docsru.dev",
+  "email": "beginner@docsru.dev",
   "password": "test1234!"
 }
 
@@ -19,7 +19,7 @@ GET {{baseUrl}}/submissions?challengeId=1&include=user&orderBy=likeDesc
 GET {{baseUrl}}/submissions?challengeId=1
 
 ### 작업물 상세 조회 
-GET {{baseUrl}}/submissions/5
+GET {{baseUrl}}/submissions/36
 
 ### 존재하지 않는 작업물 조회 (404 확인용)
 GET {{baseUrl}}/submissions/999999
