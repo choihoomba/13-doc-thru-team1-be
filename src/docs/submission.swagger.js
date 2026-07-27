@@ -109,9 +109,19 @@
  *                         draft:
  *                           type: object
  *                           nullable: true
- *                           description: 임시저장 내역이 없으면 null. 헤딩은 draft.title ?? challenge.title 순으로 사용
+ *                           description: >
+ *                             임시저장 내역이 없으면 null. 헤딩은 draft.title ?? challenge.title 순으로 사용.
+ *                             본인 작업물이거나 요청자가 어드민이면 content/updatedAt까지 포함되고,
+ *                             그 외에는 title만 내려감.
  *                           properties:
  *                             title: { type: string, nullable: true }
+ *                             content:
+ *                               type: string
+ *                               description: 본인 또는 어드민에게만 포함됨
+ *                             updatedAt:
+ *                               type: string
+ *                               format: date-time
+ *                               description: 본인 또는 어드민에게만 포함됨
  *                         _count:
  *                           type: object
  *                           properties:
