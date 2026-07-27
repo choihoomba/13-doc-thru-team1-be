@@ -35,11 +35,23 @@
  *                 data:
  *                   $ref: '#/components/schemas/Draft'
  *       403:
- *         description: 본인의 작업물이 아님
+ *         description: 본인의 작업물이 아니고 어드민도 아님 (FORBIDDEN)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: 작업물을 찾을 수 없음 (삭제된 작업물 포함)
+ *         description: 작업물을 찾을 수 없음 (삭제된 작업물 포함) (NOT_FOUND)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       409:
- *         description: 마감된 챌린지의 작업물은 임시저장할 수 없음
+ *         description: 마감된 챌린지의 작업물은 임시저장할 수 없음 (CONFLICT)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 /**
@@ -66,9 +78,21 @@
  *                 success: { type: boolean, example: true }
  *                 data: { nullable: true, example: null }
  *       403:
- *         description: 본인의 작업물이 아님
+ *         description: 본인의 작업물이 아니고 어드민도 아님 (FORBIDDEN)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: 작업물 또는 임시저장본을 찾을 수 없음 (삭제된 작업물 포함)
+ *         description: 작업물 또는 임시저장본을 찾을 수 없음 (삭제된 작업물 포함) (NOT_FOUND)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       409:
- *         description: 마감된 챌린지의 작업물은 삭제할 수 없음
+ *         description: 마감된 챌린지의 작업물은 삭제할 수 없음 (CONFLICT)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */

@@ -53,8 +53,8 @@ export async function getSubmissionList({
   return { submissions, totalCount };
 }
 
-// 작업물 상세 페이지: 작업물 상세 조회 (본인 것일 때만 draft.content 노출)
-export async function getSubmissionById(id, userId) {
+// 작업물 상세 페이지: 작업물 상세 조회 (본인 또는 어드민일 때만 draft.content 노출)
+export async function getSubmissionById(id, userId, userRole) {
   const submission = await prisma.submission.findFirst({
     where: { id, deletedAt: null },
     include: {
@@ -72,8 +72,12 @@ export async function getSubmissionById(id, userId) {
     submission.isLiked = submission.likes.length > 0;
     delete submission.likes;
 
-    // 본인 작업물이 아니면 title만 남기고 content 등은 제거
-    if (submission.draft && submission.userId !== userId) {
+    // 본인 작업물이 아니고 어드민도 아니면 title만 남기고 content 등은 제거
+    if (
+      submission.draft &&
+      submission.userId !== userId &&
+      userRole !== 'ADMIN'
+    ) {
       submission.draft = { title: submission.draft.title };
     }
   }
