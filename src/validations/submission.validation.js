@@ -7,13 +7,9 @@ export const submissionIdParamSchema = z.object({
 export const submissionListQuerySchema = z.object({
   challengeId: z.coerce.number().int().positive().optional(),
   orderBy: z.enum(['likeDesc']).optional(),
-  include: z.enum(['user', 'draft']).optional(),
-});
-
-export const submissionDetailQuerySchema = z.object({
-  include: z.enum(['feedback']).optional(),
+  include: z.enum(['user']).optional(),
   page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(50).default(3),
+  limit: z.coerce.number().int().positive().max(50).default(5),
 });
 
 export const updateSubmissionSchema = z.object({

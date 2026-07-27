@@ -318,6 +318,7 @@ latest: [{ createdAt: 'desc' }, { id: 'desc' }];
 - 현재/최대 참여 인원
 - 상태
 - 거절 또는 삭제 사유
+- 신청자(작성자) 정보: `user.id`, `user.nickname`
 
 원문 보기 전용 API는 추가하지 않습니다. 프론트가 상세 응답의
 `originalUrl`을 새 창으로 엽니다.

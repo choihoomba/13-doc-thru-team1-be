@@ -275,6 +275,7 @@
  * Challenge 자체 정보 외에 상세 화면에서 조합해 사용하는 relation과 viewer
  * 정보를 설명합니다.
  *
+ * - user: 챌린지 신청자(작성자) 정보 (id, nickname)
  * - originalUrl: 프론트의 원문 보기 새 창에 사용
  * - topSubmissions: CLOSED에서만 최다 추천 작업물
  * - viewer.isApplicant: 신청자 본인 여부
@@ -322,6 +323,12 @@
  *                         - $ref: '#/components/schemas/Challenge'
  *                         - type: object
  *                           properties:
+ *                             user:
+ *                               type: object
+ *                               description: 챌린지 신청자(작성자) 정보입니다.
+ *                               properties:
+ *                                 id: { type: integer, example: 1 }
+ *                                 nickname: { type: string, example: '만두' }
  *                             topSubmissions:
  *                               type: array
  *                               description: CLOSED 상태에서만 반환되는 최다 추천 작업물입니다.

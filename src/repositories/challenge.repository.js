@@ -122,6 +122,12 @@ async function findDetailById(id, viewerId) {
     where: { id },
     select: {
       ...challengeSelect,
+      user: {
+        select: {
+          id: true,
+          nickname: true,
+        },
+      },
       participations: {
         // viewer 본인의 참여만 포함해 상세 버튼 상태와 작업물 이동에 사용합니다.
         where: {
