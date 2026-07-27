@@ -17,7 +17,8 @@ export async function getSubmissionById(req, res) {
   const { id } = submissionIdParamSchema.parse(req.params);
   const submission = await submissionService.getSubmissionById(
     id,
-    req.user.userId
+    req.user.userId,
+    req.user.role
   );
   res.status(200).json({ success: true, data: submission });
 }

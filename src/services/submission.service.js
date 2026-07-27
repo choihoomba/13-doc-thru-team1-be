@@ -35,8 +35,12 @@ async function getSubmissionList({
 }
 
 // 작업물 상세 조회 (피드백은 GET /submissions/:submissionId/feedbacks로 별도 조회)
-async function getSubmissionById(id, userId) {
-  const submission = await submissionRepository.getSubmissionById(id, userId);
+async function getSubmissionById(id, userId, userRole) {
+  const submission = await submissionRepository.getSubmissionById(
+    id,
+    userId,
+    userRole
+  );
 
   if (!submission) {
     throw new NotFoundError('작업물을 찾을 수 없습니다');
