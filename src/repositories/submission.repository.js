@@ -59,7 +59,15 @@ export async function getSubmissionById(id, userId, userRole) {
     where: { id, deletedAt: null },
     include: {
       user: { select: { id: true, nickname: true } },
-      challenge: { select: { title: true } },
+      challenge: {
+        select: {
+          title: true,
+          field: true,
+          docType: true,
+          status: true,
+          deadline: true,
+        },
+      },
       draft: {
         select: { id: true, title: true, content: true, updatedAt: true },
       },
@@ -89,11 +97,23 @@ export async function getSubmissionById(id, userId, userRole) {
 export function findSubmissionById(id) {
   return prisma.submission.findUnique({
     where: { id },
-    include: { challenge: { select: { status: true, deadline: true } } },
+    include: {
+      challenge: {
+        select: { status: true, deadline: true, userId: true, title: true },
+      },
+    },
   });
 }
 
 // 작업물 수정
-export function updateSubmissionContent(id, content) {
-  return prisma.submission.update({ where: { id }, data: { content } });
+export function updateSubmissionContent(id, content, databaseClient = prisma) {
+  return databaseClient.submission.update({ where: { id }, data: { content } });
+}
+
+// 작업물 삭제 (soft delete) - 어드민 전용, 원본 content는 보존
+export function softDeleteSubmission(id, databaseClient = prisma) {
+  return databaseClient.submission.update({
+    where: { id },
+    data: { deletedAt: new Date() },
+  });
 }

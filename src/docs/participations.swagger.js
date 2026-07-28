@@ -16,8 +16,14 @@
  *     summary: 작업 도전하기
  *     description: >
  *       챌린지에 참여를 등록합니다. accessToken 쿠키로 인증합니다.
- *       참여 등록과 동시에 제출물(Submission)이 빈 내용으로 함께 생성됩니다.
+ *
+ *       - 신규 참여: 참여(Participation)와 빈 제출물(Submission)이 함께 생성됩니다.
+ *       - 재도전: 이전에 포기(DROPPED)했던 챌린지는 기존 참여를 ACTIVE로 복구합니다.
+ *         이때 기존 제출물도 함께 복구되어(soft delete 해제) 이전 작성 내용을 이어서 사용할 수 있습니다.
+ *       - 이미 참여 중(ACTIVE)이거나 제재 이력(REMOVED)이 있는 챌린지는 재참여할 수 없습니다.
  *     tags: [Participations]
+ *     security:
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -31,7 +37,7 @@
  *                 example: 7
  *     responses:
  *       201:
- *         description: 참여 등록 성공
+ *         description: 참여 등록 또는 재도전 성공
  *         content:
  *           application/json:
  *             schema:
@@ -72,7 +78,7 @@
  *               $ref: '#/components/schemas/ErrorResponse'
  *       409:
  *         description: >
- *           마감된 챌린지 / 참여 정원 마감 / 이미 참여한 챌린지 (CONFLICT)
+ *           마감된 챌린지 / 참여 정원 마감 / 이미 참여 중인 챌린지 / 제재 이력이 있어 참여 불가한 챌린지 (CONFLICT)
  *         content:
  *           application/json:
  *             schema:
@@ -87,7 +93,10 @@
  *     description: >
  *       진행 중인 참여를 포기 처리합니다. accessToken 쿠키로 인증합니다.
  *       포기 시 연결된 제출물은 soft delete되고, 챌린지 참여 인원이 1 감소합니다.
+ *       이후 같은 챌린지에 재도전하면 포기 시점의 제출물 내용을 그대로 이어서 사용할 수 있습니다.
  *     tags: [Participations]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id

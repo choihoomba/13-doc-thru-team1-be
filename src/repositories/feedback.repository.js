@@ -2,12 +2,14 @@
 import prisma from '../config/prisma.js';
 
 // 작업물 존재 + 소속 챌린지 상태/마감일 (마감 판단에 필요)
+// 알림 발신용으로 작업물 작성자(userId), 챌린지 제목(title)도 함께 조회
 // soft delete된 작업물(deletedAt != null)은 없는 것으로 취급
 export function findSubmissionWithChallenge(submissionId) {
   return prisma.submission.findFirst({
     where: { id: submissionId, deletedAt: null },
-    include: {
-      challenge: { select: { status: true, deadline: true } },
+    select: {
+      userId: true,
+      challenge: { select: { status: true, deadline: true, title: true } },
     },
   });
 }
@@ -25,7 +27,7 @@ export function findManyBySubmission(submissionId, { cursor, take }) {
   });
 }
 
-// 피드백 1건 + 소속 챌린지 상태 (권한/마감 판단용)
+// 피드백 1건 + 소속 챌린지 상태 (권한/마감 판단 및 알림 발신용)
 export function findByIdWithChallenge(feedbackId) {
   return prisma.feedback.findFirst({
     where: {
@@ -34,27 +36,29 @@ export function findByIdWithChallenge(feedbackId) {
     },
     include: {
       submission: {
-        include: { challenge: { select: { status: true, deadline: true } } },
+        include: {
+          challenge: { select: { status: true, deadline: true, title: true } },
+        },
       },
     },
   });
 }
 
-export function create(submissionId, userId, content) {
-  return prisma.feedback.create({
+export function create(submissionId, userId, content, databaseClient = prisma) {
+  return databaseClient.feedback.create({
     data: { content, submissionId, userId },
   });
 }
 
-export function update(feedbackId, content) {
-  return prisma.feedback.update({
+export function update(feedbackId, content, databaseClient = prisma) {
+  return databaseClient.feedback.update({
     where: { id: feedbackId },
     data: { content },
   });
 }
 
-export function remove(feedbackId) {
-  return prisma.feedback.delete({
+export function remove(feedbackId, databaseClient = prisma) {
+  return databaseClient.feedback.delete({
     where: { id: feedbackId },
   });
 }

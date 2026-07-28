@@ -106,9 +106,10 @@ const challengeFieldsSchema = z.object({
     .trim()
     .min(1, '제목을 입력해주세요.')
     .max(100, '제목은 100자 이하이어야 합니다.'),
-  field: z.enum(FIELD_VALUES, {
-    message: '지원하지 않는 분야입니다.',
-  }),
+  field: z
+    .union([z.enum(FIELD_VALUES), z.array(z.enum(FIELD_VALUES))])
+    .optional()
+    .transform((value) => (value === undefined ? undefined : [].concat(value))),
   docType: z.enum(DOC_TYPE_VALUES, {
     message: '지원하지 않는 문서 유형입니다.',
   }),

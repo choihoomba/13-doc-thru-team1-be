@@ -35,3 +35,15 @@ export async function updateSubmission(req, res) {
   );
   res.status(200).json({ success: true, data: submission });
 }
+
+// 작업물 삭제
+// 본인: content 초기화 / 어드민: soft delete (deletedAt 세팅) + 알림
+export async function deleteSubmission(req, res) {
+  const { id } = submissionIdParamSchema.parse(req.params);
+  const submission = await submissionService.deleteSubmission(
+    req.user.userId,
+    req.user.role,
+    id
+  );
+  res.status(200).json({ success: true, data: null });
+}

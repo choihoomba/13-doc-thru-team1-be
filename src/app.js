@@ -14,6 +14,7 @@ import participationRouter from './routes/participations.route.js';
 import draftRouter from './routes/draft.route.js';
 import notificationRouter from './routes/notification.route.js';
 import likeRouter from './routes/like.route.js';
+import { registerCronJobs } from './jobs/scheduler.js';
 
 const app = express();
 
@@ -30,24 +31,18 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// 라우터 연결 (도메인별로 추가)
 app.use('/auth', authRouter);
-
-/**
- * Challenge 목록(query), 상세, 신청(manage), 승인·거절(status), 수정·삭제 기능은
- * challenge.route.js 하나로 통합되어 있습니다. 담당자별 Router를 같은
- * `/challenges` 경로에 여러 번 마운트하면 동일 PATCH Handler가 등록 순서에 따라
- * 가려질 수 있으므로 이 마운트는 반드시 한 번만 유지합니다.
- */
 app.use('/challenges', challengeRouter);
 app.use('/participations', participationRouter);
-app.use('/draft', draftRouter);
+app.use('/drafts', draftRouter);
 app.use('/notifications', notificationRouter);
-app.use('/', likeRouter);
 app.use('/submissions', submissionRouter);
+// feedback/like 라우터는 자체 파일 내부에 전체 경로(/submissions/:submissionId/...)를 갖고 있어 접두사 없이 마운트
+app.use('/', likeRouter);
 app.use('/', feedbackRouter);
 
-// 에러 핸들러 (항상 마지막)
+registerCronJobs();
+
 app.use(errorHandler);
 
 export default app;

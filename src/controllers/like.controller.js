@@ -17,5 +17,5 @@ export async function removeLike(req, res) {
 
   // 취소 후 갱신된 개수를 돌려줘야 하므로 204가 아닌 200 + body
   const data = await likeService.removeLike(submissionId, userId);
-  res.status(200).json({ success: true, data });
+  res.status(200).json({ success: true, data: null });
 }

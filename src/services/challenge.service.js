@@ -56,7 +56,7 @@ function buildCommonWhere({ search, field, docType }) {
         mode: 'insensitive',
       },
     }),
-    ...(field && { field }),
+    ...(field && { field: { in: field } }),
     ...(docType && { docType }),
   };
 }
