@@ -15,6 +15,8 @@
  *     summary: 좋아요 등록
  *     description: 특정 작업물에 좋아요를 등록합니다. accessToken 쿠키로 인증합니다.
  *     tags: [Likes]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: submissionId
@@ -63,6 +65,8 @@
  *     summary: 좋아요 취소
  *     description: 특정 작업물의 좋아요를 취소합니다. accessToken 쿠키로 인증합니다.
  *     tags: [Likes]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: submissionId

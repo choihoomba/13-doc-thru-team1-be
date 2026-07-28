@@ -1,5 +1,7 @@
 // 비즈니스 규칙만 담당 — DB 접근은 repository에 위임한다.
+import prisma from '../config/prisma.js';
 import * as feedbackRepository from '../repositories/feedback.repository.js';
+import { createNotification } from './notification.service.js';
 import {
   NotFoundError,
   ForbiddenError,
@@ -64,7 +66,7 @@ async function ensureCanMutateFeedback(feedbackId, userId, userRole) {
     throw new ForbiddenError('피드백을 수정하거나 삭제할 권한이 없습니다.');
   }
 
-  return feedback;
+  return { feedback, isAdmin };
 }
 
 // ────────────────────────────────────────────
@@ -84,21 +86,98 @@ export async function createFeedback(submissionId, userId, content) {
     throw new ConflictError('마감된 챌린지에는 피드백을 작성할 수 없습니다.');
   }
 
-  return feedbackRepository.create(submissionId, userId, content);
+  return prisma.$transaction(async (transactionClient) => {
+    const feedback = await feedbackRepository.create(
+      submissionId,
+      userId,
+      content,
+      transactionClient
+    );
+
+    // 작업물 작성자에게 알림
+    await createNotification(
+      {
+        userId: submission.userId,
+        type: 'NEW_FEEDBACK',
+        targetType: 'FEEDBACK',
+        targetId: feedback.id,
+        message: `'${submission.challenge.title}' 챌린지의 작업물에 새로운 피드백이 달렸습니다.`,
+      },
+      transactionClient
+    );
+
+    return feedback;
+  });
 }
 
 // ────────────────────────────────────────────
 // 수정 (U)
 // ────────────────────────────────────────────
 export async function updateFeedback(feedbackId, userId, userRole, content) {
-  await ensureCanMutateFeedback(feedbackId, userId, userRole);
-  return feedbackRepository.update(feedbackId, content);
+  const { feedback, isAdmin } = await ensureCanMutateFeedback(
+    feedbackId,
+    userId,
+    userRole
+  );
+
+  if (!isAdmin) {
+    return feedbackRepository.update(feedbackId, content);
+  }
+
+  return prisma.$transaction(async (transactionClient) => {
+    const updated = await feedbackRepository.update(
+      feedbackId,
+      content,
+      transactionClient
+    );
+
+    await createNotification(
+      {
+        userId: feedback.userId,
+        type: 'CONTENT_CHANGED',
+        targetType: 'FEEDBACK',
+        targetId: feedback.id,
+        message: `'${feedback.submission.challenge.title}' 챌린지의 작성하신 피드백이 수정되었습니다.`,
+      },
+      transactionClient
+    );
+
+    return updated;
+  });
 }
 
 // ────────────────────────────────────────────
 // 삭제 (D)
 // ────────────────────────────────────────────
 export async function deleteFeedback(feedbackId, userId, userRole) {
-  await ensureCanMutateFeedback(feedbackId, userId, userRole);
-  return feedbackRepository.remove(feedbackId);
+  const { feedback, isAdmin } = await ensureCanMutateFeedback(
+    feedbackId,
+    userId,
+    userRole
+  );
+
+  if (!isAdmin) {
+    return feedbackRepository.remove(feedbackId);
+  }
+
+  return prisma.$transaction(async (transactionClient) => {
+    const removed = await feedbackRepository.remove(
+      feedbackId,
+      transactionClient
+    );
+
+    // 하드 삭제라 삭제 전에 확보해둔 feedback 정보로 알림 생성
+    await createNotification(
+      {
+        userId: feedback.userId,
+        type: 'CONTENT_CHANGED',
+        targetType: 'FEEDBACK',
+        targetId: feedback.id,
+        message: `'${feedback.submission.challenge.title}' 챌린지의 작성하신 피드백이 삭제되었습니다.`,
+      },
+      transactionClient
+    );
+
+    return removed;
+  });
 }

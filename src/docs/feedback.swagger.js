@@ -15,8 +15,10 @@
  *     summary: 피드백 목록 조회
  *     description: >
  *       특정 작업물의 피드백 목록을 커서 기반 페이지네이션으로 조회합니다.
- *       비로그인 사용자도 조회할 수 있습니다.
+ *       accessToken 쿠키로 인증합니다.
  *     tags: [Feedbacks]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: submissionId
@@ -67,6 +69,12 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: 인증 실패 (UNAUTHORIZED)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: 작업물을 찾을 수 없음 (NOT_FOUND)
  *         content:
@@ -77,6 +85,8 @@
  *     summary: 피드백 작성
  *     description: 특정 작업물에 피드백을 작성합니다. accessToken 쿠키로 인증합니다.
  *     tags: [Feedbacks]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: submissionId
@@ -142,6 +152,8 @@
  *     summary: 피드백 수정
  *     description: 본인이 작성한 피드백 또는 어드민이 수정할 수 있습니다.
  *     tags: [Feedbacks]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: feedbackId
@@ -208,6 +220,8 @@
  *     summary: 피드백 삭제
  *     description: 본인이 작성한 피드백 또는 어드민이 삭제할 수 있습니다.
  *     tags: [Feedbacks]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: feedbackId

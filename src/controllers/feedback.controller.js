@@ -57,5 +57,5 @@ export async function deleteFeedback(req, res) {
 
   await feedbackService.deleteFeedback(feedbackId, userId, role);
   // 공통 응답 형식을 유지하기 위해 204(No Content) 대신 200 + { success: true }
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: null });
 }
