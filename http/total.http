@@ -1,0 +1,243 @@
+@baseUrl = http://localhost:4000
+
+### =========================================
+### 0. 회원가입 - 신청자, 참여자
+### =========================================
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test-applicant@docsru.dev",
+  "password": "test1234!",
+  "nickname": "테스트신청자"
+}
+
+###
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test-participant@docsru.dev",
+  "password": "test1234!",
+  "nickname": "테스트참여자"
+}
+
+### =========================================
+### 1. 신청자 로그인 → 챌린지 생성
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test-applicant@docsru.dev",
+  "password": "test1234!"
+}
+
+### @name createChallenge
+POST {{baseUrl}}/challenges
+Content-Type: application/json
+
+{
+  "title": "알림 테스트용 챌린지",
+  "field": "WEB",
+  "docType": "OFFICIAL",
+  "content": "알림 트랜잭션 테스트를 위한 챌린지입니다.",
+  "originalUrl": "https://example.com/docs",
+  "deadline": "2026-08-10T23:59:59.000Z",
+  "maxParticipants": 5
+}
+
+### =========================================
+### 2. 어드민 로그인 → 챌린지 승인
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+
+PATCH {{baseUrl}}/challenges/{{createChallenge.response.body.data.id}}
+Content-Type: application/json
+
+{
+  "status": "APPROVED"
+}
+
+### =========================================
+### 3. 참여자 로그인 → 참여 등록 (Submission 자동 생성)
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test-participant@docsru.dev",
+  "password": "test1234!"
+}
+
+### @name joinChallenge
+POST {{baseUrl}}/participations
+Content-Type: application/json
+
+{
+  "challengeId": {{createChallenge.response.body.data.id}}
+}
+
+### =========================================
+### 4. [NEW_SUBMISSION] 최초 제출
+### 예상: 챌린지 신청자에게 NEW_SUBMISSION 알림
+### =========================================
+PATCH {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}
+Content-Type: application/json
+
+{
+  "content": "최초로 제출하는 번역 내용입니다."
+}
+
+### [알림 없음] 본인 재수정
+PATCH {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}
+Content-Type: application/json
+
+{
+  "content": "재수정한 내용입니다."
+}
+
+### =========================================
+### 5. [Draft 정상 케이스] 참여자 본인 임시저장
+### =========================================
+PUT {{baseUrl}}/drafts/{{joinChallenge.response.body.data.submission.id}}
+Content-Type: application/json
+
+{
+  "title": "임시 제목",
+  "content": "임시 저장 내용"
+}
+
+### =========================================
+### 6. [Draft 어드민 차단 - 403] 삭제되기 전에 먼저 테스트
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+
+PUT {{baseUrl}}/drafts/{{joinChallenge.response.body.data.submission.id}}
+Content-Type: application/json
+
+{
+  "title": "어드민이 시도하는 임시저장",
+  "content": "저장되면 안 됨"
+}
+
+### =========================================
+### 7. [NEW_FEEDBACK] 신청자가 참여자 작업물에 피드백 작성
+### 예상: 작업물 작성자(test-participant)에게 NEW_FEEDBACK 알림
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test-applicant@docsru.dev",
+  "password": "test1234!"
+}
+
+### @name createFeedback
+POST {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}/feedbacks
+Content-Type: application/json
+
+{
+  "content": "번역 잘 하셨네요! 다만 이 부분은 문맥상 재검토가 필요해 보입니다."
+}
+
+### =========================================
+### 8. [Feedback 본인 수정/삭제 - 알림 없음] 신청자가 본인 피드백 수정
+### =========================================
+PATCH {{baseUrl}}/feedbacks/{{createFeedback.response.body.data.id}}
+Content-Type: application/json
+
+{
+  "content": "본인이 수정한 피드백입니다."
+}
+
+### =========================================
+### 9. [Feedback 어드민 수정 - CONTENT_CHANGED]
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+
+PATCH {{baseUrl}}/feedbacks/{{createFeedback.response.body.data.id}}
+Content-Type: application/json
+
+{
+  "content": "어드민이 수정한 피드백입니다."
+}
+
+### [Feedback 어드민 삭제 - CONTENT_CHANGED] (하드 삭제)
+DELETE {{baseUrl}}/feedbacks/{{createFeedback.response.body.data.id}}
+
+### =========================================
+### 10. [Submission 어드민 수정 - CONTENT_CHANGED]
+### =========================================
+PATCH {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}
+Content-Type: application/json
+
+{
+  "content": "어드민이 수정한 작업물 내용입니다."
+}
+
+### =========================================
+### 11. [Submission 어드민 삭제 - CONTENT_CHANGED, soft delete]
+### =========================================
+DELETE {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}
+
+### 삭제 확인 - 404 예상
+GET {{baseUrl}}/submissions/{{joinChallenge.response.body.data.submission.id}}
+
+### =========================================
+### 12. 신청자 로그인 → 알림 확인
+### 예상: NEW_SUBMISSION 1개, CONTENT_CHANGED(피드백 수정) 1개
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test-applicant@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+
+GET {{baseUrl}}/notifications
+
+### =========================================
+### 13. 참여자 로그인 → 알림 확인
+### 예상: NEW_FEEDBACK 1개, CONTENT_CHANGED(작업물 수정+삭제) 2개
+### =========================================
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test-participant@docsru.dev",
+  "password": "test1234!"
+}
+
+###
+
+GET {{baseUrl}}/notifications

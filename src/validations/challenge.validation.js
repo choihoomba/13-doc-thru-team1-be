@@ -106,10 +106,9 @@ const challengeFieldsSchema = z.object({
     .trim()
     .min(1, '제목을 입력해주세요.')
     .max(100, '제목은 100자 이하이어야 합니다.'),
-  field: z
-    .union([z.enum(FIELD_VALUES), z.array(z.enum(FIELD_VALUES))])
-    .optional()
-    .transform((value) => (value === undefined ? undefined : [].concat(value))),
+  field: z.enum(FIELD_VALUES, {
+    message: '지원하지 않는 분야입니다.',
+  }),
   docType: z.enum(DOC_TYPE_VALUES, {
     message: '지원하지 않는 문서 유형입니다.',
   }),
@@ -249,6 +248,10 @@ const challengeIdParamsSchema = z.object({
  * - page/limit: 페이지네이션 및 무한 스크롤
  *
  * query string은 모두 문자열로 전달되므로 page/limit은 숫자로 coerce합니다.
+ *
+ * field는 다중 선택을 지원합니다. `?field=WEB&field=API`처럼 같은 키를
+ * 반복하면 배열로, 하나만 오면 문자열로 들어오므로 union으로 둘 다 받아
+ * transform에서 항상 배열로 통일합니다.
  */
 const challengeListQuerySchema = z
   .object({
@@ -256,7 +259,12 @@ const challengeListQuerySchema = z
     view: z.enum(VIEW_VALUES).default('public'),
     // 빈 문자열은 Service의 조건 조합에서 falsy로 취급되어 검색 조건을 만들지 않습니다.
     search: z.string().trim().max(100).optional(),
-    field: z.enum(FIELD_VALUES).optional(),
+    field: z
+      .union([z.enum(FIELD_VALUES), z.array(z.enum(FIELD_VALUES))])
+      .optional()
+      .transform((value) =>
+        value === undefined ? undefined : [].concat(value)
+      ),
     docType: z.enum(DOC_TYPE_VALUES).optional(),
     status: z.enum(CHALLENGE_STATUS_VALUES).optional(),
     // 생략하면 최신 신청/등록 순으로 정렬합니다.
