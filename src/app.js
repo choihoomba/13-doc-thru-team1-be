@@ -31,6 +31,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// Render 슬립 방지용 헬스체크 - UptimeRobot이 주기적으로 호출, 인증/DB 조회 없음
+app.get('/health', (req, res) => {
+  res.status(200).json({ success: true, status: 'ok' });
+});
+
 app.use('/auth', authRouter);
 app.use('/challenges', challengeRouter);
 app.use('/participations', participationRouter);
