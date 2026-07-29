@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "type": "STATUS_CHANGED",
+    "targetType": "CHALLENGE",
+    "targetId": 12,
+    "message": "신청한 ‘MDN Fetch API 사용하기’ 챌린지가 승인되었습니다.",
+    "isRead": false,
+    "createdAt": "2026-07-10T09:05:00Z",
+    "userId": 2
+  },
+  {
+    "id": 2,
+    "type": "STATUS_CHANGED",
+    "targetType": "CHALLENGE",
+    "targetId": 14,
+    "message": "신청한 ‘React Server Components 심화’ 챌린지가 거절되었습니다. 사유: 원문 분량이 프로젝트 기준을 초과합니다.",
+    "isRead": true,
+    "createdAt": "2026-06-20T14:05:00Z",
+    "userId": 2
+  },
+  {
+    "id": 3,
+    "type": "STATUS_CHANGED",
+    "targetType": "CHALLENGE",
+    "targetId": 15,
+    "message": "신청한 ‘WebSocket API 가이드’ 챌린지가 삭제되었습니다. 사유: 원문 링크 구조가 변경되었습니다.",
+    "isRead": true,
+    "createdAt": "2026-06-30T14:05:00Z",
+    "userId": 2
+  },
+  {
+    "id": 4,
+    "type": "NEW_FEEDBACK",
+    "targetType": "FEEDBACK",
+    "targetId": 40,
+    "message": "‘Prisma Relations 이해하기’ 작업물에 새로운 피드백이 등록되었습니다.",
+    "isRead": false,
+    "createdAt": "2026-07-02T16:00:00Z",
+    "userId": 2
+  },
+  {
+    "id": 5,
+    "type": "NEW_SUBMISSION",
+    "targetType": "SUBMISSION",
+    "targetId": 47,
+    "message": "신청한 ‘MDN Fetch API 사용하기’ 챌린지에 새로운 작업물이 제출되었습니다.",
+    "isRead": false,
+    "createdAt": "2026-07-13T18:00:00Z",
+    "userId": 2
+  },
+  {
+    "id": 6,
+    "type": "CONTENT_CHANGED",
+    "targetType": "CHALLENGE",
+    "targetId": 6,
+    "message": "참여한 ‘웹 접근성 기본 개념’ 챌린지가 마감되었습니다.",
+    "isRead": true,
+    "createdAt": "2026-07-06T00:00:10Z",
+    "userId": 2
+  },
+  {
+    "id": 7,
+    "type": "CONTENT_CHANGED",
+    "targetType": "SUBMISSION",
+    "targetId": 31,
+    "message": "‘JavaScript Promise 사용 가이드’ 작업물이 수정되었습니다.",
+    "isRead": false,
+    "createdAt": "2026-07-12T12:00:00Z",
+    "userId": 3
+  },
+  {
+    "id": 8,
+    "type": "CONTENT_CHANGED",
+    "targetType": "FEEDBACK",
+    "targetId": 24,
+    "message": "작성한 피드백이 관리자에 의해 수정되었습니다.",
+    "isRead": false,
+    "createdAt": "2026-07-11T10:00:00Z",
+    "userId": 6
+  },
+  {
+    "id": 9,
+    "type": "STATUS_CHANGED",
+    "targetType": "SUBMISSION",
+    "targetId": 25,
+    "message": "작성한 피드백이 관리자에 의해 삭제되었습니다. 사유: 챌린지 내용과 무관한 피드백입니다.",
+    "isRead": true,
+    "createdAt": "2026-07-09T10:00:00Z",
+    "userId": 11
+  },
+  {
+    "id": 10,
+    "type": "STATUS_CHANGED",
+    "targetType": "CHALLENGE",
+    "targetId": 16,
+    "message": "신청 상태가 변경되면 이 위치에 알림이 표시됩니다.",
+    "isRead": true,
+    "createdAt": "2026-07-01T10:00:00Z",
+    "userId": 10
+  }
+]
