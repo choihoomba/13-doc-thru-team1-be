@@ -8,7 +8,10 @@ import {
 // 작업물 목록 조회
 export async function getSubmissionList(req, res) {
   const query = submissionListQuerySchema.parse(req.query);
-  const data = await submissionService.getSubmissionList(query);
+  const data = await submissionService.getSubmissionList({
+    ...query,
+    userId: req.user.userId,
+  });
   res.status(200).json({ success: true, data });
 }
 
