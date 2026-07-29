@@ -515,5 +515,82 @@
     "participationId": 52,
     "challengeId": 12,
     "userId": 6
+  },
+  {
+    "id": 48,
+    "content": "Docker는 애플리케이션과 의존성을 컨테이너 이미지로 패키징합니다. 동일한 이미지를 사용하면 개발 환경과 배포 환경의 차이를 줄일 수 있습니다.\n\n백엔드러버의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-04-21T10:00:00Z",
+    "updatedAt": "2026-06-15T10:00:00Z",
+    "participationId": 54,
+    "challengeId": 4,
+    "userId": 5
+  },
+  {
+    "id": 49,
+    "content": "Docker는 애플리케이션과 의존성을 컨테이너 이미지로 패키징합니다. 동일한 이미지를 사용하면 개발 환경과 배포 환경의 차이를 줄일 수 있습니다.\n\n웹표준지킴이의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-04-22T10:00:00Z",
+    "updatedAt": "2026-06-15T14:00:00Z",
+    "participationId": 55,
+    "challengeId": 4,
+    "userId": 8
+  },
+  {
+    "id": 50,
+    "content": "Docker는 애플리케이션과 의존성을 컨테이너 이미지로 패키징합니다. 동일한 이미지를 사용하면 개발 환경과 배포 환경의 차이를 줄일 수 있습니다.\n\n문장다듬이의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-04-23T10:00:00Z",
+    "updatedAt": "2026-06-15T18:00:00Z",
+    "participationId": 56,
+    "challengeId": 4,
+    "userId": 12
+  },
+  {
+    "id": 51,
+    "content": "Redux Toolkit은 상태 관리 로직을 단순화하기 위한 공식 Redux 툴셋입니다. createSlice와 configureStore를 사용하면 보일러플레이트 코드를 크게 줄일 수 있습니다.\n\n지훈번역가의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": true,
+    "createdAt": "2026-06-02T10:00:00Z",
+    "updatedAt": "2026-07-08T20:00:00Z",
+    "participationId": 57,
+    "challengeId": 21,
+    "userId": 2
+  },
+  {
+    "id": 52,
+    "content": "Redux Toolkit은 상태 관리 로직을 단순화하기 위한 공식 Redux 툴셋입니다. createSlice와 configureStore를 사용하면 보일러플레이트 코드를 크게 줄일 수 있습니다.\n\n리액트장인의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": true,
+    "createdAt": "2026-06-03T10:00:00Z",
+    "updatedAt": "2026-07-08T21:00:00Z",
+    "participationId": 58,
+    "challengeId": 21,
+    "userId": 3
+  },
+  {
+    "id": 53,
+    "content": "Redux Toolkit은 상태 관리 로직을 단순화하기 위한 공식 Redux 툴셋입니다. createSlice와 configureStore를 사용하면 보일러플레이트 코드를 크게 줄일 수 있습니다.\n\n문서탐험가의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-04T10:00:00Z",
+    "updatedAt": "2026-07-09T20:00:00Z",
+    "participationId": 59,
+    "challengeId": 21,
+    "userId": 4
+  },
+  {
+    "id": 54,
+    "content": "Redux Toolkit은 상태 관리 로직을 단순화하기 위한 공식 Redux 툴셋입니다. createSlice와 configureStore를 사용하면 보일러플레이트 코드를 크게 줄일 수 있습니다.\n\n타입스크립터의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-05T10:00:00Z",
+    "updatedAt": "2026-07-09T21:00:00Z",
+    "participationId": 60,
+    "challengeId": 21,
+    "userId": 6
   }
 ]

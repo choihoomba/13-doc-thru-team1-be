@@ -15,6 +15,7 @@ async function getSubmissionList({
   include,
   page,
   limit,
+  userId,
 }) {
   const { submissions, totalCount } =
     await submissionRepository.getSubmissionList({
@@ -23,6 +24,7 @@ async function getSubmissionList({
       include,
       page,
       limit,
+      userId,
     });
 
   return {

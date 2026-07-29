@@ -18,7 +18,7 @@
     "password": "__HASH_AT_SEED_RUNTIME__",
     "role": "USER",
     "grade": "GENERAL",
-    "topLikedCount": 0,
+    "topLikedCount": 1,
     "refreshToken": null,
     "createdAt": "2026-03-02T09:00:00Z",
     "updatedAt": "2026-03-02T09:00:00Z"
@@ -30,7 +30,7 @@
     "password": "__HASH_AT_SEED_RUNTIME__",
     "role": "USER",
     "grade": "EXPERT",
-    "topLikedCount": 0,
+    "topLikedCount": 1,
     "refreshToken": null,
     "createdAt": "2026-03-03T09:00:00Z",
     "updatedAt": "2026-03-03T09:00:00Z"

@@ -10,10 +10,11 @@ const baseSelect = {
   userId: true,
 };
 
-function buildListSelect(include) {
+function buildListSelect(include, userId) {
   const select = {
     ...baseSelect,
     _count: { select: { likes: true, feedbacks: true } },
+    likes: { where: { userId }, select: { id: true }, take: 1 },
   };
   // 챌린지 상세 페이지
   if (include === 'user') {
@@ -30,6 +31,7 @@ export async function getSubmissionList({
   include,
   page,
   limit,
+  userId,
 }) {
   const where = {
     deletedAt: null,
@@ -45,10 +47,15 @@ export async function getSubmissionList({
           : { createdAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
-      select: buildListSelect(include),
+      select: buildListSelect(include, userId),
     }),
     prisma.submission.count({ where }),
   ]);
+
+  submissions.forEach((submission) => {
+    submission.isLiked = submission.likes.length > 0;
+    delete submission.likes;
+  });
 
   return { submissions, totalCount };
 }
