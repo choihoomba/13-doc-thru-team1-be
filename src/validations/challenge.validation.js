@@ -60,19 +60,38 @@ const VIEW_VALUES = [
  */
 const SORT_VALUES = ['latest', 'oldest', 'deadlineAsc', 'deadlineDesc'];
 const MIN_CHALLENGE_DEADLINE_DAYS = 7;
+const MAX_CHALLENGE_DEADLINE_DAYS = 21;
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * 달력에서 선택하는 날짜는 해당 날짜의 마지막 시각으로 저장됩니다.
+ * 최대 21일째 날짜 전체를 허용하기 위해 비교 기준도 21일째 23:59:59로 맞춥니다.
+ */
+function getMaximumChallengeDeadline(baseDate = new Date()) {
+  const maximumDeadline = new Date(baseDate);
+  maximumDeadline.setDate(
+    maximumDeadline.getDate() + MAX_CHALLENGE_DEADLINE_DAYS
+  );
+  maximumDeadline.setHours(23, 59, 59, 999);
+
+  return maximumDeadline;
+}
 
 /**
  * 생성과 수정에서 공통으로 사용하는 미래 마감일 검증입니다.
  *
  * HTML date/datetime input은 문자열을 전송하므로 z.coerce.date()로 Date 객체로
  * 변환합니다. 과거 마감일은 진행 중 챌린지 수정에서도 허용하지 않습니다.
+ * 최대 마감일은 요청 시점을 기준으로 21일째 날짜까지 허용합니다.
  * 승인 시점에도 시간이 지났을 수 있으므로 Service가 다시 검사합니다.
  */
 const deadlineSchema = z.coerce
   .date('deadline은 올바른 날짜 형식이어야 합니다.')
   .refine((deadline) => deadline > new Date(), {
     message: '마감일은 현재 시간보다 이후여야 합니다.',
+  })
+  .refine((deadline) => deadline <= getMaximumChallengeDeadline(), {
+    message: `마감일은 요청일 기준 최대 ${MAX_CHALLENGE_DEADLINE_DAYS}일 이내여야 합니다.`,
   });
 
 /**
