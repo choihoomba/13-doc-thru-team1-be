@@ -121,6 +121,8 @@
  *     summary: 본인 정보 조회
  *     description: accessToken 쿠키로 인증합니다.
  *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: 조회 성공
@@ -154,6 +156,8 @@
  *     summary: 로그아웃
  *     description: DB의 refreshToken을 제거하고 인증 쿠키를 삭제합니다.
  *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: 로그아웃 성공 (쿠키 삭제됨)

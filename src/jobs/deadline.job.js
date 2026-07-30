@@ -1,3 +1,4 @@
+// jobs/deadline.job.js
 import prisma from '../config/prisma.js';
 
 /**
@@ -25,6 +26,10 @@ export async function closeExpiredChallenges(now = new Date()) {
       deadline: true,
     },
   });
+
+  console.log(
+    `[CRON] ${now.toISOString()} - 마감 대상 ${expiredChallenges.length}개`
+  );
 
   // 챌린지 단위로 독립 트랜잭션 처리 - 한 건 실패가 다른 챌린지 마감을 막지 않음
   for (const challenge of expiredChallenges) {
@@ -135,4 +140,6 @@ export async function closeExpiredChallenges(now = new Date()) {
       }
     });
   }
+
+  console.log(`[CRON] ${now.toISOString()} - 마감 처리 완료`);
 }
