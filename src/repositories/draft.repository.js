@@ -20,7 +20,7 @@ export function createDraft({ submissionId, userId, title, content }) {
 }
 
 export function deleteDraft(submissionId) {
-  return prisma.draft.delete({
+  return prisma.draft.deleteMany({
     where: { submissionId },
   });
 }
