@@ -120,9 +120,11 @@ function buildViewWhere({ view, status, userId, commonWhere }) {
       };
 
     case 'admin':
-      // status를 생략하면 전체 신청을, 전달하면 해당 상태만 조회합니다.
+      // 관리자 목록에서는 soft delete된 챌린지를 다시 삭제하지 않도록 제외합니다.
+      // 신청자가 삭제 사유를 확인해야 하는 applied 뷰는 기존 동작을 유지합니다.
       return {
         ...commonWhere,
+        deletedAt: null,
         ...(status && { status }),
       };
 
