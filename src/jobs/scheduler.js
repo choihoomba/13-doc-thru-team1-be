@@ -13,7 +13,7 @@ export function registerCronJobs() {
   cron.schedule(
     '0 0 * * *',
     () => {
-      closeExpiredChallenges;
+      closeExpiredChallenges();
     },
     {
       timezone: 'Asia/Seoul',
