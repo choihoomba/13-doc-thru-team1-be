@@ -288,7 +288,7 @@ test('챌린지 목록·상세·신청 관리·알림 통합 흐름', async () =
         (challenge) => challenge.status
       )
     ),
-    new Set(['DELETED', 'REJECTED'])
+    new Set(['REJECTED'])
   );
 
   const appliedList = await request(
