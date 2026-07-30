@@ -341,6 +341,23 @@
   },
   {
     "id": 21,
+    "title": "Webpack 5 Module Federation 가이드",
+    "field": "MODERNJS",
+    "docType": "OFFICIAL",
+    "content": "Webpack 5의 Module Federation 개념과 활용법을 다루는 공식 문서를 함께 읽고 자연스럽고 정확한 한국어 개발 문서로 번역합니다. 예제 코드와 설정 방법을 중심으로 검토해 주세요.",
+    "originalUrl": "https://webpack.js.org/concepts/module-federation/",
+    "deadline": "2026-09-15T23:59:59Z",
+    "maxParticipants": 6,
+    "currentParticipants": 0,
+    "status": "APPROVED",
+    "reason": null,
+    "deletedAt": null,
+    "createdAt": "2026-07-25T09:00:00Z",
+    "updatedAt": "2026-07-25T09:00:00Z",
+    "userId": 9
+  },
+  {
+    "id": 22,
     "title": "Redux Toolkit 핵심 개념 번역",
     "field": "REACT",
     "docType": "OFFICIAL",
@@ -355,5 +372,22 @@
     "createdAt": "2026-06-01T09:00:00Z",
     "updatedAt": "2026-06-01T09:00:00Z",
     "userId": 5
+  },
+  {
+    "id": 23,
+    "title": "GraphQL Query 기본 가이드 번역",
+    "field": "API",
+    "docType": "OFFICIAL",
+    "content": "GraphQL 공식 문서의 Query 기본 개념을 함께 읽고 자연스럽고 정확한 한국어 개발 문서로 번역합니다. 예제 코드와 용어의 일관성을 중점적으로 검토해 주세요.",
+    "originalUrl": "https://graphql.org/learn/queries/",
+    "deadline": "2026-07-20T23:59:59Z",
+    "maxParticipants": 8,
+    "currentParticipants": 6,
+    "status": "CLOSED",
+    "reason": null,
+    "deletedAt": null,
+    "createdAt": "2026-06-10T09:00:00Z",
+    "updatedAt": "2026-06-10T09:00:00Z",
+    "userId": 12
   }
 ]

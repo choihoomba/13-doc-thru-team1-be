@@ -557,18 +557,18 @@
     "createdAt": "2026-06-02T10:00:00Z",
     "updatedAt": "2026-07-08T20:00:00Z",
     "participationId": 57,
-    "challengeId": 21,
+    "challengeId": 22,
     "userId": 2
   },
   {
     "id": 52,
     "content": "Redux Toolkit은 상태 관리 로직을 단순화하기 위한 공식 Redux 툴셋입니다. createSlice와 configureStore를 사용하면 보일러플레이트 코드를 크게 줄일 수 있습니다.\n\n리액트장인의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
     "deletedAt": null,
-    "isTopSubmission": true,
+    "isTopSubmission": false,
     "createdAt": "2026-06-03T10:00:00Z",
     "updatedAt": "2026-07-08T21:00:00Z",
     "participationId": 58,
-    "challengeId": 21,
+    "challengeId": 22,
     "userId": 3
   },
   {
@@ -579,7 +579,7 @@
     "createdAt": "2026-06-04T10:00:00Z",
     "updatedAt": "2026-07-09T20:00:00Z",
     "participationId": 59,
-    "challengeId": 21,
+    "challengeId": 22,
     "userId": 4
   },
   {
@@ -590,7 +590,73 @@
     "createdAt": "2026-06-05T10:00:00Z",
     "updatedAt": "2026-07-09T21:00:00Z",
     "participationId": 60,
-    "challengeId": 21,
+    "challengeId": 22,
     "userId": 6
+  },
+  {
+    "id": 55,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n타입스크립터의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": true,
+    "createdAt": "2026-06-12T10:00:00Z",
+    "updatedAt": "2026-07-15T20:00:00Z",
+    "participationId": 61,
+    "challengeId": 23,
+    "userId": 6
+  },
+  {
+    "id": 56,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n도커고래의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": true,
+    "createdAt": "2026-06-13T10:00:00Z",
+    "updatedAt": "2026-07-15T21:00:00Z",
+    "participationId": 62,
+    "challengeId": 23,
+    "userId": 7
+  },
+  {
+    "id": 57,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n웹표준지킴이의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-14T10:00:00Z",
+    "updatedAt": "2026-07-16T20:00:00Z",
+    "participationId": 63,
+    "challengeId": 23,
+    "userId": 8
+  },
+  {
+    "id": 58,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n테스트마스터의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-15T10:00:00Z",
+    "updatedAt": "2026-07-16T21:00:00Z",
+    "participationId": 64,
+    "challengeId": 23,
+    "userId": 9
+  },
+  {
+    "id": 59,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n초보개발자의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-16T10:00:00Z",
+    "updatedAt": "2026-07-17T20:00:00Z",
+    "participationId": 65,
+    "challengeId": 23,
+    "userId": 10
+  },
+  {
+    "id": 60,
+    "content": "GraphQL Query는 클라이언트가 필요한 데이터만 선언적으로 요청할 수 있게 해주는 핵심 기능입니다. 필드를 중첩해서 요청하면 여러 리소스를 한 번의 요청으로 가져올 수 있습니다.\n\n코드리뷰어의 번역 초안입니다. 기술 용어는 원문 표기를 함께 남겼습니다.",
+    "deletedAt": null,
+    "isTopSubmission": false,
+    "createdAt": "2026-06-17T10:00:00Z",
+    "updatedAt": "2026-07-17T21:00:00Z",
+    "participationId": 66,
+    "challengeId": 23,
+    "userId": 11
   }
 ]

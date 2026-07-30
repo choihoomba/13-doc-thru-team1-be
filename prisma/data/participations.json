@@ -453,7 +453,7 @@
     "createdAt": "2026-06-02T10:00:00Z",
     "updatedAt": "2026-06-02T10:00:00Z",
     "userId": 2,
-    "challengeId": 21
+    "challengeId": 22
   },
   {
     "id": 58,
@@ -461,7 +461,7 @@
     "createdAt": "2026-06-03T10:00:00Z",
     "updatedAt": "2026-06-03T10:00:00Z",
     "userId": 3,
-    "challengeId": 21
+    "challengeId": 22
   },
   {
     "id": 59,
@@ -469,7 +469,7 @@
     "createdAt": "2026-06-04T10:00:00Z",
     "updatedAt": "2026-06-04T10:00:00Z",
     "userId": 4,
-    "challengeId": 21
+    "challengeId": 22
   },
   {
     "id": 60,
@@ -477,6 +477,54 @@
     "createdAt": "2026-06-05T10:00:00Z",
     "updatedAt": "2026-06-05T10:00:00Z",
     "userId": 6,
-    "challengeId": 21
+    "challengeId": 22
+  },
+  {
+    "id": 61,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-11T10:00:00Z",
+    "updatedAt": "2026-06-11T10:00:00Z",
+    "userId": 6,
+    "challengeId": 23
+  },
+  {
+    "id": 62,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-12T10:00:00Z",
+    "updatedAt": "2026-06-12T10:00:00Z",
+    "userId": 7,
+    "challengeId": 23
+  },
+  {
+    "id": 63,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-13T10:00:00Z",
+    "updatedAt": "2026-06-13T10:00:00Z",
+    "userId": 8,
+    "challengeId": 23
+  },
+  {
+    "id": 64,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-14T10:00:00Z",
+    "updatedAt": "2026-06-14T10:00:00Z",
+    "userId": 9,
+    "challengeId": 23
+  },
+  {
+    "id": 65,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-15T10:00:00Z",
+    "updatedAt": "2026-06-15T10:00:00Z",
+    "userId": 10,
+    "challengeId": 23
+  },
+  {
+    "id": 66,
+    "status": "ACTIVE",
+    "createdAt": "2026-06-16T10:00:00Z",
+    "updatedAt": "2026-06-16T10:00:00Z",
+    "userId": 11,
+    "challengeId": 23
   }
 ]
